@@ -21,7 +21,7 @@ const Products = () => {
                 console.error('There was an error fetching the products!', error);
             });
         console.log("products:", products)
-        axios.get('http://dacn-seeds-1.onrender.com/category')
+        axios.get('https://dacn-seeds-1.onrender.com/category')
             .then(res => {
                 setCategory(res.data);
             })
