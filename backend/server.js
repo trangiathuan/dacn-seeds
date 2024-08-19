@@ -15,7 +15,11 @@ const commentRoutes = require('./src/routes/commentRoutes');
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(cors())
+app.use(cors({
+    origin: ["https://dacn-seeds.vercel.app/"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+}))
 app.use(bodyParser.json());
 app.use('/', productRoutes)
 app.use('/', categoryRoutes)
