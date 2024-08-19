@@ -24,10 +24,10 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use('/', productRoutes)
 app.use('/', categoryRoutes)
-app.use('/api/auth', authRoutes);
-app.use('/api', cartRoutes);
-app.use('/api', checkoutRoutes);
-// app.use('/api', adminRoutes);
+// app.use('/api/auth', authRoutes);
+// app.use('/api', cartRoutes);
+// app.use('/api', checkoutRoutes);
+// // app.use('/api', adminRoutes);
 app.use('/api', commentRoutes);
 
 
