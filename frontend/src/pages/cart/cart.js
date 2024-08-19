@@ -12,6 +12,7 @@ const Cart = () => {
 
     useEffect(() => {
         if (!isLoggedIn) {
+            alert("Yêu cầu đăng nhập ")
             navigate('/login');
             return;
         } else {

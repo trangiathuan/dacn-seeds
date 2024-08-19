@@ -61,6 +61,7 @@ const Nav = () => {
                             <button onClick={handleLogout} className='btn btn-login'>Đăng xuất</button>
                         </>
                     ) : (
+
                         <a href='/login'>
                             <button className='btn btn-login'>
                                 Đăng nhập
@@ -142,7 +143,7 @@ const Nav = () => {
                     </div>
                 </nav>
             </div>
-        </div>
+        </div >
     );
 };
 

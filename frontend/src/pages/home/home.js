@@ -152,15 +152,16 @@ const Home = () => {
                         <div class="card">
                             <img className='card-img' src={require(`../../asset/images-product/${item.image}`)} class="card-img-top" alt="..." />
                             <div class="card-body">
-                                <div className='card-name mb-2' >
-                                    <p class=" fw-bold ">{item.productName}</p>
-                                </div>
-                                <h7>Số lượng:<h7 className='mb-1 card-sl'>{item.quantity}</h7></h7>
-                                <h5>Giá:<h5 className='card-price'> {item.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</h5>
-                                    <img className='img-sale' src={require('../../asset/Images/hot-deal.png')} /> </h5>
-                                <div className='card-title'>
-                                    <h6 className='mb-2'>Giao hàng siêu nhanh</h6>
-                                </div>
+                                <Link to={`/product-detail/${item._id}`}>
+                                    <div className='card-name mb-2' >
+                                        <p class=" fw-bold ">{item.productName}</p>
+                                    </div>
+                                    <h7>Số lượng:<h7 className='mb-1 card-sl'>{item.quantity}</h7></h7>
+                                    <h5>Giá:<h5 className='card-price'> {item.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</h5>
+                                        <img className='img-sale' src={require('../../asset/Images/hot-deal.png')} /> </h5>
+                                    <div className='card-title'>
+                                        <h6 className='mb-2'>Giao hàng siêu nhanh</h6>
+                                    </div></Link>
                                 <button onClick={() => addToCart(item)} className="btn btn-success btn-cart">Thêm vào giỏ hàng</button>
                             </div>
                         </div>
