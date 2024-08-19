@@ -161,7 +161,8 @@ const Home = () => {
                                         <img className='img-sale' src={require('../../asset/Images/hot-deal.png')} /> </h5>
                                     <div className='card-title'>
                                         <h6 className='mb-2'>Giao hàng siêu nhanh</h6>
-                                    </div></Link>
+                                    </div>
+                                </Link>
                                 <button onClick={() => addToCart(item)} className="btn btn-success btn-cart">Thêm vào giỏ hàng</button>
                             </div>
                         </div>
