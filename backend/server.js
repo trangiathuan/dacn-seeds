@@ -6,12 +6,13 @@ const port = 8000
 const bodyParser = require('body-parser');
 
 const productRoutes = require('./src/routes/productRoutes');
-const cartRoutes = require('./src/routes/cartRoutes');
-const authRoutes = require('./src/routes/authRoutes');
-const checkoutRoutes = require('./src/routes/checkoutRoutes');
-const categoryRoutes = require('./src/routes/categoryRoutes');
-const adminRoutes = require('./src/routes/adminRoutes')
+// const cartRoutes = require('./src/routes/cartRoutes');
+// const authRoutes = require('./src/routes/authRoutes');
+// const checkoutRoutes = require('./src/routes/checkoutRoutes');
+// const adminRoutes = require('./src/routes/adminRoutes')
 const commentRoutes = require('./src/routes/commentRoutes');
+const categoryRoutes = require('./src/routes/categoryRoutes');
+
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
