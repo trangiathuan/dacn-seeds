@@ -11,7 +11,7 @@ const Home = () => {
     const [category, setCategory] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:8000/product')
+        axios.get('https://dacn-seeds-1.onrender.com/product')
             .then(res => {
                 setProducts(res.data);
             })
@@ -19,7 +19,7 @@ const Home = () => {
                 console.error('There was an error fetching the products!', error);
             });
 
-        axios.get('http://localhost:8000/category')
+        axios.get('https://dacn-seeds-1.onrender.com/category')
             .then(res => {
                 setCategory(res.data);
             })
@@ -27,6 +27,35 @@ const Home = () => {
                 console.error('There was an error fetching the categories!', error);
             });
     }, []);
+
+    const addToCart = (product) => {
+        const isLoggedIn = !!localStorage.getItem('token');
+        if (isLoggedIn) {
+            addToCartDatabase(product);
+        } else {
+            alert("Đăng nhập để thêm sản phẩm vào giỏ hàng");
+        }
+    };
+
+    const addToCartDatabase = async (product) => {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.post('https://dacn-seeds-1.onrender.com/api/cart', {
+                productName: product.productName,
+                image: product.image,
+                price: product.price,
+                quantity: 1  // Giả sử số lượng mặc định là 1
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            alert("Sản phẩm đã được thêm vào giỏ hàng");
+        } catch (err) {
+            console.error(err);
+            alert("Đăng nhập để thêm sản phẩm vào giỏ hàng");
+        }
+    };
     return (
         <div>
 
@@ -132,7 +161,7 @@ const Home = () => {
                                 <div className='card-title'>
                                     <h6 className='mb-2'>Giao hàng siêu nhanh</h6>
                                 </div>
-                                <a href="#" class="btn btn-success btn-cart">Thêm vào giỏ hàng   </a>
+                                <button onClick={() => addToCart(item)} className="btn btn-success btn-cart">Thêm vào giỏ hàng</button>
                             </div>
                         </div>
                     </div>

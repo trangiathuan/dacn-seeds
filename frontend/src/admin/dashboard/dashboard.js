@@ -11,7 +11,7 @@ const Dashboard = () => {
 
     useEffect(() => {
 
-        axios.get('http://localhost:8000/api/dashboard', {
+        axios.get('https://dacn-seeds-1.onrender.com/api/dashboard', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -36,7 +36,7 @@ const Dashboard = () => {
         const fetchTotalOrders = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:8000/api/totalOrders', {
+                const response = await axios.get('https://dacn-seeds-1.onrender.com/api/totalOrders', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -56,7 +56,7 @@ const Dashboard = () => {
         const fetchTotalProducts = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:8000/api/totalProducts', {
+                const response = await axios.get('https://dacn-seeds-1.onrender.com/api/totalProducts', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -76,7 +76,7 @@ const Dashboard = () => {
         const fetchTotalUsers = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:8000/api/totalUsers', {
+                const response = await axios.get('https://dacn-seeds-1.onrender.com/api/totalUsers', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

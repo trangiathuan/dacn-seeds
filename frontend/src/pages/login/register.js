@@ -16,7 +16,7 @@ const Register = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:8000/api/auth/register', {
+            await axios.post('https://dacn-seeds-1.onrender.com/api/auth/register', {
                 userName, passWord, fullName, birthDay, address, phoneNumber, email
             });
             navigate('/login'); // Chuyển hướng đến trang đăng nhập sau khi đăng ký thành công

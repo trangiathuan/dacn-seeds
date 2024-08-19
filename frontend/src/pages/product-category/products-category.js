@@ -14,10 +14,10 @@ const ProductsCategory = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const productResponse = await axios.get(`http://localhost:8000/products-category/${id}`);
+                const productResponse = await axios.get(`https://dacn-seeds-1.onrender.com/products-category/${id}`);
                 setProducts(productResponse.data);
 
-                const categoryResponse = await axios.get('http://localhost:8000/category');
+                const categoryResponse = await axios.get('https://dacn-seeds-1.onrender.com/category');
                 setCategory(categoryResponse.data);
 
                 setLoading(false); // Đặt loading thành false sau khi dữ liệu đã được tải
@@ -42,7 +42,7 @@ const ProductsCategory = () => {
     const addToCartDatabase = async (product) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post('http://localhost:8000/api/cart', {
+            await axios.post('https://dacn-seeds-1.onrender.com/api/cart', {
                 productName: product.productName,
                 image: product.image,
                 price: product.price,

@@ -11,14 +11,16 @@ const Products = () => {
     const [category, setCategory] = useState([]);
 
     useEffect(() => {
-        axios.get('http://dacn-seeds-1.onrender.com/product')
+        axios.get('https://dacn-seeds-1.onrender.com/product')
             .then(res => {
+                console.log('Products data:', res.data);  // Log dữ liệu nhận được
                 setProducts(res.data);
+
             })
             .catch(error => {
                 console.error('There was an error fetching the products!', error);
             });
-
+        console.log("products:", products)
         axios.get('http://dacn-seeds-1.onrender.com/category')
             .then(res => {
                 setCategory(res.data);
@@ -40,7 +42,7 @@ const Products = () => {
     const addToCartDatabase = async (product) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post('http://dacn-seeds-1.onrender.com/api/cart', {
+            await axios.post('https://dacn-seeds-1.onrender.com/api/cart', {
                 productName: product.productName,
                 image: product.image,
                 price: product.price,

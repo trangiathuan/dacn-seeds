@@ -24,7 +24,7 @@ const UpdateProduct = () => {
                     throw new Error('No token found');
                 }
 
-                const response = await axios.get(`http://localhost:8000/api/products/${id}`, {
+                const response = await axios.get(`https://dacn-seeds-1.onrender.com/api/products/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}` // Thêm token vào header
                     }
@@ -54,7 +54,7 @@ const UpdateProduct = () => {
             if (!token) {
                 throw new Error('No token found');
             }
-            const response = await axios.put(`http://localhost:8000/api/update-product/${id}`, {
+            const response = await axios.put(`https://dacn-seeds-1.onrender.com/api/update-product/${id}`, {
                 productName: productName,
                 categoryID: categoryID,
                 description: description,

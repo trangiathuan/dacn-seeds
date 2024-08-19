@@ -9,7 +9,7 @@ const Sidebar = () => {
         const fetchTotalOrders = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:8000/api/totalPendingOrders', {
+                const response = await axios.get('https://dacn-seeds-1.onrender.com/api/totalPendingOrders', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

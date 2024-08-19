@@ -24,7 +24,7 @@ const DeleteProduct = () => {
                     throw new Error('No token found');
                 }
 
-                const response = await axios.get(`http://localhost:8000/api/products/${id}`, {
+                const response = await axios.get(`https://dacn-seeds-1.onrender.com/api/products/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}` // Thêm token vào header
                     }
@@ -55,7 +55,7 @@ const DeleteProduct = () => {
                 throw new Error('No token found');
             }
 
-            await axios.delete(`http://localhost:8000/api/products/${id}`, {
+            await axios.delete(`https://dacn-seeds-1.onrender.com/api/products/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}` // Thêm token vào header
                 }
