@@ -63,7 +63,7 @@ const UserAdmin = () => {
         if (window.confirm("Bạn có chắc chắn muốn xóa user này?")) {
             try {
                 const token = localStorage.getItem('token');
-                await axios.delete(`http://localhost:8000/api/deleteUser/${userId}`, {
+                await axios.delete(`https://dacn-seeds-1.onrender.com/api/deleteUser/${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
