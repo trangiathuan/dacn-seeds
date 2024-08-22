@@ -22,6 +22,7 @@ router.get('/totalPendingOrders', authAdmin, adminController.getTotalPendingOrde
 router.get('/getAllUsers', authAdmin, adminController.getAllUsers);
 router.put('/updateUserRole', authAdmin, adminController.updateUserRole);
 router.get('/totalUsers', authAdmin, adminController.getTotalUsers);
+router.delete('/deleteUser/:id', authAdmin, adminController.deleteUser);
 
 
 module.exports = router;

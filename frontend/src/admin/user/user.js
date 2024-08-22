@@ -59,6 +59,25 @@ const UserAdmin = () => {
             alert('Đã xảy ra lỗi khi cập nhật chức vụ');
         }
     };
+    const handleDeleteUser = async (userId) => {
+        if (window.confirm("Bạn có chắc chắn muốn xóa user này?")) {
+            try {
+                const token = localStorage.getItem('token');
+                await axios.delete(`http://localhost:8000/api/deleteUser/${userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                alert('User đã được xóa thành công');
+                // Cập nhật lại danh sách users sau khi xóa
+                setUsers(users.filter(user => user._id !== userId));
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                alert('Đã xảy ra lỗi khi xóa user');
+            }
+        }
+    };
 
     if (loading) {
         return <div>Loading...</div>;
@@ -111,7 +130,12 @@ const UserAdmin = () => {
                                         </select>
                                     </td>
                                     <td className='text-center'>
-                                        <Link to={`/admin/products-delete/`} className='btn btn-danger btn-product'>Xóa</Link>
+                                        <button
+                                            onClick={() => handleDeleteUser(user._id)}
+                                            className='btn btn-danger btn-product'
+                                        >
+                                            Xóa
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
