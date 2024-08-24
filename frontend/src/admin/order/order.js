@@ -104,7 +104,7 @@ const OrdersAdmin = () => {
                 <div className="col-9 content-body">
                     <div>
                     </div>
-                    <table className="table">
+                    <table className="table ">
                         <thead>
                             <tr>
                                 <th className='text-center' scope="col">Đơn hàng</th>
