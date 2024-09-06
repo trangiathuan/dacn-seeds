@@ -87,7 +87,9 @@ const ProductDetail = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>;  // Hiển thị loading trong khi đợi dữ liệu
+        return <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>;  // Hiển thị loading trong khi đợi dữ liệu
     }
 
     if (!product) {

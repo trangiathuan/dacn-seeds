@@ -18,7 +18,7 @@ const NavAdmin = () => {
                 // Gửi yêu cầu để lấy thông tin người dùng dựa trên userId
                 axios.get(`https://dacn-seeds-1.onrender.com/api/auth/users/${userId}`)
                     .then(response => {
-                        setUser(response.data);  // Giả sử backend trả về đối tượng user với các trường như userName
+                        setUser(response.data);
                     })
                     .catch(error => {
                         console.error("Error fetching user data:", error);

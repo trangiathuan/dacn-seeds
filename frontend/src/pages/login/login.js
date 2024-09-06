@@ -16,6 +16,7 @@ const Login = () => {
             localStorage.setItem('token', token);
             console.log(role)
             if (role === 'admin') {
+
                 navigate('/admin/dashboard'); // Chuyển hướng đến trang admin nếu người dùng là admin
             } else {
                 navigate('/'); // Chuyển hướng đến trang chủ hoặc trang khác nếu không phải admin
