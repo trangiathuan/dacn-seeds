@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';  // Sử dụng axios để gửi yêu cầu tới backend
 import './navbar.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Nav = () => {
     const navigate = useNavigate();
@@ -19,6 +21,7 @@ const Nav = () => {
                 axios.get(`https://dacn-seeds-1.onrender.com/api/auth/users/${userId}`)
                     .then(response => {
                         setUser(response.data);  // Giả sử backend trả về đối tượng user với các trường như userName
+
                     })
                     .catch(error => {
                         console.error("Error fetching user data:", error);

@@ -114,3 +114,9 @@
 .date-comment{
     font-weight: 400;
 }
+.spinner-border{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20%;
+}

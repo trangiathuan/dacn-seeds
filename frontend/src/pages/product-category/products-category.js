@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import '../products/products.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProductsCategory = () => {
     const [products, setProducts] = useState([]);
@@ -35,7 +37,7 @@ const ProductsCategory = () => {
         if (isLoggedIn) {
             addToCartDatabase(product);
         } else {
-            alert("Đăng nhập để thêm sản phẩm vào giỏ hàng");
+            toast.success("Đăng nhập để thêm sản phẩm vào giỏ hàng");
         }
     };
 
@@ -52,24 +54,27 @@ const ProductsCategory = () => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            alert("Sản phẩm đã được thêm vào giỏ hàng");
+            toast.success("Sản phẩm đã được thêm vào giỏ hàng");
         } catch (err) {
             console.error(err);
-            alert("Đăng nhập để thêm sản phẩm vào giỏ hàng");
+            toast.warn("Đăng nhập để thêm sản phẩm vào giỏ hàng");
         }
     };
 
     if (loading) {
-        return <div>Loading...</div>; // Hiển thị thông báo chờ khi dữ liệu đang được tải
+        return <div><Nav /><div class="spinner-border" role="status">
+            <span class="visually-hidden text-center">Loading...</span>
+        </div></div> // Hiển thị loading trong khi đợi dữ liệu
     }
 
     return (
         <div className="products">
             <Nav />
+            <ToastContainer />
             <div className='row'>
                 <div className='col-3 col-category'>
                     <div className='row row-category'>
-                        <h4 className=''>DANH MỤC SẢN PHẨM</h4>
+                        <p className="category-title">DANH MỤC SẢN PHẨM</p>
                         {category.map((item) => (
                             <Link to={`/products-category/${item._id}`} key={item._id} className='a-category mt-3'>
                                 <img className='img-icon-product' src={require(`../../asset/Images/${item.categoryIcon}`)} alt={item.categoryName} />

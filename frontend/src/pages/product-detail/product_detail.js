@@ -1,9 +1,11 @@
-import './product_detail.css'
+import './product_detail.css';
 import Footer from "../../component/footer/footer";
 import Nav from "../../component/navbar/navbar";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProductDetail = () => {
     const [product, setProduct] = useState(null);  // Khởi tạo product là null để dễ kiểm tra
@@ -36,7 +38,7 @@ const ProductDetail = () => {
         if (isLoggedIn) {
             addToCartDatabase(product);
         } else {
-            alert("Đăng nhập để thêm sản phẩm vào giỏ hàng")
+            toast.warn("Đăng nhập để thêm sản phẩm vào giỏ hàng");
         }
     };
 
@@ -53,10 +55,10 @@ const ProductDetail = () => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            alert("Sản phẩm đã được thêm vào giỏ hàng");
+            toast.success("Sản phẩm đã được thêm vào giỏ hàng");
         } catch (err) {
             console.error(err);
-            alert("Có lỗi xảy ra, vui lòng thử lại");
+            toast.error("Có lỗi xảy ra, vui lòng thử lại");
         }
     };
 
@@ -77,19 +79,20 @@ const ProductDetail = () => {
 
                 setComment(''); // Reset comment sau khi submit
                 window.location.reload();
+                toast.success('Bình luận thành công')
             } catch (err) {
                 console.error(err);
-                alert('Có lỗi xảy ra, vui lòng thử lại');
+                toast.error('Có lỗi xảy ra, vui lòng thử lại');
             }
         } else {
-            alert("Đăng nhập để bình luận");
+            toast.warn("Đăng nhập để bình luận");
         }
     };
 
     if (loading) {
         return <div class="spinner-border" role="status">
             <span class="visually-hidden text-center">Loading...</span>
-        </div>;  // Hiển thị loading trong khi đợi dữ liệu
+        </div> // Hiển thị loading trong khi đợi dữ liệu
     }
 
     if (!product) {
@@ -99,6 +102,7 @@ const ProductDetail = () => {
     return (
         <div>
             <Nav />
+            <ToastContainer />  {/* Thêm ToastContainer vào giao diện */}
             <div className='product-detail-body'>
                 <div className='product-detail'>
                     <div className='row'>

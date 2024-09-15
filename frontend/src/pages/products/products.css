@@ -86,6 +86,7 @@
     font-weight: 700;
     margin-left: 25px;
     margin-top: 9px;
+    
 }
 .a-category{
     color: black;
@@ -98,4 +99,11 @@
 .a-category:hover{
     background-color: #f0f0f0;
     border-radius: 15px;
+}
+.category-title{
+    font-size: 25px;
+    margin-top: 5px;
+    margin-bottom: 0px;
+    font-weight: 700;
+    color: #0ca90c;
 }

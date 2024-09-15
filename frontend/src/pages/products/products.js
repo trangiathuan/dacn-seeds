@@ -4,18 +4,21 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './products.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Products = () => {
 
     const [products, setProducts] = useState([]);
     const [category, setCategory] = useState([]);
+    const [loading, setLoading] = useState(true);  // Thêm trạng thái loading
 
     useEffect(() => {
         axios.get('https://dacn-seeds-1.onrender.com/product')
             .then(res => {
                 console.log('Products data:', res.data);  // Log dữ liệu nhận được
                 setProducts(res.data);
-
+                setLoading(false);
             })
             .catch(error => {
                 console.error('There was an error fetching the products!', error);
@@ -35,7 +38,7 @@ const Products = () => {
         if (isLoggedIn) {
             addToCartDatabase(product);
         } else {
-            alert("Đăng nhập để thêm sản phẩm vào giỏ hàng");
+            toast.warn("Đăng nhập để thêm sản phẩm vào giỏ hàng");
         }
     };
 
@@ -52,20 +55,25 @@ const Products = () => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            alert("Sản phẩm đã được thêm vào giỏ hàng");
+            toast.success("Sản phẩm đã được thêm vào giỏ hàng");
         } catch (err) {
             console.error(err);
-            alert("Đăng nhập để thêm sản phẩm vào giỏ hàng");
+            toast.success("Đăng nhập để thêm sản phẩm vào giỏ hàng");
         }
     };
-
+    if (loading) {
+        return <div><Nav /><div class="spinner-border" role="status">
+            <span class="visually-hidden text-center">Loading...</span>
+        </div></div> // Hiển thị loading trong khi đợi dữ liệu
+    }
     return (
         <div className="products">
             <Nav />
+            <ToastContainer />
             <div className='row'>
                 <div className='col-3 col-category'>
                     <div className='row row-category'>
-                        <h4>DANH MỤC SẢN PHẨM</h4>
+                        <p className="category-title">DANH MỤC SẢN PHẨM</p>
                         {category.map((item) => (
                             <Link to={`/products-category/${item._id}`} key={item._id} className='a-category mt-3'>
                                 <img className='img-icon-product' src={require(`../../asset/Images/${item.categoryIcon}`)} alt={item.categoryName} />

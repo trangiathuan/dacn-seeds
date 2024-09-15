@@ -2,6 +2,8 @@ import './login.css';
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
     const [userName, setUserName] = useState('');
@@ -16,18 +18,21 @@ const Login = () => {
             localStorage.setItem('token', token);
             console.log(role)
             if (role === 'admin') {
-
+                toast.success('Đăng nhập thành công');
                 navigate('/admin/dashboard'); // Chuyển hướng đến trang admin nếu người dùng là admin
             } else {
                 navigate('/'); // Chuyển hướng đến trang chủ hoặc trang khác nếu không phải admin
+                toast.success('Đăng nhập thành công');
             }
         } catch (err) {
-            alert('Tên tài khoản hoặc mật khẩu không đúng');
+            toast.warn('Tên tài khoản hoặc mật khẩu không chính xác');
         }
     };
 
     return (
+
         <div className='brg'>
+            <ToastContainer />
             <div className="login-container">
                 <div className="login-content">
                     <form className="login-form" onSubmit={handleLogin}>

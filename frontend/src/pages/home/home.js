@@ -3,7 +3,8 @@ import Footer from "../../component/footer/footer";
 import Nav from "../../component/navbar/navbar";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import './home.css';
 const Home = () => {
@@ -14,6 +15,7 @@ const Home = () => {
         axios.get('https://dacn-seeds-1.onrender.com/product')
             .then(res => {
                 setProducts(res.data);
+
             })
             .catch(error => {
                 console.error('There was an error fetching the products!', error);
@@ -33,7 +35,7 @@ const Home = () => {
         if (isLoggedIn) {
             addToCartDatabase(product);
         } else {
-            alert("Đăng nhập để thêm sản phẩm vào giỏ hàng");
+            toast.warn("Đăng nhập để thêm sản phẩm vào giỏ hàng");
         }
     };
 
@@ -50,17 +52,17 @@ const Home = () => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            alert("Sản phẩm đã được thêm vào giỏ hàng");
+            toast.success("Sản phẩm đã được thêm vào giỏ hàng");
         } catch (err) {
             console.error(err);
-            alert("Đăng nhập để thêm sản phẩm vào giỏ hàng");
+            toast.warn("Đăng nhập để thêm sản phẩm vào giỏ hàng");
         }
     };
     return (
         <div>
 
             <Nav />
-
+            <ToastContainer />
             <div>
                 <img className="home-banner" src={require('../../asset/Images/banner01.png')} />
             </div>
