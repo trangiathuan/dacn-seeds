@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';  // Sử dụng axios để gửi yêu cầu tới backend
+import { jwtDecode } from 'jwt-decode';
 import './navbar.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,6 +9,8 @@ import 'react-toastify/dist/ReactToastify.css';
 const Nav = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
+    const [searchTerm, setSearchTerm] = useState(''); // Thêm state cho từ khóa tìm kiếm
+    const [searchResults, setSearchResults] = useState([]); // Thêm state cho kết quả tìm kiếm
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -18,10 +20,9 @@ const Nav = () => {
                 const userId = decoded.userId;
 
                 // Gửi yêu cầu để lấy thông tin người dùng dựa trên userId
-                axios.get(`https://dacn-seeds-1.onrender.com/api/auth/users/${userId}`)
+                axios.get(`http://localhost:8000/api/auth/users/${userId}`)
                     .then(response => {
                         setUser(response.data);  // Giả sử backend trả về đối tượng user với các trường như userName
-
                     })
                     .catch(error => {
                         console.error("Error fetching user data:", error);
@@ -37,18 +38,61 @@ const Nav = () => {
         navigate('/login');
     };
 
+    // Hàm xử lý tìm kiếm
+    const handleSearch = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8000/search?q=${searchTerm}`);
+            setSearchResults(response.data); // Lưu trữ kết quả tìm kiếm
+        } catch (error) {
+            console.error('Error during product search:', error);
+        }
+    };
+
+    // Hàm xử lý khi người dùng chọn sản phẩm từ kết quả tìm kiếm
+    const handleProductSelect = (productId) => {
+        navigate(`/product-detail/${productId}`); // Chuyển hướng đến trang chi tiết sản phẩm
+
+    };
+
     return (
         <div className='nav-all'>
             <div className='row'>
-
                 <div className='col-2'>
                     <img className='logo' src={require("../../asset/Images/Logo.png")} alt="Logo" />
                 </div>
                 <div className='col-5'>
                     <div className="input-group mt-3 mb-3 nav-search">
-                        <input type="text" className="form-control" placeholder="Nhập sản phẩm cần tìm" />
-                        <button className="btn btn-outline-secondary btn-search" type="button" id="button-addon2">Tìm kiếm</button>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Nhập sản phẩm cần tìm"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)} // Cập nhật từ khóa tìm kiếm
+                        />
+                        <button
+                            className="btn btn-outline-secondary btn-search"
+                            type="button"
+                            id="button-addon2"
+                            onClick={handleSearch} // Gọi hàm tìm kiếm khi nhấn nút
+                        >
+                            Tìm kiếm
+                        </button>
                     </div>
+
+                    {/* Phần hiển thị kết quả tìm kiếm */}
+                    {searchResults.length > 0 && (
+                        <ul className="list-group search">
+                            {searchResults.map(product => (
+                                <li
+                                    key={product._id}
+                                    className="list-group-item"
+                                    onClick={() => handleProductSelect(product._id)} // Chuyển hướng khi người dùng chọn sản phẩm
+                                >
+                                    {product.productName}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
                 <div className='col-nav'></div>
                 <div className='col-1 mb-3 a-cart'>
@@ -57,14 +101,13 @@ const Nav = () => {
                         <span>  Giỏ hàng</span>
                     </a>
                 </div>
-                <div className=' mt-4 mb-3 login-nav'>
+                <div className='mt-4 mb-3 login-nav'>
                     {user ? (
                         <>
                             <p className='username-nav'>{user.fullName}</p> {/* Hiển thị userName hoặc email */}
                             <button onClick={handleLogout} className='btn btn-login'>Đăng xuất</button>
                         </>
                     ) : (
-
                         <a href='/login'>
                             <button className='btn btn-login'>
                                 Đăng nhập
@@ -146,7 +189,7 @@ const Nav = () => {
                     </div>
                 </nav>
             </div>
-        </div >
+        </div>
     );
 };
 

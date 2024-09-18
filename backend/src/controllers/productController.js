@@ -1,5 +1,21 @@
 const Product = require('../models/product')
 
+const search = async (req, res) => {
+    try {
+        const searchTerm = req.query.q; // Lấy từ khóa tìm kiếm từ query parameter
+
+        // Tìm kiếm sản phẩm theo tên
+        const products = await Product.find(
+            { productName: { $regex: searchTerm, $options: 'i' } },
+            { productName: 1 } // Chỉ trả về tên sản phẩm và ID
+        );
+
+        res.json(products);
+    } catch (error) {
+        res.status(500).json({ message: 'Đã xảy ra lỗi trong quá trình tìm kiếm' });
+    }
+}
+
 const getProduct = async (req, res) => {
     try {
         const category = req.query.category;
@@ -64,5 +80,6 @@ module.exports = {
     getProduct,
     postCreateProduct,
     getProductDetail,
-    getProductCategory
+    getProductCategory,
+    search
 }

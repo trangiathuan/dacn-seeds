@@ -1,126 +1,153 @@
-
-.nav-bg{
-    background-color:#2cb92c;
-    /* background-color:#228B22; */
-    box-shadow:  0px 1px 7px #228B22;
+.nav-bg {
+    background-color: #2cb92c;
+    box-shadow: 0px 1px 7px #228B22;
     margin: 0;
     padding-left: 150px;
 }
-.nav-a{
+
+.nav-a {
     color: white;
     font-size: 17px;
     padding-left: 20px;
     font-weight: 550;
 }
-.login-nav{
-    
+
+.login-nav {
     margin-top: 12px;
     width: 320px;
     display: flex;
 }
-.username-nav{
+
+.username-nav {
     font-weight: 700;
     font-size: 18px;
 }
-.btn-login{
+
+.btn-login {
     margin-top: -16px;
     margin-left: 17px;
     font-size: 20px;
     font-weight: 600;
     color: rgb(17, 25, 171);
 }
-.col-nav{
+
+.col-nav {
     width: 100px;
 }
-.nav-item{
+
+.nav-item {
     padding-left: 40px;
 }
-.nav-link:hover{
+
+.nav-link:hover {
     color: #012201;
 }
-.logo{
+
+.logo {
     width: 170px;
     margin-left: 55px;
 }
-.nav-search{
+
+.nav-search {
     margin-left: 65px;
+    position: relative; 
 }
-.input-group{
+
+.input-group {
     height: 30px;
 }
-.cart{
+
+.cart {
     width: 30px;
 }
-.navbar{
+
+.navbar {
     height: 50px;
 }
-.nav-all{
+
+.nav-all {
     position: fixed;
     top: 0;
     z-index: 1001;
     width: 100%;
     background-color: white;
-    
 }
-.a-cart{
+
+.a-cart {
     width: 160px;
     margin-top: 12px;
 }
-.btn-nav{
+
+.btn-nav {
     background-color: #f0f0f0;
     border-radius: 25px;
-   
 }
-.btn-search{
-    background-color: 	#8B4513;
+
+.btn-search {
+    background-color: #8B4513;
     color: white;
-    outline-color: 	#8B4513;
+    outline-color: #8B4513;
     border-radius: 10px;
 }
-.btn-search:hover{
+
+.btn-search:hover {
     background-color: rgb(171, 121, 35);
     outline-color: rgb(171, 121, 35);
 }
-.icon-menu{
+
+.icon-menu {
     width: 11%;
     color: white;
     margin-bottom: 4px;
     margin-right: 2px;
 }
-.dropdown{
+
+.dropdown {
     width: 350px;
     padding-right: 50px;
     margin-top: 3px;
-} 
+    position: relative; /* Đảm bảo dropdown được đặt tương đối */
+}
+
 .dropdown-menu {
     display: none;
     position: absolute;
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 800px;
+    z-index: 1100; /* Đảm bảo nó nằm trên cùng */
 }
 
 .dropdown:hover .dropdown-menu {
-   
     display: block;
+    z-index: 1100;
 }
+
 .dropdown-menu a {
     color: #333;
     text-decoration: none;
     padding: 10px 20px;
     display: block;
 }
+
 .dropdown-menu a:hover {
     background-color: #f0f0f0;
     border-radius: 15px;
 }
-.dropdown-item{
+
+.dropdown-item {
     font-size: 18px;
     font-weight: 600;
     margin-left: 5px;
 }
-.img-icon{
+
+.img-icon {
     width: 15%;
 }
 
-
+.search {
+    position: absolute;
+    z-index: 1100; /* Đảm bảo phần tìm kiếm nổi lên trên */
+    margin-left: 65px;
+    width: 615px;
+}
