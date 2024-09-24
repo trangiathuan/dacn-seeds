@@ -1,0 +1,101 @@
+.main-blog{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 150px;
+    width: 1100px;
+    
+}
+.main-write {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    border: solid 1px rgb(213, 211, 211) ;
+    box-shadow: 0px 0px 10px 0px rgb(213, 211, 211) ;
+    width: 800px;
+    border-radius: 5px;
+}
+.main-content {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    border: solid 1px rgb(185, 176, 176);
+    width: 800px;
+    padding: 10px;
+    border-radius: 5px;
+}
+.content-write {
+    display: block;
+    margin: auto;
+    width: 750px;
+}
+.brg-img {
+    display: block;
+    margin: auto;
+    border: solid #dedede 1px;
+    width: 750px;
+    border-radius: 2px;
+    background-color: #dedede;
+}
+.img-blog {
+    width: 300px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.input-write {
+    padding: 10px;
+}
+.btn-write {
+   margin-top: 10px;
+   padding: 10px;
+}
+.content-comment-blog {
+    border: solid rgb(225, 225, 225) 1px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 10px 1px rgb(225, 225, 225);
+    padding: 5px;
+    width: 727px;
+}
+.info-user-cmt {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+.info-user-cmt img{
+    width: 40px;
+    margin-right: 10px;
+}
+.name-info-user-cmt{
+    display: block;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-weight: bold;
+}
+
+.btn-like img{
+    width: 25px;
+    padding-right: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 10px;
+    
+}
+.btn-comment {
+    display: block;
+    margin-left: auto;
+}
+
+.btn-comment img {
+    width: 30px;
+}
+
+.input-cmt {
+    display:flex;
+    align-items: center;
+}
+.input-cmt input {
+    width: 710px;
+}

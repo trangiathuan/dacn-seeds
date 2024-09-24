@@ -18,7 +18,7 @@ const ProductSearch = () => {
             const query = new URLSearchParams(location.search).get('query'); // Lấy từ khóa tìm kiếm từ URL
             try {
                 // Gửi yêu cầu tìm kiếm sản phẩm dựa trên từ khóa
-                const productResponse = await axios.get(`http://localhost:8000/search?q=${query}`);
+                const productResponse = await axios.get(`https://dacn-seeds-1.onrender.com/search?q=${query}`);
                 setProducts(productResponse.data);
 
                 // Gửi yêu cầu lấy danh mục sản phẩm

@@ -10,9 +10,9 @@ import Register from './pages/login/register';
 import Products from './pages/products/products';
 import ProductDetail from './pages/product-detail/product_detail';
 import ProductsCategory from './pages/product-category/products-category';
-import ProductSearch from './pages/product-search/products-search';
 import Cart from './pages/cart/cart';
 import Checkout from './pages/checkout/checkout';
+import Blog from './pages/blog/blog';
 
 // import admin pages
 import Dashboard from './admin/dashboard/dashboard';
@@ -22,6 +22,7 @@ import UpdateProduct from './admin/products/update-product';
 import DeleteProduct from './admin/products/delete-product';
 import OrdersAdmin from './admin/order/order';
 import UserAdmin from './admin/user/user';
+
 
 
 // import ProductList from './pages/admin/productList';
@@ -43,6 +44,7 @@ root.render(
         <Route path='/products-search/' element={<ProductsCategory />} />
         <Route path='/cart' element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/blog" element={<Blog />} />
 
         {/* Admin Routes */}
         <Route path="/admin/dashboard" element={<Dashboard />} />

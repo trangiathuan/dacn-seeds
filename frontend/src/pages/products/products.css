@@ -18,6 +18,9 @@
     margin-left: 0%;
     margin-right: auto;
 }
+.row-cardProduct{
+    margin-left: 350px;
+}
 .card-img{
     
     width: 250px;
@@ -87,6 +90,7 @@
     margin-left: 25px;
     margin-top: 9px;
     
+    
 }
 .a-category{
     color: black;
@@ -95,6 +99,7 @@
 }
 .col-category{
     width: 350px;
+    position: fixed;
 }
 .a-category:hover{
     background-color: #f0f0f0;
