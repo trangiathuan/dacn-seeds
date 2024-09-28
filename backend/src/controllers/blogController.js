@@ -4,7 +4,11 @@ exports.postBlog = async (req, res) => {
     try {
         const { title, content } = req.body
         const { userId } = req.user.userId
-        const newBlog = await createCollection
+        const newBlog = await Blog.create({
+            user: userId,
+            title: title,
+            content: content
+        })
     }
     catch (err) {
 

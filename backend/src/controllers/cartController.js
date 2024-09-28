@@ -3,7 +3,7 @@ const CartItem = require('../models/cartItem');
 // Lấy tất cả các sản phẩm trong giỏ hàng cho người dùng hiện tại
 exports.getCartItems = async (req, res) => {
     try {
-        const cartItems = await CartItem.find({ userId: req.user });
+        const cartItems = await CartItem.find({ userId: req.user.userId });
         res.json(cartItems);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -36,7 +36,7 @@ exports.updateCartItem = async (req, res) => {
 
     try {
         const cartItem = await CartItem.findOneAndUpdate(
-            { _id: id, userId: req.user },
+            { _id: id, userId: req.user.userId },
             { quantity },
             { new: true }
         );
@@ -54,7 +54,7 @@ exports.deleteCartItem = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const cartItem = await CartItem.findOneAndDelete({ _id: id, userId: req.user });
+        const cartItem = await CartItem.findOneAndDelete({ _id: id, userId: req.user.userId });
         if (!cartItem) {
             return res.status(404).json({ error: 'Item not found' });
         }
@@ -70,7 +70,7 @@ exports.updateCartItem = async (req, res) => {
 
     try {
         const cartItem = await CartItem.findOneAndUpdate(
-            { _id: id, userId: req.user },
+            { _id: id, userId: req.user.userId },
             { quantity },
             { new: true }
         );
