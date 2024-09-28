@@ -33,6 +33,7 @@ const Blog = () => {
             toast.success('Đăng bài viết thành công')
             setTitle('')
             setContent('')
+            console.log({ messenge: 'Xử lý thành công' })
         } catch (err) {
             console.error(err); // Log lỗi để dễ dàng theo dõi
             toast.error('Yêu cầu nhập nội dung và tiêu đề');
