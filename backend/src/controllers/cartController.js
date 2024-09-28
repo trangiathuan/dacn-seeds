@@ -60,29 +60,6 @@ exports.addToCart = async (req, res) => {
     }
 };
 
-
-// Thêm sản phẩm vào giỏ hàng
-// exports.addToCart = async (req, res) => {
-//     const { productName, image, price, quantity } = req.body;
-
-//     try {
-//         const newCartItem = new CartItem({
-//             productName,
-//             image,
-//             price,
-//             quantity,
-//             userId: req.user.userId
-//         });
-
-//         await newCartItem.save();
-//         res.status(201).json(newCartItem);
-//     } catch (err) {
-//         res.status(500).json({ error: err.message });
-//     }
-// };
-
-
-
 // Xóa sản phẩm khỏi giỏ hàng
 exports.deleteCartItem = async (req, res) => {
     const { id } = req.params;
