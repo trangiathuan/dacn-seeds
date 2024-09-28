@@ -26,7 +26,7 @@ const Blog = () => {
         const token = localStorage.getItem('token');
 
         try {
-            const response = await axios.post('/api/blogs', formData, {
+            const response = await axios.post('https://dacn-seeds-1.onrender.com/api/blogs', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`,

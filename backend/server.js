@@ -12,18 +12,20 @@ const checkoutRoutes = require('./src/routes/checkoutRoutes');
 const categoryRoutes = require('./src/routes/categoryRoutes');
 const adminRoutes = require('./src/routes/adminRoutes')
 const commentRoutes = require('./src/routes/commentRoutes');
+const blogRoutes = require('./src/routes/blogRoutes')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 app.use(bodyParser.json());
-app.use('/', productRoutes)
-app.use('/', categoryRoutes)
+app.use('/', productRoutes);
+app.use('/', categoryRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api', cartRoutes);
 app.use('/api', checkoutRoutes);
 app.use('/api', adminRoutes);
 app.use('/api', commentRoutes);
+app.use('/api', blogRoutes);
 
 
 const conn = async () => {
