@@ -15,6 +15,10 @@ const blogSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    image: { // Thêm trường cho ảnh
+        type: String, // Lưu trữ đường dẫn URL đến ảnh
+        required: false // Có thể không bắt buộc
+    },
     createdAt: {
         type: Date,
         default: Date.now // Ngày đăng mặc định là thời điểm hiện tại 
