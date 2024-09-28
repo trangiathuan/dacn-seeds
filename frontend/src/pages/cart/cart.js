@@ -4,6 +4,9 @@ import Nav from '../../component/navbar/navbar';
 import './cart.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -70,6 +73,7 @@ const Cart = () => {
             const newCartItems = cartItems.filter(item => item._id !== id);
             setCartItems(newCartItems);
             console.log("Cart items after delete:", newCartItems);
+            toast.success("Sảm phẩm đã được xóa khỏi giỏ hàng")
         }).catch((err) => {
             console.error(err);
         });
@@ -88,6 +92,7 @@ const Cart = () => {
     return (
         <div>
             <Nav />
+            <ToastContainer />
             <div className='body-cart'>
                 <div>
                     <table className="table">
@@ -107,9 +112,11 @@ const Cart = () => {
                                         <img className='img-cart' src={require(`../../asset/images-product/${item.image}`)} alt={item.productName} />
                                     </td>
                                     <td className='cart-name'>
-                                        <p className='name-product'>{item.productName}</p>
+                                        <p className='cart-name-product'>{item.productName}</p>
                                     </td>
-                                    <td className='cart-price'>{item.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
+                                    <td className='cart-price'>
+                                        <p>{item.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                                    </td>
                                     <td className='cart-quantity'>
                                         <input
                                             className='form-control input-cart'

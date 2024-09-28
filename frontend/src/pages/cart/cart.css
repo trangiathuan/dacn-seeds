@@ -23,12 +23,18 @@ width: 200px;
     width: 325px;
     
 }
-.name-product{
-    margin: auto;
+.cart-name-product{
+    display: block;
+    margin-top: 30px;
+    margin-bottom: auto;
     text-align: center;
+    font-weight: 700;
 }
 .cart-price{
     text-align: center;
+}
+.cart-price p{
+    margin-top: 28px;
 }
 .cart-quantity{
     text-align: center;
@@ -39,9 +45,14 @@ width: 200px;
     display: block;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 28px;
 }
 .cart-delete{
     text-align: center;
+}
+
+.cart-delete button{
+    margin-top: 28px;
 }
 .cart-total h5{
     text-align: right;

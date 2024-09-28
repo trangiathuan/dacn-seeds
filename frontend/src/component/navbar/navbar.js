@@ -11,6 +11,7 @@ const Nav = () => {
     const [user, setUser] = useState(null);
     const [searchTerm, setSearchTerm] = useState(''); // Thêm state cho từ khóa tìm kiếm
     const [searchResults, setSearchResults] = useState([]); // Thêm state cho kết quả tìm kiếm
+    const isLoggedIn = !!localStorage.getItem('token');
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -47,6 +48,19 @@ const Nav = () => {
             console.error('Error during product search:', error);
         }
     };
+
+    const checkLogin = async () => {
+        try {
+            if (!isLoggedIn)
+                toast.warn("Yêu cầu đăng nhập !")
+            else
+                navigate('/cart')
+        }
+        catch (error) {
+            console.error('Lỗi check đăng nhập', error);
+        }
+
+    }
 
     // Hàm xử lý khi người dùng chọn sản phẩm từ kết quả tìm kiếm
     const handleProductSelect = (productId) => {
@@ -95,13 +109,13 @@ const Nav = () => {
                     )}
                 </div>
                 <div className='col-nav'></div>
-                <div className='col-1 mb-3 a-cart'>
-                    <a className='btn btn-nav' href='/cart'>
+                <div className='col-1 mb-1 a-cart'>
+                    <a className='btn btn-nav' onClick={checkLogin}>
                         <img className='cart' src={require('../../asset/Images/cart.png')} alt="Cart" />
                         <span>  Giỏ hàng</span>
                     </a>
                 </div>
-                <div className='mt-4 mb-3 login-nav'>
+                <div className='mt-4 mb-1 login-nav'>
                     {user ? (
                         <>
                             <p className='username-nav'>{user.fullName}</p> {/* Hiển thị userName hoặc email */}
@@ -184,6 +198,9 @@ const Nav = () => {
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link nav-a" href="#">TIN TỨC</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link nav-a" href="/blog">BLOG</a>
                             </li>
                         </ul>
                     </div>

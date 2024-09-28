@@ -1,4 +1,3 @@
-import Footer from "../../component/footer/footer";
 import Nav from "../../component/navbar/navbar";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -6,6 +5,7 @@ import { Link } from 'react-router-dom';
 import './products.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 
 const Products = () => {
 
@@ -109,7 +109,6 @@ const Products = () => {
                     </div>
                 </div>
             </div>
-            <Footer />
         </div>
     );
 }

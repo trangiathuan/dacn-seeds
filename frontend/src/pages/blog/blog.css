@@ -2,7 +2,7 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 150px;
+    margin-top: 130px;
     width: 1100px;
     
 }
@@ -16,6 +16,40 @@
     width: 800px;
     border-radius: 5px;
 }
+
+.title-write {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.btn-add-img1 {
+    background-color: green ;
+    color: white;
+    margin-left: 10px;
+}
+.btn-add-img1:hover {
+    background-color: rgb(1, 92, 1) ;
+    color: white;
+}
+.btn-add-img1 .img1 {
+    width: 25px;
+}
+
+.btn-add-img2 {
+    background-color: rgb(9, 69, 248) ;
+    color: white;
+    margin-left: 10px;
+}
+.btn-add-img2:hover {
+    background-color: rgb(4, 4, 210) ;
+    color: white;
+}
+.btn-add-img2 .img2 {
+    width: 21px;
+    padding-bottom: 4px;
+    
+}
+
 .main-content {
     display: block;
     margin-left: auto;
@@ -48,10 +82,15 @@
 .input-write {
     padding: 10px;
 }
-.btn-write {
-   margin-top: 10px;
-   padding: 10px;
+.input-write input {
+    height: 70px;
 }
+.btn-write {
+   padding: 10px;
+   padding-top: 0px;
+   text-align: right;
+}
+
 .content-comment-blog {
     border: solid rgb(225, 225, 225) 1px;
     border-radius: 5px;
@@ -99,3 +138,26 @@
 .input-cmt input {
     width: 710px;
 }
+.option-menu {
+    display: block;
+    margin-left: auto;
+}
+.option-menu img {
+    width: 30px;
+}
+.option-menu .dropdown {
+    width: 70px;
+    height: 0;
+}
+.option-menu .dropdown-menu.show {
+    display: block;
+    width: 0;
+}
+.option-menu .dropdown:hover .dropdown-menu {
+    display: none;
+    z-index: 1100;
+    display: block;
+    width: 0px;    
+}
+
+
