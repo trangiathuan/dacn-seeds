@@ -3,18 +3,16 @@ import Nav from "../../component/navbar/navbar";
 import Footer from "../../component/footer/footer";
 import './blog.css';
 import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
 
 const Blog = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [image, setImage] = useState(null);
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(null);
-        setSuccess(null);
 
         const formData = new FormData();
         formData.append('title', title);
@@ -26,24 +24,25 @@ const Blog = () => {
         const token = localStorage.getItem('token');
 
         try {
-            const response = await axios.post('https://dacn-seeds-1.onrender.com/api/blogs', formData, {
+            const response = await axios.post('https://dacn-seeds-1.onrender.com/api/blog', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            setSuccess('Blog đã được tạo thành công!');
-            setTitle('');
-            setContent('');
-            setImage(null);
+            toast.success('Đăng bài viết thành công')
+            setTitle('')
+            setContent('')
         } catch (err) {
-            setError('Có lỗi xảy ra khi tạo blog. Vui lòng thử lại.');
+            console.error(err); // Log lỗi để dễ dàng theo dõi
+            toast.error('Yêu cầu nhập nội dung và tiêu đề');
         }
     };
 
     return (
         <div>
             <Nav />
+            <ToastContainer />
             <div>
                 <div className="main-blog">
                     <div className="main-write">
@@ -82,8 +81,7 @@ const Blog = () => {
                                 <span> Đăng bài</span>
                             </button>
                         </div>
-                        {error && <p style={{ color: 'red' }}>{error}</p>}
-                        {success && <p style={{ color: 'green' }}>{success}</p>}
+
                     </div>
                     <div className="main-content">
                         <div className="info-user-cmt">
