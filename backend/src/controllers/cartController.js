@@ -19,7 +19,7 @@ exports.addToCart = async (req, res) => {
             image,
             price,
             quantity,
-            userId: req.user
+            userId: req.user.userId
         });
 
         await newCartItem.save();

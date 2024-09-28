@@ -32,7 +32,7 @@
     color: white;
 }
 .btn-add-img1 .img1 {
-    width: 25px;
+    width: 20px;
 }
 
 .btn-add-img2 {
@@ -45,7 +45,7 @@
     color: white;
 }
 .btn-add-img2 .img2 {
-    width: 21px;
+    width: 16px;
     padding-bottom: 4px;
     
 }
@@ -90,6 +90,11 @@
    padding-top: 0px;
    text-align: right;
 }
+
+.btn-write button {
+    width: 110px;
+    font-size: 13px;
+ }
 
 .content-comment-blog {
     border: solid rgb(225, 225, 225) 1px;

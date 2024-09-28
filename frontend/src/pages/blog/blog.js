@@ -11,7 +11,7 @@ const Blog = () => {
                     <div className="main-write">
                         <div className="input-write">
                             <p className="title-write">Đăng bài viết</p>
-                            <input class="form-control form-control-lg" type="text" placeholder="" aria-label=".form-control-lg example" />
+                            <textarea className="form-control form-control-lg" type="text" placeholder="" aria-label=".form-control-lg example" />
                         </div>
                         <div className="btn-write">
                             <button type="button" class="btn btn-add-img1">
