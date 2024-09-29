@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 // Định nghĩa schema cho blog
 const blogSchema = new mongoose.Schema({
     userId: {
-        type: mongoose.Schema.Types.ObjectId, // Liên kết với user
-        ref: 'User', // Tên model user
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     title: {
@@ -15,18 +15,19 @@ const blogSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    image: { // Thêm trường cho ảnh
-        type: String, // Lưu trữ đường dẫn URL đến ảnh
-        required: false // Có thể không bắt buộc
+    image: {
+        type: String,
+        required: false // Thay đổi thành true nếu cần thiết
     },
     totalLike: {
         type: Number,
-        require: false,
+        required: true,
         default: 0
     },
+    likers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false }],
     createdAt: {
         type: Date,
-        default: Date.now // Ngày đăng mặc định là thời điểm hiện tại 
+        default: Date.now
     }
 });
 

@@ -1,22 +1,28 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const blogController = require('../controllers/blogController')
-const authUser = require('../middleware/authUser')
+const blogController = require('../controllers/blogController');
+const authUser = require('../middleware/authUser');
+const path = require('path');
 
 // Cấu hình multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'D:/NTTU/Đồ án chuyên ngành KTPM/Project/frontend/src/asset/blog'); // Thư mục lưu trữ file
+        const uploadPath = path.join(__dirname, '../../../frontend/src/asset/blog'); // Đường dẫn lưu file
+        cb(null, uploadPath);
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname); // Tên file
+        // Đặt tên file với timestamp và thay thế khoảng trắng
+        const uniqueSuffix = Date.now() + '-' + file.originalname.replace(/\s+/g, '_');
+        cb(null, uniqueSuffix);
     },
 });
 
 const upload = multer({ storage });
 
-router.post('/blog', authUser, upload.single('image'), blogController.postBlog)
-router.get('/getAllBlog', blogController.getAllBlog)
+// Đăng ký các route
+router.post('/blog', authUser, upload.single('image'), blogController.postBlog);
+router.get('/getAllBlog', blogController.getAllBlog);
+router.post('/like', authUser, blogController.likeBlog)
 
 module.exports = router;

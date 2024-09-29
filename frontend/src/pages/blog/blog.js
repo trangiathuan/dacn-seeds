@@ -9,27 +9,28 @@ const Blog = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [image, setImage] = useState(null);
-    const [totalLike, setTotalLike] = useState();
-
-    const [blog, setBlog] = useState([])
+    const [blog, setBlog] = useState([]);
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        getAllBlog()
-        // console.log(blog)
-    })
+
+        getAllBlog();
+        setLoading(false)
+    }, []);
 
     const getAllBlog = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/getAllBlog')
-            setBlog(response.data)
-        } catch (error) {
+            const response = await axios.get('https://dacn-seeds-1.onrender.com/api/getAllBlog');
+            setBlog(response.data);
 
+        } catch (error) {
+            console.error(error);
+            toast.error('Không thể lấy dữ liệu blog.');
         }
-    }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const formData = new FormData();
         formData.append('title', title);
         formData.append('content', content);
@@ -38,7 +39,6 @@ const Blog = () => {
         }
 
         const token = localStorage.getItem('token');
-
         try {
             const response = await axios.post('https://dacn-seeds-1.onrender.com/api/blog', formData, {
                 headers: {
@@ -46,16 +46,51 @@ const Blog = () => {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            toast.success('Đăng bài viết thành công')
-            setTitle('')
-            setContent('')
-            console.log({ messenge: 'Xử lý thành công' })
+            toast.success('Đăng bài viết thành công');
+            setTitle('');
+            setContent('');
+            setImage(null); // Reset image after submitting
+            setTimeout(() => (
+                getAllBlog()
+            ), 1000)
+
         } catch (err) {
-            console.error(err); // Log lỗi để dễ dàng theo dõi
+            console.error(err);
             toast.error('Yêu cầu nhập nội dung và tiêu đề');
         }
     };
 
+    const handleLike = async (blogId) => {
+
+        const token = localStorage.getItem('token'); // Lấy token từ localStorage
+        try {
+            const response = await axios.post('http://localhost:8000/api/like',
+                { blogId },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                }
+            );
+
+            // Cập nhật số lượt thích trong state
+            const updatedBlogs = blog.map(b =>
+                b._id === blogId ? { ...b, totalLike: response.data.totalLike } : b
+            );
+            setBlog(updatedBlogs);
+
+            toast.success(response.data.message); // Hiển thị thông báo
+        } catch (error) {
+            console.error('Error:', error);
+            toast.error('Có lỗi xảy ra khi thích bài viết.');
+        }
+    };
+    if (loading) {
+        return <div class="spinner-border" role="status">
+            <span class="visually-hidden text-center">Loading...</span>
+        </div> // Hiển thị loading trong khi đợi dữ liệu
+    }
     return (
         <div>
             <Nav />
@@ -98,13 +133,12 @@ const Blog = () => {
                                 <span> Đăng bài</span>
                             </button>
                         </div>
-
                     </div>
                     {blog.map((blog) => (
-                        <div className="main-content">
+                        <div key={blog._id} className="main-content">
                             <div className="info-user-cmt">
                                 <img className='' src={require('../../asset/Images/account.png')} />
-                                <p className='name-info-user-cmt'> <span className='date-comment ms-2'>24/09/2024</span></p>
+                                <p className='name-info-user-cmt'>{blog.userId.fullName} <span className='date-comment ms-2'>{new Date(blog.createdAt).toLocaleDateString()}</span></p>
                                 <div className="option-menu">
                                     <div class="dropdown">
                                         <button class="btn btn-option" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -119,35 +153,30 @@ const Blog = () => {
                             <hr />
                             <div className="content-write">
                                 <h4>{blog.title}</h4>
-                                <p>
-                                    {blog.content}
-                                </p>
+                                <p>{blog.content}</p>
                             </div>
-                            <div className="brg-img mt-2 mb-3">
-                                <img className="img-blog" src={require('../../asset/images-product/h01.jpg')} />
-                            </div>
+                            {blog.image && (
+                                <div className="brg-img mt-2 mb-3">
+                                    <img className="img-blog" src={require(`../../${blog.image}`)} alt="Blog" />
+                                </div>
+                            )}
                             <div>
                                 <span>{blog.totalLike} thích</span>
                                 <span className="ms-3">15 Bình luận</span>
-                            </div>
-                            <div>
-                                <hr />
-                                <button type="button" class="btn btn-primary btn-like">
-                                    <img src={require("../../asset/Images/like.png")} />
-                                    <span>Thích</span>
-                                </button>
+                                <div>
+                                    <hr />
+                                    <button
+                                        type="button"
+                                        className="btn btn-primary btn-like"
+                                        onClick={() => handleLike(blog._id)} // blogId là ID của blog
+                                    >
+                                        <img src={require("../../asset/Images/like.png")} alt="Like" />
+                                        <span>Thích</span>
+                                    </button>
+                                </div>
                             </div>
                             <div className="comment">
                                 <hr />
-                                <div className="info-user-cmt mt-3">
-                                    <img className='' src={require('../../asset/Images/account.png')} />
-                                    <div>
-                                        <div className="content-comment-blog">
-                                            <p className='name-info-user-cmt'>Tran Gia Thuận <span className='date-comment'>24/09/2024</span></p>
-                                            <p>Nhớ không em lời hứa ngày xưa, mình bên nhau dưới ánh trăng đã nguyện thề, rằng đôi mình có nhau không bao giờ lìa xa</p>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div className="info-user-cmt mt-3">
                                     <img className='' src={require('../../asset/Images/account.png')} />
                                     <div>
@@ -164,10 +193,11 @@ const Blog = () => {
                                         <img src={require("../../asset/Images/send.png")} />
                                     </button>
                                 </div>
+
                             </div>
                         </div>
-                    ))}
 
+                    ))}
                 </div>
             </div>
             <Footer />
