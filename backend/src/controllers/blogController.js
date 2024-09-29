@@ -11,7 +11,7 @@ exports.postBlog = async (req, res) => {
         }
 
         // Lưu đường dẫn hình ảnh tương đối
-        const imagePath = req.file ? `asset/blog/${req.file.filename}` : null;
+        const imagePath = req.file ? `${req.file.filename}` : null;
 
         const newBlog = new Blog({
             userId: userId,

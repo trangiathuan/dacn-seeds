@@ -15,14 +15,16 @@ const Blog = () => {
     useEffect(() => {
 
         getAllBlog();
-        setLoading(false)
+
+
+
     }, []);
 
     const getAllBlog = async () => {
         try {
-            const response = await axios.get('https://dacn-seeds-1.onrender.com/api/getAllBlog');
+            const response = await axios.get('http://localhost:8000/api/getAllBlog');
             setBlog(response.data);
-
+            setLoading(false)
         } catch (error) {
             console.error(error);
             toast.error('Không thể lấy dữ liệu blog.');
@@ -64,7 +66,7 @@ const Blog = () => {
 
         const token = localStorage.getItem('token'); // Lấy token từ localStorage
         try {
-            const response = await axios.post('http://localhost:8000/api/like',
+            const response = await axios.post('https://dacn-seeds-1.onrender.com/api/like',
                 { blogId },
                 {
                     headers: {
@@ -157,7 +159,7 @@ const Blog = () => {
                             </div>
                             {blog.image && (
                                 <div className="brg-img mt-2 mb-3">
-                                    <img className="img-blog" src={require(`../../${blog.image}`)} alt="Blog" />
+                                    <img className="img-blog" src={require(`../../asset/blog/${blog.image}`)} alt="Blog" />
                                 </div>
                             )}
                             <div>
