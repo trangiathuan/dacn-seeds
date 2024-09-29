@@ -23,13 +23,14 @@ const ProductDetail = () => {
                 const resComments = await axios.get(`https://dacn-seeds-1.onrender.com/api/${id}/comments`);
                 setComments(resComments.data);
 
+
                 setLoading(false);  // Đặt loading thành false khi dữ liệu được tải
             } catch (err) {
                 console.log(err);
                 setLoading(false);  // Đặt loading thành false ngay cả khi có lỗi
             }
         };
-
+        console.log(comments)
         fetchProductAndComments();
     }, [id]);
 

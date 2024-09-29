@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // Định nghĩa schema cho blog
 const blogSchema = new mongoose.Schema({
-    user: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId, // Liên kết với user
         ref: 'User', // Tên model user
         required: true
@@ -18,6 +18,11 @@ const blogSchema = new mongoose.Schema({
     image: { // Thêm trường cho ảnh
         type: String, // Lưu trữ đường dẫn URL đến ảnh
         required: false // Có thể không bắt buộc
+    },
+    totalLike: {
+        type: Number,
+        require: false,
+        default: 0
     },
     createdAt: {
         type: Date,

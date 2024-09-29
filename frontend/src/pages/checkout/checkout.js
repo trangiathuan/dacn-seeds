@@ -73,7 +73,7 @@ const Checkout = () => {
             });
 
             alert('Thanh toán thành công! Mã đơn hàng: ' + res.data.orderId);
-            navigate('/'); // Điều hướng sang trang thành công hoặc trang khác tùy theo logic của bạn
+
         } catch (err) {
             console.error(err);
             alert('Đã xảy ra lỗi trong quá trình thanh toán.');

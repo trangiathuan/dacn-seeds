@@ -4,6 +4,7 @@ import Sidebar from "../component/sidebar/sidebar";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 
 const OrdersAdmin = () => {
     const [orders, setOrders] = useState([]);
@@ -52,7 +53,7 @@ const OrdersAdmin = () => {
                 }
             );
 
-            alert('Cập nhật trạng thái thành công');
+            toast.success('Cập nhật trạng thái thành công');
             window.location.reload();
 
 
@@ -77,10 +78,16 @@ const OrdersAdmin = () => {
                 },
             });
 
-            alert('Đã xóa đơn hàng thành công');
+
             // Loại bỏ đơn hàng đã xóa khỏi danh sách đơn hàng
             setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId));
-            window.location.reload();
+
+            toast.success('Đã xóa đơn hàng thành công');
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500); // Reload sau 1 giây
+
         } catch (error) {
             console.error('Error deleting order:', error);
 
@@ -97,6 +104,7 @@ const OrdersAdmin = () => {
     return (
         <div>
             <NavAdmin />
+            <ToastContainer />
             <div className="row productsAdmin-body">
                 <div className="col-3 sidebar-body">
                     <Sidebar />

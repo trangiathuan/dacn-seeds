@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Nav from "../../component/navbar/navbar";
 import Footer from "../../component/footer/footer";
 import './blog.css';
@@ -9,7 +9,23 @@ const Blog = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [image, setImage] = useState(null);
+    const [totalLike, setTotalLike] = useState();
 
+    const [blog, setBlog] = useState([])
+
+    useEffect(() => {
+        getAllBlog()
+        // console.log(blog)
+    })
+
+    const getAllBlog = async () => {
+        try {
+            const response = await axios.get('http://localhost:8000/api/getAllBlog')
+            setBlog(response.data)
+        } catch (error) {
+
+        }
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -84,70 +100,74 @@ const Blog = () => {
                         </div>
 
                     </div>
-                    <div className="main-content">
-                        <div className="info-user-cmt">
-                            <img className='' src={require('../../asset/Images/account.png')} />
-                            <p className='name-info-user-cmt'>Tran Gia Thuận <span className='date-comment ms-2'>24/09/2024</span></p>
-                            <div className="option-menu">
-                                <div class="dropdown">
-                                    <button class="btn btn-option" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img src={require('../../asset/Images/option.png')} />
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#">Xóa</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <hr />
-                        <div className="content-write">
-                            <p>[THÔNG BÁO]
-                                Triển khai chương trình học bổng quốc tế E-International tài trợ lên tới 70% học phí cho chương trình IELTS và tiếng Anh giao tiếp.
-                            </p>
-                        </div>
-                        <div className="brg-img mt-2 mb-3">
-                            <img className="img-blog" src={require('../../asset/images-product/h01.jpg')} />
-                        </div>
-                        <div>
-                            <span>12 thích</span>
-                            <span className="ms-3">15 Bình luận</span>
-                        </div>
-                        <div>
-                            <hr />
-                            <button type="button" class="btn btn-primary btn-like">
-                                <img src={require("../../asset/Images/like.png")} />
-                                <span>Thích</span>
-                            </button>
-                        </div>
-                        <div className="comment">
-                            <hr />
-                            <div className="info-user-cmt mt-3">
+                    {blog.map((blog) => (
+                        <div className="main-content">
+                            <div className="info-user-cmt">
                                 <img className='' src={require('../../asset/Images/account.png')} />
-                                <div>
-                                    <div className="content-comment-blog">
-                                        <p className='name-info-user-cmt'>Tran Gia Thuận <span className='date-comment'>24/09/2024</span></p>
-                                        <p>Nhớ không em lời hứa ngày xưa, mình bên nhau dưới ánh trăng đã nguyện thề, rằng đôi mình có nhau không bao giờ lìa xa</p>
+                                <p className='name-info-user-cmt'> <span className='date-comment ms-2'>24/09/2024</span></p>
+                                <div className="option-menu">
+                                    <div class="dropdown">
+                                        <button class="btn btn-option" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <img src={require('../../asset/Images/option.png')} />
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="#">Xóa</a></li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
-                            <div className="info-user-cmt mt-3">
-                                <img className='' src={require('../../asset/Images/account.png')} />
-                                <div>
-                                    <div className="content-comment-blog">
-                                        <p className='name-info-user-cmt'>Tran Gia Thuận <span className='date-comment'>24/09/2024</span></p>
-                                        <p>Nhớ không em lời hứa ngày xưa, mình bên nhau dưới ánh trăng đã nguyện thề, rằng đôi mình có nhau không bao giờ lìa xa</p>
-                                    </div>
-                                </div>
+                            <hr />
+                            <div className="content-write">
+                                <h4>{blog.title}</h4>
+                                <p>
+                                    {blog.content}
+                                </p>
                             </div>
-                            <div className="input-cmt">
+                            <div className="brg-img mt-2 mb-3">
+                                <img className="img-blog" src={require('../../asset/images-product/h01.jpg')} />
+                            </div>
+                            <div>
+                                <span>{blog.totalLike} thích</span>
+                                <span className="ms-3">15 Bình luận</span>
+                            </div>
+                            <div>
                                 <hr />
-                                <input class="form-control form-control-lg mt-3" type="text" placeholder="Bình luận" aria-label=".form-control-lg example" />
-                                <button type="button" class="btn btn-primary mt-3 btn-comment">
-                                    <img src={require("../../asset/Images/send.png")} />
+                                <button type="button" class="btn btn-primary btn-like">
+                                    <img src={require("../../asset/Images/like.png")} />
+                                    <span>Thích</span>
                                 </button>
                             </div>
+                            <div className="comment">
+                                <hr />
+                                <div className="info-user-cmt mt-3">
+                                    <img className='' src={require('../../asset/Images/account.png')} />
+                                    <div>
+                                        <div className="content-comment-blog">
+                                            <p className='name-info-user-cmt'>Tran Gia Thuận <span className='date-comment'>24/09/2024</span></p>
+                                            <p>Nhớ không em lời hứa ngày xưa, mình bên nhau dưới ánh trăng đã nguyện thề, rằng đôi mình có nhau không bao giờ lìa xa</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="info-user-cmt mt-3">
+                                    <img className='' src={require('../../asset/Images/account.png')} />
+                                    <div>
+                                        <div className="content-comment-blog">
+                                            <p className='name-info-user-cmt'>Tran Gia Thuận <span className='date-comment'>24/09/2024</span></p>
+                                            <p>Nhớ không em lời hứa ngày xưa, mình bên nhau dưới ánh trăng đã nguyện thề, rằng đôi mình có nhau không bao giờ lìa xa</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="input-cmt">
+                                    <hr />
+                                    <input class="form-control form-control-lg mt-3" type="text" placeholder="Bình luận" aria-label=".form-control-lg example" />
+                                    <button type="button" class="btn btn-primary mt-3 btn-comment">
+                                        <img src={require("../../asset/Images/send.png")} />
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    ))}
+
                 </div>
             </div>
             <Footer />

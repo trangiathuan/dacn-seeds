@@ -31,4 +31,14 @@ exports.postBlog = async (req, res) => {
     }
 };
 
+exports.getAllBlog = async (req, res) => {
+    try {
+        const getBlog = await Blog.find().populate('userId', 'fullName')
+        res.status(200).json(getBlog)
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Có lỗi khi lấy dữ liệu blog' })
+    }
+}
+
 
