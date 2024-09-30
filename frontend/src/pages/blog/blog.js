@@ -13,18 +13,15 @@ const Blog = () => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-
-        getAllBlog();
-
-
-
+        getAllBlog()
     }, []);
 
     const getAllBlog = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/getAllBlog');
+            const response = await axios.get('https://dacn-seeds-1.onrender.com/api/getAllBlog');
             setBlog(response.data);
             setLoading(false)
+
         } catch (error) {
             console.error(error);
             toast.error('Không thể lấy dữ liệu blog.');
@@ -41,6 +38,7 @@ const Blog = () => {
         }
 
         const token = localStorage.getItem('token');
+        setLoading(true)
         try {
             const response = await axios.post('https://dacn-seeds-1.onrender.com/api/blog', formData, {
                 headers: {
@@ -48,13 +46,17 @@ const Blog = () => {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            toast.success('Đăng bài viết thành công');
-            setTitle('');
-            setContent('');
-            setImage(null); // Reset image after submitting
-            setTimeout(() => (
+
+
+            setTimeout(() => {
+                setTitle('');
+                setContent('');
+                setImage(null); // Reset image after submitting
+                setLoading(false)
                 getAllBlog()
-            ), 1000)
+                toast.success('Đăng bài viết thành công');
+            }, 500);
+
 
         } catch (err) {
             console.error(err);
@@ -88,10 +90,32 @@ const Blog = () => {
             toast.error('Có lỗi xảy ra khi thích bài viết.');
         }
     };
+
+    const handleDelete = async (blogId) => {
+        const token = localStorage.getItem('token')
+        try {
+            const response = await axios.delete('https://dacn-seeds-1.onrender.com/api/deleteBlog',
+                { blogId },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                }
+            );
+            toast.success('Xóa bài viết thành công.');
+        } catch (error) {
+            console.error('Error:', error);
+            toast.error('Có lỗi xảy ra khi xoá bài viết.');
+        }
+    }
     if (loading) {
-        return <div class="spinner-border" role="status">
-            <span class="visually-hidden text-center">Loading...</span>
-        </div> // Hiển thị loading trong khi đợi dữ liệu
+        return (<div>
+            <Nav />
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden text-center">Loading...</span>
+            </div>
+        </div>)
     }
     return (
         <div>
@@ -147,7 +171,7 @@ const Blog = () => {
                                             <img src={require('../../asset/Images/option.png')} />
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="#">Xóa</a></li>
+                                            <li><a class="dropdown-item" href="#" onClick={() => handleDelete(blog._id)}>Xóa</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -203,7 +227,7 @@ const Blog = () => {
                 </div>
             </div>
             <Footer />
-        </div>
+        </div >
     );
 }
 

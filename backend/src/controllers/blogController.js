@@ -80,6 +80,25 @@ exports.likeBlog = async (req, res) => {
     }
 };
 
+exports.deteleBlog = async (req, res) => {
+    try {
+        const { blogId } = req.body
+        const UserId = req.user.userId
+
+        const deleteBlog = await Blog.deleteOne({ blogId, UserId })
+
+        if (!deleteBlog) {
+            return res.status(400).json({ message: 'Blog không tồn tại' })
+        }
+        else {
+            return res.status(200).json({ message: 'Xoá blog thành công' })
+        }
+    } catch (error) {
+
+    }
+
+}
+
 
 
 
