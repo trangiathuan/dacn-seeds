@@ -80,7 +80,7 @@ exports.likeBlog = async (req, res) => {
     }
 };
 
-exports.deteleBlog = async (req, res) => {
+exports.deleteBlog = async (req, res) => {
     try {
         const { blogId } = req.body
         const UserId = req.user.userId
