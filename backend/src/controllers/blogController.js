@@ -83,9 +83,15 @@ exports.likeBlog = async (req, res) => {
 exports.deleteBlog = async (req, res) => {
     try {
         const { blogId } = req.body
-        const UserId = req.user.userId
+        const userId = req.user.userId
 
-        const deleteBlog = await Blog.deleteOne({ blogId, UserId })
+        const blog = await Blog.findOne({ _id: blogId });
+
+        if (!blog || blog.userId.toString() !== userId) {
+            return res.status(403).json({ message: 'Bạn không có quyền xóa blog này' });
+        }
+
+        const deleteBlog = await Blog.deleteOne({ _id: blogId, userId: userId })
 
         if (!deleteBlog) {
             return res.status(400).json({ message: 'Blog không tồn tại' })
@@ -93,8 +99,10 @@ exports.deleteBlog = async (req, res) => {
         else {
             return res.status(200).json({ message: 'Xoá blog thành công' })
         }
-    } catch (error) {
 
+
+    } catch (error) {
+        res.status(500).json({ message: 'Có lỗi xảy ra' })
     }
 
 }

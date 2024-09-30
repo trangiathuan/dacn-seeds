@@ -40,23 +40,21 @@ const Blog = () => {
         const token = localStorage.getItem('token');
         setLoading(true)
         try {
-            const response = await axios.post('https://dacn-seeds-1.onrender.com/api/blog', formData, {
+            const response = await axios.post('http://localhost:8000/api/blog', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`,
                 },
             });
-
-
+            setLoading(false)
             setTimeout(() => {
                 setTitle('');
                 setContent('');
                 setImage(null); // Reset image after submitting
-                setLoading(false)
+
                 getAllBlog()
                 toast.success('Đăng bài viết thành công');
-            }, 500);
-
+            }, 1000);
 
         } catch (err) {
             console.error(err);
@@ -94,7 +92,7 @@ const Blog = () => {
     const handleDelete = async (blogId) => {
         const token = localStorage.getItem('token')
         try {
-            const response = await axios.delete('https://dacn-seeds-1.onrender.com/api/deleteBlog',
+            const response = await axios.post('https://dacn-seeds-1.onrender.com/api/deleteBlog',
                 { blogId },
                 {
                     headers: {
@@ -103,10 +101,15 @@ const Blog = () => {
                     },
                 }
             );
-            toast.success('Xóa bài viết thành công.');
+            // Nếu xóa thành công, cập nhật danh sách blog
+            if (response.status === 200) {
+                const updatedBlogs = blog.filter(b => b._id !== blogId); // Loại bỏ blog đã xóa
+                setBlog(updatedBlogs); // Cập nhật danh sách blog
+                toast.success('Xóa bài viết thành công.');
+            }
         } catch (error) {
             console.error('Error:', error);
-            toast.error('Có lỗi xảy ra khi xoá bài viết.');
+            toast.error('Bạn không được phép xoá bài viết của người khác');
         }
     }
     if (loading) {
@@ -171,7 +174,7 @@ const Blog = () => {
                                             <img src={require('../../asset/Images/option.png')} />
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="#" onClick={() => handleDelete(blog._id)}>Xóa</a></li>
+                                            <li><a class="dropdown-item" onClick={() => handleDelete(blog._id)}>Xóa</a></li>
                                         </ul>
                                     </div>
                                 </div>
