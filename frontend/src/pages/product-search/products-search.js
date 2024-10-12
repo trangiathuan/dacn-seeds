@@ -18,11 +18,11 @@ const ProductSearch = () => {
             const query = new URLSearchParams(location.search).get('query'); // Lấy từ khóa tìm kiếm từ URL
             try {
                 // Gửi yêu cầu tìm kiếm sản phẩm dựa trên từ khóa
-                const productResponse = await axios.get(`https://dacn-seeds-1.onrender.com/search?q=${query}`);
+                const productResponse = await axios.get(`http://localhost:8000/search?q=${query}`);
                 setProducts(productResponse.data);
 
                 // Gửi yêu cầu lấy danh mục sản phẩm
-                const categoryResponse = await axios.get('https://dacn-seeds-1.onrender.com/category');
+                const categoryResponse = await axios.get('http://localhost:8000/category');
                 setCategory(categoryResponse.data);
 
                 setLoading(false); // Dừng loading khi đã tải xong dữ liệu
@@ -47,7 +47,7 @@ const ProductSearch = () => {
     const addToCartDatabase = async (product) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post('https://dacn-seeds-1.onrender.com/api/cart', {
+            await axios.post('http://localhost:8000/api/cart', {
                 productName: product.productName,
                 image: product.image,
                 price: product.price,

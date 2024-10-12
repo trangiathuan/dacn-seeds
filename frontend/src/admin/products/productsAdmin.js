@@ -18,7 +18,7 @@ const ProductsAdmin = () => {
                     throw new Error('No token found');
                 }
 
-                const response = await axios.get('https://dacn-seeds-1.onrender.com/api/getAllProduct', {
+                const response = await axios.get('http://localhost:8000/api/getAllProduct', {
                     headers: {
                         Authorization: `Bearer ${token}` // Sử dụng Bearer token
                     }

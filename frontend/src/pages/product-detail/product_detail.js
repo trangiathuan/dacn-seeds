@@ -17,10 +17,10 @@ const ProductDetail = () => {
     useEffect(() => {
         const fetchProductAndComments = async () => {
             try {
-                const resProduct = await axios.get(`https://dacn-seeds-1.onrender.com/product-detail/${id}`);
+                const resProduct = await axios.get(`http://localhost:8000/product-detail/${id}`);
                 setProduct(resProduct.data);
 
-                const resComments = await axios.get(`https://dacn-seeds-1.onrender.com/api/${id}/comments`);
+                const resComments = await axios.get(`http://localhost:8000/api/${id}/comments`);
                 setComments(resComments.data);
 
 
@@ -46,7 +46,7 @@ const ProductDetail = () => {
     const addToCartDatabase = async (product) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post('https://dacn-seeds-1.onrender.com/api/cart', {
+            await axios.post('http://localhost:8000/api/cart', {
                 productName: product.productName,
                 image: product.image,
                 price: product.price,
@@ -72,7 +72,7 @@ const ProductDetail = () => {
         if (isLoggedIn) {
             try {
                 const token = localStorage.getItem('token');
-                const res = await axios.post(`https://dacn-seeds-1.onrender.com/api/${id}/comment`, { comment }, {
+                const res = await axios.post(`http://localhost:8000/api/${id}/comment`, { comment }, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

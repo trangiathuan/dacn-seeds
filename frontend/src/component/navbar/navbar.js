@@ -21,7 +21,7 @@ const Nav = () => {
                 const userId = decoded.userId;
 
                 // Gửi yêu cầu để lấy thông tin người dùng dựa trên userId
-                axios.get(`https://dacn-seeds-1.onrender.com/api/auth/users/${userId}`)
+                axios.get(`http://localhost:8000/api/auth/users/${userId}`)
                     .then(response => {
                         setUser(response.data);  // Giả sử backend trả về đối tượng user với các trường như userName
                     })
@@ -42,7 +42,7 @@ const Nav = () => {
     // Hàm xử lý tìm kiếm
     const handleSearch = async () => {
         try {
-            const response = await axios.get(`https://dacn-seeds-1.onrender.com/search?q=${searchTerm}`);
+            const response = await axios.get(`http://localhost:8000/search?q=${searchTerm}`);
             setSearchResults(response.data); // Lưu trữ kết quả tìm kiếm
         } catch (error) {
             console.error('Error during product search:', error);

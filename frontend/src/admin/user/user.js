@@ -18,7 +18,7 @@ const UserAdmin = () => {
                     throw new Error('No token found');
                 }
 
-                const response = await axios.get('https://dacn-seeds-1.onrender.com/api/getAllUsers', {
+                const response = await axios.get('http://localhost:8000/api/getAllUsers', {
                     headers: {
                         Authorization: `Bearer ${token}` // Sử dụng Bearer token
                     }
@@ -41,7 +41,7 @@ const UserAdmin = () => {
     const handleRoleChange = async (userId, newRole) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.put('https://dacn-seeds-1.onrender.com/api/updateUserRole',
+            const response = await axios.put('http://localhost:8000/api/updateUserRole',
                 { userId, role: newRole },
                 {
                     headers: {
@@ -63,7 +63,7 @@ const UserAdmin = () => {
         if (window.confirm("Bạn có chắc chắn muốn xóa user này?")) {
             try {
                 const token = localStorage.getItem('token');
-                await axios.delete(`https://dacn-seeds-1.onrender.com/api/deleteUser/${userId}`, {
+                await axios.delete(`http://localhost:8000/api/deleteUser/${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

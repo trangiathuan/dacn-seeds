@@ -6,8 +6,22 @@
     width: 250px;
     border-radius: 15px;
 }
+
+.arrange{
+ text-align: right;
+ margin-right: 70px;
+}
+
+.btn-arrange:hover{
+ color: #11a711 !important;
+ border: solid 1px #08770866 !important;
+}
+
 .card-body a{
     color: black;
+}
+.card-body{
+    height: 250px;
 }
 .col-card-product{
   padding-top: 15px;
@@ -19,16 +33,13 @@
     margin-right: auto;
 }
 .row-cardProduct{
-    margin-left: 350px;
+    margin-left: 120px;
 }
-.card-img{
-    
-    width: 250px;
-    height: 250px;
-}
+
 .card-img-top{
-    width: 250px;
+    width: 248.5px;
     height: 250px;
+    border-radius: 14px 14px 0 0 ;
 }
 .card-name{
     width: 216px;
@@ -85,12 +96,16 @@
 }
 /* Category*/
 .row-category{
-    font-size: 19px;
-    font-weight: 700;
-    margin-left: 25px;
-    margin-top: 9px;
+    font-size: 18px;
+    font-weight: 500;
+    margin-left: 29px;
+    margin-top: 16px;
+    width: 300px;
     
-    
+}
+
+.list-item{
+    width: 320px;
 }
 .a-category{
     color: black;
@@ -98,17 +113,17 @@
     width: 270px;
 }
 .col-category{
-    width: 350px;
-    position: fixed;
+    width: 250px;
+    /* position: fixed; */
 }
 .a-category:hover{
-    background-color: #f0f0f0;
-    border-radius: 15px;
+    color:#0ca90c;
 }
 .category-title{
-    font-size: 25px;
+    font-size: 20px;
     margin-top: 5px;
     margin-bottom: 0px;
     font-weight: 700;
     color: #0ca90c;
+   
 }

@@ -16,7 +16,7 @@ const NavAdmin = () => {
                 const userId = decoded.userId;
 
                 // Gửi yêu cầu để lấy thông tin người dùng dựa trên userId
-                axios.get(`https://dacn-seeds-1.onrender.com/api/auth/users/${userId}`)
+                axios.get(`http://localhost:8000/api/auth/users/${userId}`)
                     .then(response => {
                         setUser(response.data);
                     })

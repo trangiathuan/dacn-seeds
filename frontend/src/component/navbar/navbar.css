@@ -10,6 +10,12 @@
     font-size: 17px;
     padding-left: 20px;
     font-weight: 550;
+    outline: none;
+}
+.btn {
+    outline: none; /* Loại bỏ viền focus */
+    border: none; /* Đảm bảo không có viền mặc định */
+    text-decoration: none; /* Nếu bạn không muốn có gạch chân */
 }
 
 .login-nav {

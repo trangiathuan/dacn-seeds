@@ -16,10 +16,10 @@ const ProductsCategory = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const productResponse = await axios.get(`https://dacn-seeds-1.onrender.com/products-category/${id}`);
+                const productResponse = await axios.get(`http://localhost:8000/products-category/${id}`);
                 setProducts(productResponse.data);
 
-                const categoryResponse = await axios.get('https://dacn-seeds-1.onrender.com/category');
+                const categoryResponse = await axios.get('http://localhost:8000/category');
                 setCategory(categoryResponse.data);
 
                 setLoading(false); // Đặt loading thành false sau khi dữ liệu đã được tải
@@ -44,7 +44,7 @@ const ProductsCategory = () => {
     const addToCartDatabase = async (product) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post('https://dacn-seeds-1.onrender.com/api/cart', {
+            await axios.post('http://localhost:8000/api/cart', {
                 productName: product.productName,
                 image: product.image,
                 price: product.price,
@@ -74,13 +74,32 @@ const ProductsCategory = () => {
             <div className='row'>
                 <div className='col-3 col-category'>
                     <div className='row row-category'>
-                        <p className="category-title">DANH MỤC SẢN PHẨM</p>
+                        {/* <p className="category-title">DANH MỤC SẢN PHẨM</p>
                         {category.map((item) => (
                             <Link to={`/products-category/${item._id}`} key={item._id} className='a-category mt-3'>
                                 <img className='img-icon-product' src={require(`../../asset/Images/${item.categoryIcon}`)} alt={item.categoryName} />
                                 {item.categoryName}
                             </Link>
-                        ))}
+                        ))} */}
+
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center list-item">
+                                <Link to={`/products/`} className='a-category mt-0'>
+                                    <img className='img-icon-product' src={require(`../../asset/Images/mark.png`)} />
+                                    Tất cả sản phẩm
+                                    <span className="badge text-bg-success rounded-pill ms-2"> 64</span>
+                                </Link>
+                            </li>
+                            {category.map((item) => (
+                                <li class="list-group-item d-flex justify-content-between align-items-center list-item">
+                                    <Link to={`/products-category/${item._id}`} key={item._id} className='a-category mt-0'>
+                                        <img className='img-icon-product' src={require(`../../asset/Images/${item.categoryIcon}`)} alt={item.categoryName} />
+                                        {item.categoryName}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+
                     </div>
                 </div>
                 <div className='col-9 row-cardProduct'>

@@ -27,7 +27,18 @@ const productSchema = new Schema({
     image: {
         type: String,
         required: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    isSold: {
+        type: Number,
+        require: false
     }
+
+
+
 });
 
 // Tạo model Product

@@ -27,7 +27,7 @@ const Cart = () => {
     const fetchCartItems = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('https://dacn-seeds-1.onrender.com/api/cart', {
+            const res = await axios.get('http://localhost:8000/api/cart', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -48,7 +48,7 @@ const Cart = () => {
     const updateCartItemInDatabase = async (id, quantity) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`https://dacn-seeds-1.onrender.com/api/cart/${id}`, { quantity }, {
+            await axios.put(`http://localhost:8000/api/cart/${id}`, { quantity }, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -65,7 +65,7 @@ const Cart = () => {
         console.log("Deleting item with id:", id);
 
         const token = localStorage.getItem('token');
-        axios.delete(`https://dacn-seeds-1.onrender.com/api/cart/${id}`, {
+        axios.delete(`http://localhost:8000/api/cart/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

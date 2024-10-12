@@ -30,7 +30,7 @@ const Checkout = () => {
     const fetchCartItems = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('https://dacn-seeds-1.onrender.com/api/cart', {
+            const res = await axios.get('http://localhost:8000/api/cart', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -66,7 +66,7 @@ const Checkout = () => {
             };
             console.log("Sending order data:", orderData); // Log dữ liệu order để kiểm tra
 
-            const res = await axios.post('https://dacn-seeds-1.onrender.com/api/checkout', orderData, {
+            const res = await axios.post('http://localhost:8000/api/checkout', orderData, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

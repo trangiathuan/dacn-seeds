@@ -19,7 +19,7 @@ const OrdersAdmin = () => {
                     throw new Error('No token found');
                 }
 
-                const response = await axios.get('https://dacn-seeds-1.onrender.com/api/getAllOrder', {
+                const response = await axios.get('http://localhost:8000/api/getAllOrder', {
                     headers: {
                         Authorization: `Bearer ${token}` // Sử dụng Bearer token
                     }
@@ -44,7 +44,7 @@ const OrdersAdmin = () => {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.put(
-                `https://dacn-seeds-1.onrender.com/api/updateOrderStatus/${orderId}`,
+                `http://localhost:8000/api/updateOrderStatus/${orderId}`,
                 { status: newStatus },
                 {
                     headers: {
@@ -72,7 +72,7 @@ const OrdersAdmin = () => {
     const deleteOrder = async (orderId) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.delete(`https://dacn-seeds-1.onrender.com/api/deleteOrder/${orderId}`, {
+            const response = await axios.delete(`http://localhost:8000/api/deleteOrder/${orderId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

@@ -20,7 +20,7 @@ const AddProduct = () => {
             if (!token) {
                 throw new Error('No token found');
             }
-            const response = await axios.post('https://dacn-seeds-1.onrender.com/api/add-product', {
+            const response = await axios.post('http://localhost:8000/api/add-product', {
                 productName,
                 categoryID,
                 description,

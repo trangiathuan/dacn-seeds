@@ -12,7 +12,7 @@ const Home = () => {
     const [category, setCategory] = useState([]);
 
     useEffect(() => {
-        axios.get('https://dacn-seeds-1.onrender.com/product')
+        axios.get('http://localhost:8000/product')
             .then(res => {
                 setProducts(res.data);
 
@@ -21,7 +21,7 @@ const Home = () => {
                 console.error('There was an error fetching the products!', error);
             });
 
-        axios.get('https://dacn-seeds-1.onrender.com/category')
+        axios.get('http://localhost:8000/category')
             .then(res => {
                 setCategory(res.data);
             })
@@ -42,7 +42,7 @@ const Home = () => {
     const addToCartDatabase = async (product) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post('https://dacn-seeds-1.onrender.com/api/cart', {
+            await axios.post('http://localhost:8000/api/cart', {
                 productName: product.productName,
                 image: product.image,
                 price: product.price,

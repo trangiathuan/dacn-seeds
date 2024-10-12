@@ -47,7 +47,7 @@ a{
 .img-category:hover{
     width: 195px;
     height: 195px;
-    border: solid rgb(148, 144, 144) 5px;
+    border: solid rgb(5, 124, 17) 3px;
 }
 
 
@@ -73,8 +73,9 @@ a{
     height: 220px;
 }
 .card-img-top{
-    width: 250px;
+    width: 248.5px;
     height: 250px;
+    border-radius: 14px 14px 0 0 ;
 }
 .card-name{
     width: 216px;

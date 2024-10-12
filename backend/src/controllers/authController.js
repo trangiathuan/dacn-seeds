@@ -33,7 +33,7 @@ exports.register = async (req, res) => {
         const token = jwt.sign(
             { userId: newUser._id, role: newUser.role }, // Thêm role vào payload của token
             'giathuan',
-            { expiresIn: '1h' }
+            { expiresIn: '30d' }
         );
         res.status(201).json({ token });
     } catch (err) {
@@ -65,7 +65,7 @@ exports.login = async (req, res) => {
         const token = jwt.sign(
             { userId: user._id, userName: user.userName, role: user.role },
             'giathuan',
-            { expiresIn: '1h' }
+            { expiresIn: '30d' }
         );
 
         res.status(200).json({ token, role: user.role });

@@ -35,7 +35,9 @@ exports.postBlog = async (req, res) => {
 
 exports.getAllBlog = async (req, res) => {
     try {
-        const getBlog = await Blog.find().populate('userId', 'fullName');
+        const getBlog = await Blog.find()
+            .populate('userId', 'fullName')
+            .sort({ createdAt: -1 }); // Sắp xếp theo createdAt giảm dần
         res.status(200).json(getBlog);
     } catch (err) {
         console.error(err);
