@@ -4,6 +4,7 @@ import Sidebar from "../component/sidebar/sidebar";
 import CategoryChart from "./CategoryChart";
 import './dashboard.css'
 import axios from "axios";
+import API_URL from '../../config/config.js';
 
 
 const Dashboard = () => {
@@ -11,7 +12,7 @@ const Dashboard = () => {
 
     useEffect(() => {
 
-        axios.get('http://localhost:8000/api/dashboard', {
+        axios.get(`${API_URL}/dashboard`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -36,7 +37,7 @@ const Dashboard = () => {
         const fetchTotalOrders = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:8000/api/totalOrders', {
+                const response = await axios.get(`${API_URL}/totalOrders`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -56,7 +57,7 @@ const Dashboard = () => {
         const fetchTotalProducts = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:8000/api/totalProducts', {
+                const response = await axios.get(`${API_URL}/totalProducts`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -76,7 +77,7 @@ const Dashboard = () => {
         const fetchTotalUsers = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:8000/api/totalUsers', {
+                const response = await axios.get(`${API_URL}/totalUsers`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

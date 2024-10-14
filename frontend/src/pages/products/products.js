@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 import './products.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Dropdown, message, Space, Tooltip } from 'antd';
+import API_URL from "../../config/config";
 
 
 const items = [
@@ -43,9 +43,9 @@ const Products = () => {
     }, [sortKey]);
     // Lấy ra danh sách sản phẩm
     const getAllProducts = async () => {
-        await axios.get(`http://localhost:8000/product?sort=${sortKey}`)
+        await axios.get(`${API_URL}/product?sort=${sortKey}`)
             .then(res => {
-                console.log('Products data:', res.data);  // Log dữ liệu nhận được
+                console.log('Products data:', res.data);
                 setProducts(res.data);
                 setLoading(false);
             })
@@ -56,7 +56,7 @@ const Products = () => {
     }
     // Lấy ra danh mục
     const getCategory = () => {
-        axios.get('http://localhost:8000/category')
+        axios.get(`${API_URL}/category`)
             .then(res => {
                 setCategory(res.data);
             })
@@ -77,17 +77,17 @@ const Products = () => {
     const addToCartDatabase = async (product) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post('http://localhost:8000/api/cart', {
+            await axios.post(`${API_URL}/cart`, {
                 productName: product.productName,
                 image: product.image,
                 price: product.price,
-                quantity: 1  // Giả sử số lượng mặc định là 1
+                quantity: 1
             }, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            toast.success("Sản phẩm đã được thêm vào giỏ hàng");
+            toast.success("Thêm sản phẩm vào giỏ hàng");
         } catch (err) {
             console.error(err);
             toast.success("Đăng nhập để thêm sản phẩm vào giỏ hàng");

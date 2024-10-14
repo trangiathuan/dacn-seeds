@@ -4,6 +4,7 @@ import Sidebar from "../component/sidebar/sidebar";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import API_URL from '../../config/config';
 
 const ProductsAdmin = () => {
     const [products, setProducts] = useState([]);
@@ -18,7 +19,7 @@ const ProductsAdmin = () => {
                     throw new Error('No token found');
                 }
 
-                const response = await axios.get('http://localhost:8000/api/getAllProduct', {
+                const response = await axios.get(`${API_URL}/getAllProduct`, {
                     headers: {
                         Authorization: `Bearer ${token}` // Sử dụng Bearer token
                     }

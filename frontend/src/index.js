@@ -21,6 +21,7 @@ import AddProduct from './admin/products/add-product';
 import UpdateProduct from './admin/products/update-product';
 import DeleteProduct from './admin/products/delete-product';
 import OrdersAdmin from './admin/order/order';
+import SoldOrdersAdmin from './admin/order/soldOrders';
 import UserAdmin from './admin/user/user';
 
 
@@ -56,6 +57,7 @@ root.render(
 
 
         <Route path="/admin/orders" element={<OrdersAdmin />} />
+        <Route path="/admin/soldOrders" element={<SoldOrdersAdmin />} />
 
 
 

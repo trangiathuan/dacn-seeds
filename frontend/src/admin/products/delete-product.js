@@ -4,6 +4,7 @@ import NavAdmin from "../component/nav-admin/nav-admin";
 import Sidebar from "../component/sidebar/sidebar";
 import axios from 'axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import API_URL from '../../config/config';
 
 const DeleteProduct = () => {
     const { id } = useParams(); // Lấy ID sản phẩm từ URL
@@ -24,7 +25,7 @@ const DeleteProduct = () => {
                     throw new Error('No token found');
                 }
 
-                const response = await axios.get(`http://localhost:8000/api/products/${id}`, {
+                const response = await axios.get(`${API_URL}/products/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}` // Thêm token vào header
                     }
@@ -55,7 +56,7 @@ const DeleteProduct = () => {
                 throw new Error('No token found');
             }
 
-            await axios.delete(`http://localhost:8000/api/products/${id}`, {
+            await axios.delete(`${API_URL}/products/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}` // Thêm token vào header
                 }

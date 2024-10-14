@@ -3,11 +3,10 @@ import NavAdmin from "../component/nav-admin/nav-admin";
 import Sidebar from "../component/sidebar/sidebar";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import API_URL from '../../config/config';
 
-const OrdersAdmin = () => {
+const SoldOrdersAdmin = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -22,7 +21,7 @@ const OrdersAdmin = () => {
                 throw new Error('No token found');
             }
 
-            const response = await axios.get(`${API_URL}/getAllOrder`, {
+            const response = await axios.get(`${API_URL}/getSoldOrders`, {
                 headers: {
                     Authorization: `Bearer ${token}` // Sử dụng Bearer token
                 }
@@ -178,4 +177,4 @@ const OrdersAdmin = () => {
     )
 }
 
-export default OrdersAdmin;
+export default SoldOrdersAdmin;

@@ -1,6 +1,6 @@
 .body-checkout{
     margin-top: 140px;
-    display: block;
+    display: flex;
     margin-right: auto;
     margin-left: auto;
     width: 1200px;
@@ -17,7 +17,12 @@
     border-radius: 10px;
 }
 .img-checkout-body{
-width: 200px;
+width: 120px;
+}
+
+.table-checkout {
+    width: 800px;
+    display: block;
 }
 
 .checkout-name{
@@ -53,9 +58,8 @@ width: 200px;
     text-align: center;
 }
 .customer-infor{
-    width: 400px;
+    width: 350px;
     display: block;
     margin-left: auto;
-    margin-right: 25px;
     
 }

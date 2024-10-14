@@ -110,13 +110,34 @@ exports.getTotalProducts = async (req, res) => {
 
 
 
+//API Order//
 
-
-
-
+//Lấy ra DS đơn hàng 
 exports.getAllOrder = async (req, res) => {
     try {
-        const orders = await Order.find()
+        const orders = await Order.find({ status: { $in: [0, 1] } }) //Hiển thị đơn hàng chưa duyệt và đã duyệt
+        res.status(200).json(orders);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ msg: 'Lỗi server' });
+    }
+};
+
+//Lấy ra DS đơn hàng đã bán 
+exports.getSoldOrders = async (req, res) => {
+    try {
+        const orders = await Order.find({ status: 2 })
+        res.status(200).json(orders);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ msg: 'Lỗi server' });
+    }
+};
+
+//Lấy ra DS đơn hàng đã hủy 
+exports.getCancelledOrders = async (req, res) => {
+    try {
+        const orders = await Order.find({ status: 1 })
         res.status(200).json(orders);
     } catch (error) {
         console.error(error.message);
@@ -129,7 +150,7 @@ exports.updateOrderStatus = async (req, res) => {
         const { orderId } = req.params;
         const { status } = req.body;
         // Kiểm tra trạng thái có hợp lệ hay không
-        const validStatuses = ['Đang chờ duyệt', 'Đã duyệt', 'Đã giao', 'Đã hủy'];
+        const validStatuses = [-1, 0, 1, 2];
         if (!validStatuses.includes(status)) {
             return res.status(400).json({ message: 'Trạng thái không hợp lệ' });
         }
@@ -182,7 +203,7 @@ exports.getTotalOrders = async (req, res) => {
 exports.getTotalPendingOrders = async (req, res) => {
     try {
         // Sử dụng Mongoose để đếm tổng số đơn hàng với status là "Pending"
-        const totalPendingOrders = await Order.countDocuments({ status: 'Đang chờ duyệt' });
+        const totalPendingOrders = await Order.countDocuments({ status: 0 });
 
         // Trả về tổng số lượng đơn hàng "Pending"
         res.status(200).json({ totalPendingOrders });

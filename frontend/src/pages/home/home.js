@@ -5,14 +5,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import './home.css';
+import API_URL from "../../config/config";
 const Home = () => {
     const [products, setProducts] = useState([]);
     const [category, setCategory] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:8000/product')
+        axios.get(`${API_URL}/product`)
             .then(res => {
                 setProducts(res.data);
 
@@ -21,7 +21,7 @@ const Home = () => {
                 console.error('There was an error fetching the products!', error);
             });
 
-        axios.get('http://localhost:8000/category')
+        axios.get(`${API_URL}/category`)
             .then(res => {
                 setCategory(res.data);
             })
@@ -42,7 +42,7 @@ const Home = () => {
     const addToCartDatabase = async (product) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post('http://localhost:8000/api/cart', {
+            await axios.post(`${API_URL}/cart`, {
                 productName: product.productName,
                 image: product.image,
                 price: product.price,

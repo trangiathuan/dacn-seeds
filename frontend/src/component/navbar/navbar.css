@@ -20,9 +20,15 @@
 
 .login-nav {
     margin-top: 12px;
-    width: 320px;
-    display: flex;
+    width: 230px;
+    display: block;
+   
 }
+
+.dropdown-text {
+    color: black; /* Màu đen */
+}
+
 
 .username-nav {
     font-weight: 700;
@@ -55,7 +61,7 @@
 }
 
 .nav-search {
-    margin-left: 65px;
+    margin-left: 0px;
     position: relative; 
 }
 .nav-search img {
@@ -68,7 +74,7 @@
 }
 
 .cart {
-    width: 30px;
+    width: 40px;
 }
 
 .navbar {
@@ -86,11 +92,6 @@
 .a-cart {
     width: 160px;
     margin-top: 12px;
-}
-
-.btn-nav {
-    background-color: #f0f0f0;
-    border-radius: 25px;
 }
 
 .btn-search {

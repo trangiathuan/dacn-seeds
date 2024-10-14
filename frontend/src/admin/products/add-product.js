@@ -3,6 +3,7 @@ import './productsAdmin.css'
 import NavAdmin from "../component/nav-admin/nav-admin";
 import Sidebar from "../component/sidebar/sidebar";
 import axios from 'axios';
+import API_URL from '../../config/config';
 
 const AddProduct = () => {
     const [productName, setProductName] = useState('');
@@ -20,7 +21,7 @@ const AddProduct = () => {
             if (!token) {
                 throw new Error('No token found');
             }
-            const response = await axios.post('http://localhost:8000/api/add-product', {
+            const response = await axios.post(`${API_URL}/add-product`, {
                 productName,
                 categoryID,
                 description,

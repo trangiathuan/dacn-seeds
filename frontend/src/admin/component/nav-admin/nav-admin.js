@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';  // Sử dụng axios để gửi yêu cầu tới backend
+import API_URL from '../../../config/config.js';
 
 const NavAdmin = () => {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ const NavAdmin = () => {
                 const userId = decoded.userId;
 
                 // Gửi yêu cầu để lấy thông tin người dùng dựa trên userId
-                axios.get(`http://localhost:8000/api/auth/users/${userId}`)
+                axios.get(`${API_URL}/users/${userId}`)
                     .then(response => {
                         setUser(response.data);
                     })

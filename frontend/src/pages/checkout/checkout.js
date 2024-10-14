@@ -4,6 +4,10 @@ import Nav from '../../component/navbar/navbar';
 import './checkout.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
+import { toast } from 'react-toastify';
+import API_URL from '../../config/config';
+
 
 const Checkout = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -14,6 +18,7 @@ const Checkout = () => {
         addDress: '',
         paymentMethod: 'Khi nhận hàng' // Mặc định là tiền mặt
     });
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
     const isLoggedIn = !!localStorage.getItem('token');
 
@@ -23,6 +28,7 @@ const Checkout = () => {
             return;
         } else {
             fetchCartItems();
+            getInfotUser();
 
         }
     }, [isLoggedIn, navigate]);
@@ -30,7 +36,7 @@ const Checkout = () => {
     const fetchCartItems = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:8000/api/cart', {
+            const res = await axios.get(`${API_URL}/cart`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -40,6 +46,30 @@ const Checkout = () => {
             console.error(err);
         }
     };
+
+    const getInfotUser = async () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                const userId = decoded.userId;
+
+                const response = await axios.get(`${API_URL}/users/${userId}`);
+                const userData = response.data;
+
+                // Cập nhật orderInfo với thông tin người dùng
+                setOrderInfo(prevState => ({
+                    ...prevState,
+                    fullName: userData.fullName,
+                    email: userData.email,
+                    phoneNumber: userData.phoneNumber,
+                    addDress: userData.address // Cập nhật địa chỉ
+                }));
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        }
+    }
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -66,7 +96,7 @@ const Checkout = () => {
             };
             console.log("Sending order data:", orderData); // Log dữ liệu order để kiểm tra
 
-            const res = await axios.post('http://localhost:8000/api/checkout', orderData, {
+            const res = await axios.post(`${API_URL}/checkout`, orderData, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -83,37 +113,39 @@ const Checkout = () => {
     return (
         <div>
             <Nav />
-            <div className='body-checkout'>
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th className='text-center' scope="col">Sản phẩm</th>
-                            <th className='text-center' scope="col">Giá bán</th>
-                            <th className='text-center' scope="col">Số lượng</th>
-                            <th className='text-center' scope="col">Thành tiền</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {cartItems.map(item => (
-                            <tr key={item._id}>
-                                <td className='img-checkout-body'>
-                                    <img className='img-checkout' src={require(`../../asset/images-product/${item.image}`)} alt={item.productName} />
-                                </td>
-                                <td className='checkout-name'>
-                                    <p className='name-product'>{item.productName}</p>
-                                </td>
-                                <td className='checkout-price'>{item.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
-                                <td className='checkout-quantity'>{item.quantity}</td>
-                                <td className='checkout-total total-price'>
-                                    {(item.price * item.quantity).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-                                </td>
+            <div className='row body-checkout '>
+                <div className='table-checkout'>
+                    <table className="col-6 table ">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th className='text-center' scope="col">Sản phẩm</th>
+                                <th className='text-center' scope="col">Giá bán</th>
+                                <th className='text-center' scope="col">Số lượng</th>
+                                <th className='text-center' scope="col">Thành tiền</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {cartItems.map(item => (
+                                <tr key={item._id}>
+                                    <td className='img-checkout-body'>
+                                        <img className='img-checkout' src={require(`../../asset/images-product/${item.image}`)} alt={item.productName} />
+                                    </td>
+                                    <td className='checkout-name'>
+                                        <p className='name-product'>{item.productName}</p>
+                                    </td>
+                                    <td className='checkout-price'>{item.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
+                                    <td className='checkout-quantity'>{item.quantity}</td>
+                                    <td className='checkout-total total-price'>
+                                        {(item.price * item.quantity).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
 
-                <div className='customer-infor'>
+                    </table>
+                </div>
+                <div className='col-6 customer-infor '>
 
                     <h4>Thông tin mua hàng</h4>
                     <form>
@@ -188,7 +220,7 @@ const Checkout = () => {
 
             </div>
             <Footer />
-        </div>
+        </div >
     );
 };
 

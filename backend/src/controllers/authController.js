@@ -14,7 +14,7 @@ exports.register = async (req, res) => {
     try {
         const existingUser = await User.findOne({ $or: [{ email }, { userName }] });
         if (existingUser) {
-            return res.status(400).json({ message: "Tên tài khoản hoặc Email đã tồn tại" });
+            return res.status(400).json({ message: "Tên tài khoản hoặc email đã tồn tại" });
         }
 
         const newUser = new User({

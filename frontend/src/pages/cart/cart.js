@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Footer from '../../component/footer/footer';
 import Nav from '../../component/navbar/navbar';
 import './cart.css';
+import API_URL from '../../config/config';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
@@ -27,7 +28,7 @@ const Cart = () => {
     const fetchCartItems = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:8000/api/cart', {
+            const res = await axios.get(`${API_URL}/cart`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -48,7 +49,7 @@ const Cart = () => {
     const updateCartItemInDatabase = async (id, quantity) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`http://localhost:8000/api/cart/${id}`, { quantity }, {
+            await axios.put(`${API_URL}/cart/${id}`, { quantity }, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -65,7 +66,7 @@ const Cart = () => {
         console.log("Deleting item with id:", id);
 
         const token = localStorage.getItem('token');
-        axios.delete(`http://localhost:8000/api/cart/${id}`, {
+        axios.delete(`${API_URL}/cart/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

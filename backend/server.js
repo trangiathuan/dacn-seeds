@@ -18,9 +18,9 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 app.use(bodyParser.json());
-app.use('/', productRoutes);
-app.use('/', categoryRoutes);
-app.use('/api/auth', authRoutes);
+app.use('/api', productRoutes);
+app.use('/api', categoryRoutes);
+app.use('/api', authRoutes);
 app.use('/api', cartRoutes);
 app.use('/api', checkoutRoutes);
 app.use('/api', adminRoutes);

@@ -18,6 +18,8 @@ router.put('/updateOrderStatus/:orderId', authAdmin, adminController.updateOrder
 router.delete('/deleteOrder/:orderId', authAdmin, adminController.deleteOrder);
 router.get('/totalOrders', authAdmin, adminController.getTotalOrders);
 router.get('/totalPendingOrders', authAdmin, adminController.getTotalPendingOrders);
+router.get('/getSoldOrders', authAdmin, adminController.getSoldOrders);
+
 // Route User
 router.get('/getAllUsers', authAdmin, adminController.getAllUsers);
 router.put('/updateUserRole', authAdmin, adminController.updateUserRole);

@@ -3,6 +3,7 @@ import Nav from "../../component/navbar/navbar";
 import Footer from "../../component/footer/footer";
 import './blog.css';
 import axios from 'axios';
+import API_URL from '../../config/config';
 import { toast, ToastContainer } from 'react-toastify';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -23,7 +24,7 @@ const Blog = () => {
 
     const getAllBlog = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/getAllBlog');
+            const response = await axios.get(`${API_URL}/getAllBlog`);
             setBlog(response.data);
             setLoading(false);
         } catch (error) {
@@ -54,7 +55,7 @@ const Blog = () => {
         setLoading(true);
 
         try {
-            await axios.post('http://localhost:8000/api/blog', formData, {
+            await axios.post(`${API_URL}/blog`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`,
@@ -80,7 +81,7 @@ const Blog = () => {
     const handleLike = async (blogId) => {
         const token = localStorage.getItem('token');
         try {
-            const response = await axios.post('http://localhost:8000/api/like', { blogId }, {
+            const response = await axios.post(`${API_URL}/like`, { blogId }, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
@@ -100,7 +101,7 @@ const Blog = () => {
     const handleDelete = async (blogId) => {
         const token = localStorage.getItem('token');
         try {
-            const response = await axios.post('http://localhost:8000/api/deleteBlog', { blogId }, {
+            const response = await axios.post(`${API_URL}/deleteBlog`, { blogId }, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,

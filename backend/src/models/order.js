@@ -47,10 +47,11 @@ const orderSchema = new mongoose.Schema({
         required: true
     },
     status: {
-        type: String,
-        default: 'Đang chờ duyệt',  // Trạng thái mặc định
-        enum: ['Đang chờ duyệt', 'Đã duyệt', 'Đã giao', 'Đã hủy']  // Các trạng thái có thể có
+        type: Number,
+        default: 0,
+        enum: [-1, 0, 1, 2]
     },
+
     createdAt: {
         type: Date,
         default: Date.now

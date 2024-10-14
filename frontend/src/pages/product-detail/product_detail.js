@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import API_URL from '../../config/config';
 
 const ProductDetail = () => {
     const [product, setProduct] = useState(null);  // Khởi tạo product là null để dễ kiểm tra
@@ -17,10 +18,10 @@ const ProductDetail = () => {
     useEffect(() => {
         const fetchProductAndComments = async () => {
             try {
-                const resProduct = await axios.get(`http://localhost:8000/product-detail/${id}`);
+                const resProduct = await axios.get(`${API_URL}/product-detail/${id}`);
                 setProduct(resProduct.data);
 
-                const resComments = await axios.get(`http://localhost:8000/api/${id}/comments`);
+                const resComments = await axios.get(`${API_URL}/${id}/comments`);
                 setComments(resComments.data);
 
 
@@ -46,7 +47,7 @@ const ProductDetail = () => {
     const addToCartDatabase = async (product) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post('http://localhost:8000/api/cart', {
+            await axios.post(`${API_URL}/cart`, {
                 productName: product.productName,
                 image: product.image,
                 price: product.price,
@@ -72,7 +73,7 @@ const ProductDetail = () => {
         if (isLoggedIn) {
             try {
                 const token = localStorage.getItem('token');
-                const res = await axios.post(`http://localhost:8000/api/${id}/comment`, { comment }, {
+                const res = await axios.post(`${API_URL}/${id}/comment`, { comment }, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

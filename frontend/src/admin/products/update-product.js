@@ -4,6 +4,7 @@ import NavAdmin from "../component/nav-admin/nav-admin";
 import Sidebar from "../component/sidebar/sidebar";
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import API_URL from '../../config/config';
 
 
 const UpdateProduct = () => {
@@ -24,7 +25,7 @@ const UpdateProduct = () => {
                     throw new Error('No token found');
                 }
 
-                const response = await axios.get(`http://localhost:8000/api/products/${id}`, {
+                const response = await axios.get(`${API_URL}/products/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}` // Thêm token vào header
                     }
@@ -54,7 +55,7 @@ const UpdateProduct = () => {
             if (!token) {
                 throw new Error('No token found');
             }
-            const response = await axios.put(`http://localhost:8000/api/update-product/${id}`, {
+            const response = await axios.put(`${API_URL}/update-product/${id}`, {
                 productName: productName,
                 categoryID: categoryID,
                 description: description,

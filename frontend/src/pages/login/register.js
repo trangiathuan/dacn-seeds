@@ -2,6 +2,7 @@ import './login.css';
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import API_URL from '../../config/config';
 
 const Register = () => {
     const [userName, setUserName] = useState('');
@@ -16,12 +17,13 @@ const Register = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:8000/api/auth/register', {
+            await axios.post(`${API_URL}/register`, {
                 userName, passWord, fullName, birthDay, address, phoneNumber, email
             });
             navigate('/login'); // Chuyển hướng đến trang đăng nhập sau khi đăng ký thành công
         } catch (err) {
-            alert('Đăng ký thất bại. Vui lòng thử lại.');
+
+            alert(err.response.data.message); // Hiển thị thông báo lỗi
         }
     };
 

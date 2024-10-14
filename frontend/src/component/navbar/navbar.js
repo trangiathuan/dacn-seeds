@@ -1,16 +1,19 @@
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';  // Sử dụng axios để gửi yêu cầu tới backend
+import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import './navbar.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import API_URL from '../../config/config';
+import { UserOutlined } from '@ant-design/icons';
+import { Dropdown, Space } from 'antd';
 
 const Nav = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
-    const [searchTerm, setSearchTerm] = useState(''); // Thêm state cho từ khóa tìm kiếm
-    const [searchResults, setSearchResults] = useState([]); // Thêm state cho kết quả tìm kiếm
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
     const isLoggedIn = !!localStorage.getItem('token');
 
     useEffect(() => {
@@ -20,10 +23,9 @@ const Nav = () => {
                 const decoded = jwtDecode(token);
                 const userId = decoded.userId;
 
-                // Gửi yêu cầu để lấy thông tin người dùng dựa trên userId
-                axios.get(`http://localhost:8000/api/auth/users/${userId}`)
+                axios.get(`${API_URL}/users/${userId}`)
                     .then(response => {
-                        setUser(response.data);  // Giả sử backend trả về đối tượng user với các trường như userName
+                        setUser(response.data);
                     })
                     .catch(error => {
                         console.error("Error fetching user data:", error);
@@ -36,18 +38,34 @@ const Nav = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
+        setUser(null);
+        navigate('/login');
+        toast.success("Đăng xuất thành công");
+    };
+
+    const handleLogin = () => {
         navigate('/login');
     };
 
-    // Hàm xử lý tìm kiếm
-    const handleSearch = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8000/search?q=${searchTerm}`);
-            setSearchResults(response.data); // Lưu trữ kết quả tìm kiếm
-        } catch (error) {
-            console.error('Error during product search:', error);
-        }
-    };
+    const items = [
+        {
+            label: <a onClick={() => navigate('/profile')}>Thông tin cá nhân</a>,
+            key: '0',
+        },
+        {
+            label: <a onClick={() => navigate('/orders')}>Đơn hàng</a>,
+            key: '1',
+        },
+        {
+            type: 'divider',
+        },
+        {
+            label: isLoggedIn ?
+                <a onClick={handleLogout}>Đăng xuất</a> :
+                <a onClick={handleLogin}>Đăng nhập</a>,
+            key: '3',
+        },
+    ];
 
     const checkLogin = async () => {
         try {
@@ -62,10 +80,19 @@ const Nav = () => {
 
     }
 
+    // Hàm xử lý tìm kiếm
+    const handleSearch = async () => {
+        try {
+            const response = await axios.get(`${API_URL}/search?q=${searchTerm}`);
+            setSearchResults(response.data);
+        } catch (error) {
+            console.error('Error during product search:', error);
+        }
+    };
+
     // Hàm xử lý khi người dùng chọn sản phẩm từ kết quả tìm kiếm
     const handleProductSelect = (productId) => {
-        navigate(`/product-detail/${productId}`); // Chuyển hướng đến trang chi tiết sản phẩm
-
+        navigate(`/product-detail/${productId}`);
     };
 
     return (
@@ -74,33 +101,32 @@ const Nav = () => {
                 <div className='col-2'>
                     <img className='logo' src={require("../../asset/Images/Logo.png")} alt="Logo" />
                 </div>
-                <div className='col-5'>
+                <div className='col-4'>
                     <div className="input-group mt-3 mb-3 nav-search">
                         <input
                             type="text"
                             className="form-control"
                             placeholder="Nhập sản phẩm cần tìm"
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)} // Cập nhật từ khóa tìm kiếm
+                            onChange={(e) => setSearchTerm(e.target.value)}
                         />
                         <button
                             className="btn btn-outline-secondary btn-search"
                             type="button"
                             id="button-addon2"
-                            onClick={handleSearch} // Gọi hàm tìm kiếm khi nhấn nút
+                            onClick={handleSearch}
                         >
                             <img src={require("../../asset/Images/search-interface-symbol.png")} />
                         </button>
                     </div>
 
-                    {/* Phần hiển thị kết quả tìm kiếm */}
                     {searchResults.length > 0 && (
                         <ul className="list-group search">
                             {searchResults.map(product => (
                                 <li
                                     key={product._id}
                                     className="list-group-item"
-                                    onClick={() => handleProductSelect(product._id)} // Chuyển hướng khi người dùng chọn sản phẩm
+                                    onClick={() => handleProductSelect(product._id)}
                                 >
                                     {product.productName}
                                 </li>
@@ -116,18 +142,19 @@ const Nav = () => {
                     </a>
                 </div>
                 <div className='mt-4 mb-1 login-nav'>
-                    {user ? (
-                        <>
-                            <p className='username-nav'>{user.fullName}</p> {/* Hiển thị userName hoặc email */}
-                            <button onClick={handleLogout} className='btn btn-login'>Đăng xuất</button>
-                        </>
-                    ) : (
-                        <a href='/login'>
-                            <button className='btn btn-login'>
-                                Đăng nhập
-                            </button>
+                    <Dropdown
+                        menu={{
+                            items,
+                        }}
+                        trigger={['click']}
+                    >
+                        <a onClick={(e) => e.preventDefault()}>
+                            <Space style={{ cursor: 'pointer' }} >
+                                <UserOutlined style={{ color: "black", cursor: 'pointer' }} />
+                                <span className="dropdown-text">{user ? user.fullName : 'Tài Khoản'}</span> {/* Thay đổi ở đây */}
+                            </Space>
                         </a>
-                    )}
+                    </Dropdown>
                 </div>
             </div>
             <div className='sticky-sm-top'>
