@@ -157,6 +157,21 @@
 .search {
     position: absolute;
     z-index: 1100; /* Đảm bảo phần tìm kiếm nổi lên trên */
-    margin-left: 65px;
-    width: 615px;
+    margin-left: 0px;
+    width: 490px;
+}
+
+.img-search {
+    width: 100px;
+    border-radius: 5px;
+}
+
+.list-group-item{
+    cursor: pointer;
+}
+.list-group.search {
+    max-height: 600px; /* Chiều cao tối đa của danh sách */
+    overflow-y: auto;  /* Cho phép cuộn dọc khi nội dung vượt quá chiều cao */
+    position: absolute; /* Đảm bảo danh sách hiển thị bên trên các phần tử khác */
+    z-index: 10000;     /* Đảm bảo danh sách không bị ẩn bởi các phần tử khác */
 }

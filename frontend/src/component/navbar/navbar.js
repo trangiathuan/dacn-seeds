@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import './navbar.css';
@@ -14,6 +14,8 @@ const Nav = () => {
     const [user, setUser] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
+    const [showResults, setShowResults] = useState(false); // Biến để kiểm soát hiển thị kết quả
+    const resultsRef = useRef(null); // Tham chiếu đến phần tử danh sách tìm kiếm
     const isLoggedIn = !!localStorage.getItem('token');
 
     useEffect(() => {
@@ -39,7 +41,7 @@ const Nav = () => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         setUser(null);
-        navigate('/login');
+        navigate('/');
         toast.success("Đăng xuất thành công");
     };
 
@@ -53,16 +55,14 @@ const Nav = () => {
             key: '0',
         },
         {
-            label: <a onClick={() => navigate('/orders')}>Đơn hàng</a>,
+            label: <a onClick={() => navigate('/order')}>Đơn hàng</a>,
             key: '1',
         },
         {
             type: 'divider',
         },
         {
-            label: isLoggedIn ?
-                <a onClick={handleLogout}>Đăng xuất</a> :
-                <a onClick={handleLogin}>Đăng nhập</a>,
+            label: isLoggedIn ? <a onClick={handleLogout}>Đăng xuất</a> : <a onClick={handleLogin}>Đăng nhập</a>,
             key: '3',
         },
     ];
@@ -77,7 +77,6 @@ const Nav = () => {
         catch (error) {
             console.error('Lỗi check đăng nhập', error);
         }
-
     }
 
     // Hàm xử lý tìm kiếm
@@ -85,6 +84,7 @@ const Nav = () => {
         try {
             const response = await axios.get(`${API_URL}/search?q=${searchTerm}`);
             setSearchResults(response.data);
+            setShowResults(true); // Hiển thị kết quả khi có dữ liệu
         } catch (error) {
             console.error('Error during product search:', error);
         }
@@ -93,7 +93,23 @@ const Nav = () => {
     // Hàm xử lý khi người dùng chọn sản phẩm từ kết quả tìm kiếm
     const handleProductSelect = (productId) => {
         navigate(`/product-detail/${productId}`);
+        setShowResults(false); // Ẩn kết quả sau khi chọn sản phẩm
     };
+
+    const handleClickOutside = (event) => {
+        if (resultsRef.current && !resultsRef.current.contains(event.target)) {
+            setShowResults(false); // Ẩn kết quả khi nhấp chuột bên ngoài
+        }
+    };
+
+    useEffect(() => {
+        // Thêm sự kiện lắng nghe
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            // Dọn dẹp sự kiện khi component unmount
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     return (
         <div className='nav-all'>
@@ -109,6 +125,11 @@ const Nav = () => {
                             placeholder="Nhập sản phẩm cần tìm"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
+                            onKeyPress={(e) => {
+                                if (e.key === 'Enter') {
+                                    handleSearch();
+                                }
+                            }}
                         />
                         <button
                             className="btn btn-outline-secondary btn-search"
@@ -120,15 +141,23 @@ const Nav = () => {
                         </button>
                     </div>
 
-                    {searchResults.length > 0 && (
-                        <ul className="list-group search">
+                    {showResults && searchResults.length > 0 && (
+                        <ul className="list-group search" ref={resultsRef}>
                             {searchResults.map(product => (
                                 <li
                                     key={product._id}
                                     className="list-group-item"
                                     onClick={() => handleProductSelect(product._id)}
                                 >
-                                    {product.productName}
+                                    <div className='row'>
+                                        <div className='col-3'>
+                                            <img className='img-search' src={require(`../../asset/images-product/${product.image}`)} />
+                                        </div>
+                                        <div className='col-9'>
+                                            <span className='fw-semibold'>{product.productName}</span><br />
+                                            <span>{product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
+                                        </div>
+                                    </div>
                                 </li>
                             ))}
                         </ul>
@@ -143,15 +172,13 @@ const Nav = () => {
                 </div>
                 <div className='mt-4 mb-1 login-nav'>
                     <Dropdown
-                        menu={{
-                            items,
-                        }}
+                        menu={{ items }}
                         trigger={['click']}
                     >
                         <a onClick={(e) => e.preventDefault()}>
                             <Space style={{ cursor: 'pointer' }} >
                                 <UserOutlined style={{ color: "black", cursor: 'pointer' }} />
-                                <span className="dropdown-text">{user ? user.fullName : 'Tài Khoản'}</span> {/* Thay đổi ở đây */}
+                                <span className="dropdown-text">{user ? user.fullName : 'Tài Khoản'}</span>
                             </Space>
                         </a>
                     </Dropdown>
@@ -159,7 +186,6 @@ const Nav = () => {
             </div>
             <div className='sticky-sm-top'>
                 <nav className="navbar navbar-expand-lg nav-bg">
-                    {/* Menu dropdown */}
                     <div className="dropdown ps-5">
                         <a className="btn dropdown nav-a" href="#" role="button" id="dropdownMenuLink">
                             <img className='icon-menu' src={require('../../asset/Images/menu.png')} alt="Menu" /> DANH MỤC SẢN PHẨM

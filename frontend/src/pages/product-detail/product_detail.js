@@ -48,6 +48,7 @@ const ProductDetail = () => {
         try {
             const token = localStorage.getItem('token');
             await axios.post(`${API_URL}/cart`, {
+                productId: product._id,
                 productName: product.productName,
                 image: product.image,
                 price: product.price,

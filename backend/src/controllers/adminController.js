@@ -115,7 +115,7 @@ exports.getTotalProducts = async (req, res) => {
 //Lấy ra DS đơn hàng 
 exports.getAllOrder = async (req, res) => {
     try {
-        const orders = await Order.find({ status: { $in: [0, 1] } }) //Hiển thị đơn hàng chưa duyệt và đã duyệt
+        const orders = await Order.find({ status: { $in: [0, 1, 2] } }) //Hiển thị đơn hàng chưa duyệt và đã duyệt
         res.status(200).json(orders);
     } catch (error) {
         console.error(error.message);
@@ -126,7 +126,7 @@ exports.getAllOrder = async (req, res) => {
 //Lấy ra DS đơn hàng đã bán 
 exports.getSoldOrders = async (req, res) => {
     try {
-        const orders = await Order.find({ status: 2 })
+        const orders = await Order.find({ status: 3 })
         res.status(200).json(orders);
     } catch (error) {
         console.error(error.message);
@@ -137,7 +137,7 @@ exports.getSoldOrders = async (req, res) => {
 //Lấy ra DS đơn hàng đã hủy 
 exports.getCancelledOrders = async (req, res) => {
     try {
-        const orders = await Order.find({ status: 1 })
+        const orders = await Order.find({ status: -1 })
         res.status(200).json(orders);
     } catch (error) {
         console.error(error.message);
@@ -150,7 +150,7 @@ exports.updateOrderStatus = async (req, res) => {
         const { orderId } = req.params;
         const { status } = req.body;
         // Kiểm tra trạng thái có hợp lệ hay không
-        const validStatuses = [-1, 0, 1, 2];
+        const validStatuses = [-1, 0, 1, 2, 3];
         if (!validStatuses.includes(status)) {
             return res.status(400).json({ message: 'Trạng thái không hợp lệ' });
         }
@@ -172,18 +172,26 @@ exports.updateOrderStatus = async (req, res) => {
 
 exports.deleteOrder = async (req, res) => {
     try {
-        const { orderId } = req.params;
+        const { orderId, items } = req.body;
 
-        // Tìm và xóa đơn hàng theo orderId
-        const order = await Order.findByIdAndDelete(orderId);
-
+        // Tìm đơn hàng theo ID
+        const order = await Order.findById(orderId);
         if (!order) {
             return res.status(404).json({ message: 'Đơn hàng không tồn tại' });
         }
 
-        res.status(200).json({ message: 'Đã xóa đơn hàng thành công', order });
+        // Cập nhật số lượng sản phẩm
+        for (const item of items) {
+            await Product.findByIdAndUpdate(item.productId, {
+                $inc: { quantity: item.quantity } // Tăng số lượng trở lại dùng toán tử $inc
+            });
+        }
+
+        await Order.findByIdAndUpdate(orderId, { status: -1 });
+
+        res.status(200).json({ message: 'Đơn hàng đã được hủy thành công' });
     } catch (err) {
-        console.error('Error deleting order:', err);
+        console.error("Error during canceling order:", err);
         res.status(500).json({ message: 'Lỗi hệ thống', error: err.message });
     }
 };

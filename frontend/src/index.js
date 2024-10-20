@@ -13,6 +13,7 @@ import ProductsCategory from './pages/product-category/products-category';
 import Cart from './pages/cart/cart';
 import Checkout from './pages/checkout/checkout';
 import Blog from './pages/blog/blog';
+import UserAdmin from './admin/user/user';
 
 // import admin pages
 import Dashboard from './admin/dashboard/dashboard';
@@ -22,9 +23,7 @@ import UpdateProduct from './admin/products/update-product';
 import DeleteProduct from './admin/products/delete-product';
 import OrdersAdmin from './admin/order/order';
 import SoldOrdersAdmin from './admin/order/soldOrders';
-import UserAdmin from './admin/user/user';
-
-
+import UserOrder from './pages/order/order';
 
 // import ProductList from './pages/admin/productList';
 
@@ -45,6 +44,7 @@ root.render(
         <Route path='/products-search/' element={<ProductsCategory />} />
         <Route path='/cart' element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order" element={<UserOrder />} />
         <Route path="/blog" element={<Blog />} />
 
         {/* Admin Routes */}

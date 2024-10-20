@@ -33,17 +33,22 @@ const ProductsCategory = () => {
     const [products, setProducts] = useState([]);
     const [category, setCategory] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [sortKey, setSortKey] = useState('1');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [limit, setLimit] = useState(10);
+    const [totalProducts, setTotalProducts] = useState(0);
     const { id } = useParams();
-    const [sortKey, setSortKey] = useState('1'); // Mặc định sắp xếp theo 'Mới nhất'
 
     useEffect(() => {
         fetchProducts();
-    }, [id, sortKey]);
+    }, [id, sortKey, currentPage]);
 
     const fetchProducts = async () => {
         try {
-            const productResponse = await axios.get(`${API_URL}/products-category/${id}?sort=${sortKey}`);
-            setProducts(productResponse.data);
+            const res = await axios.get(`${API_URL}/product?sort=${sortKey}&page=${currentPage}&limit=${limit}`);
+            console.log('Products data:', res.data);
+            setProducts(res.data.products);
+            setTotalProducts(res.data.pagination.totalProducts); // Cập nhật tổng số sản phẩm
 
             const categoryResponse = await axios.get(`${API_URL}/category`);
             setCategory(categoryResponse.data);
@@ -68,6 +73,7 @@ const ProductsCategory = () => {
         try {
             const token = localStorage.getItem('token');
             await axios.post(`${API_URL}/cart`, {
+                productId: product._id,
                 productName: product.productName,
                 image: product.image,
                 price: product.price,

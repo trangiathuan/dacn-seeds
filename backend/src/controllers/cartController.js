@@ -32,11 +32,10 @@ exports.updateCartItem = async (req, res) => {
 
 // Thêm sản phẩm vào giỏ hàng
 exports.addToCart = async (req, res) => {
-    const { productName, image, price, quantity } = req.body;
+    const { productId, productName, image, price, quantity } = req.body;
     try {
         // Tìm kiếm sản phẩm trong giỏ hàng
         const findCartItem = await CartItem.findOne({ productName: productName, userId: req.user.userId });
-
         if (findCartItem) {
             // Nếu sản phẩm đã tồn tại, cập nhật số lượng
             findCartItem.quantity += quantity; // Tăng số lượng
@@ -45,6 +44,7 @@ exports.addToCart = async (req, res) => {
         } else {
             // Nếu sản phẩm chưa tồn tại, tạo mới
             const newCartItem = new CartItem({
+                productId,
                 productName,
                 image,
                 price,

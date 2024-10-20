@@ -1,0 +1,30 @@
+.tabs {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+}
+.tabs-body {
+    margin-top: 130px;
+    border: solid 1px rgb(230, 223, 223);
+    border-radius: 5px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 900px;
+}
+.detail-order {
+    display: flex;
+    margin-left: auto;
+    color:rgb(17, 151, 12)
+}
+.ant-divider-inner-text {
+    padding-inline: 0 !important;
+}
+.btn-cancel {
+    display: block;
+    margin-left: 750px;
+    margin-right: auto;
+    margin-bottom: 10px;
+}
+

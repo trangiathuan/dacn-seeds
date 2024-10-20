@@ -65,3 +65,7 @@ width: 200px;
     margin-top: 15px;
     margin-right: 25px;
 }
+.cartItemNull{
+    text-align: center;
+    padding: 50px;
+}

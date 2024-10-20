@@ -10,16 +10,14 @@ import API_URL from "../../config/config";
 const Home = () => {
     const [products, setProducts] = useState([]);
     const [category, setCategory] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [sortKey, setSortKey] = useState('1');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [limit, setLimit] = useState(10);
+    const [totalProducts, setTotalProducts] = useState(0);
 
     useEffect(() => {
-        axios.get(`${API_URL}/product`)
-            .then(res => {
-                setProducts(res.data);
-
-            })
-            .catch(error => {
-                console.error('There was an error fetching the products!', error);
-            });
+        getAllProducts()
 
         axios.get(`${API_URL}/category`)
             .then(res => {
@@ -28,7 +26,21 @@ const Home = () => {
             .catch(error => {
                 console.error('There was an error fetching the categories!', error);
             });
-    }, []);
+    }, [sortKey, currentPage]);
+
+    const getAllProducts = async () => {
+        setLoading(true);
+        try {
+            const res = await axios.get(`${API_URL}/product?sort=${sortKey}&page=${currentPage}&limit=${limit}`);
+            console.log('Products data:', res.data);
+            setProducts(res.data.products);
+            setTotalProducts(res.data.pagination.totalProducts); // Cập nhật tổng số sản phẩm
+        } catch (error) {
+            console.error('There was an error fetching the products!', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const addToCart = (product) => {
         const isLoggedIn = !!localStorage.getItem('token');
@@ -43,6 +55,7 @@ const Home = () => {
         try {
             const token = localStorage.getItem('token');
             await axios.post(`${API_URL}/cart`, {
+                productId: product._id,
                 productName: product.productName,
                 image: product.image,
                 price: product.price,

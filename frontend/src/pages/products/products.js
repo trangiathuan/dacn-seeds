@@ -1,60 +1,51 @@
 import Nav from "../../component/navbar/navbar";
+import Footer from "../../component/footer/footer";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './products.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { DownOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Dropdown, message, Space, Tooltip } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+import { Button, Dropdown, Space, Pagination } from 'antd';
 import API_URL from "../../config/config";
 
-
 const items = [
-    {
-        label: 'Mới nhất',
-        key: '1',
-    },
-    {
-        label: 'Bán chạy',
-        key: '2',
-    },
-    {
-        label: 'Giá thấp đến cao',
-        key: '3',
-    },
-    {
-        label: 'Giá cao đến thấp',
-        key: '4',
-    },
-
+    { label: 'Mới nhất', key: '1' },
+    { label: 'Bán chạy', key: '2' },
+    { label: 'Giá thấp đến cao', key: '3' },
+    { label: 'Giá cao đến thấp', key: '4' },
 ];
 
 const Products = () => {
-
     const [products, setProducts] = useState([]);
     const [category, setCategory] = useState([]);
-    const [loading, setLoading] = useState(true);  // Thêm trạng thái loading
-    const [sortKey, setSortKey] = useState('1'); // Mặc định sắp xếp theo 'Mới nhất'
+    const [loading, setLoading] = useState(true);
+    const [sortKey, setSortKey] = useState('1');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [limit, setLimit] = useState(10);
+    const [totalProducts, setTotalProducts] = useState(0);
 
     useEffect(() => {
         getAllProducts();
         getCategory();
-    }, [sortKey]);
-    // Lấy ra danh sách sản phẩm
+    }, [sortKey, currentPage]);
+
     const getAllProducts = async () => {
-        await axios.get(`${API_URL}/product?sort=${sortKey}`)
-            .then(res => {
-                console.log('Products data:', res.data);
-                setProducts(res.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                console.error('There was an error fetching the products!', error);
-            });
-        console.log("products:", products)
-    }
-    // Lấy ra danh mục
+        setLoading(true);
+        try {
+            const res = await axios.get(`${API_URL}/product?sort=${sortKey}&page=${currentPage}&limit=${limit}`);
+            console.log('Products data:', res.data);
+            setProducts(res.data.products);
+            setTotalProducts(res.data.pagination.totalProducts);
+            console.log(res.data.pagination.totalProducts)
+        } catch (error) {
+            console.error('There was an error fetching the products!', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const getCategory = () => {
         axios.get(`${API_URL}/category`)
             .then(res => {
@@ -63,8 +54,8 @@ const Products = () => {
             .catch(error => {
                 console.error('There was an error fetching the categories!', error);
             });
-    }
-    //check đăng nhập mới cho thêm sản phẩm vào giỏ hàng
+    };
+
     const addToCart = (product) => {
         const isLoggedIn = !!localStorage.getItem('token');
         if (isLoggedIn) {
@@ -73,11 +64,12 @@ const Products = () => {
             toast.warn("Đăng nhập để thêm sản phẩm vào giỏ hàng");
         }
     };
-    // hàm thêm sản phẩm vào giỏ hàng
+
     const addToCartDatabase = async (product) => {
         try {
             const token = localStorage.getItem('token');
             await axios.post(`${API_URL}/cart`, {
+                productId: product._id,
                 productName: product.productName,
                 image: product.image,
                 price: product.price,
@@ -90,28 +82,32 @@ const Products = () => {
             toast.success("Thêm sản phẩm vào giỏ hàng");
         } catch (err) {
             console.error(err);
-            toast.success("Đăng nhập để thêm sản phẩm vào giỏ hàng");
+            toast.error("Có lỗi xảy ra khi thêm vào giỏ hàng");
         }
     };
-    // Menu sắp xếp
+
     const handleMenuClick = (e) => {
-        setSortKey(e.key); // Cập nhật sortKey khi người dùng chọn mục
+        setSortKey(e.key);
+        setCurrentPage(1); // Reset trang khi thay đổi sắp xếp
     };
 
     const menuProps = {
         items: items.map(item => ({
             ...item,
-            onClick: handleMenuClick, // Thêm hàm xử lý sự kiện vào mỗi mục
+            onClick: handleMenuClick,
         })),
     };
-    // Menu sắp xếp
-    // Loading
-    if (loading) {
-        return <div><Nav /><div class="spinner-border" role="status">
-            <span class="visually-hidden text-center">Loading...</span>
-        </div></div> // Hiển thị loading trong khi đợi dữ liệu
-    }
 
+    if (loading) {
+        return (
+            <div>
+                <Nav />
+                <div className="spinner-border" role="status">
+                    <span className="visually-hidden text-center">Loading...</span>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="products">
@@ -132,33 +128,23 @@ const Products = () => {
             <div className='row'>
                 <div className='col-3 col-category'>
                     <div className='row row-category'>
-                        {/* <p className="category-title text-center">DANH MỤC SẢN PHẨM</p> */}
-                        {/* {category.map((item) => (
-                            <Link to={`/products-category/${item._id}`} key={item._id} className='a-category mt-3'>
-                                <img className='img-icon-product' src={require(`../../asset/Images/${item.categoryIcon}`)} alt={item.categoryName} />
-                                {item.categoryName}
-                            </Link>
-                        ))} */}
-
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center list-item">
+                        <ul className="list-group">
+                            <li className="list-group-item d-flex justify-content-between align-items-center list-item">
                                 <Link to={`/products/`} className='a-category mt-0'>
                                     <img className='img-icon-product' src={require(`../../asset/Images/mark.png`)} />
                                     Tất cả sản phẩm
-                                    <span className="badge text-bg-success rounded-pill ms-2"> 64</span>
+                                    <span className="badge text-bg-success rounded-pill ms-2">{totalProducts}</span>
                                 </Link>
                             </li>
                             {category.map((item) => (
-                                <li class="list-group-item d-flex justify-content-between align-items-center list-item">
-                                    <Link to={`/products-category/${item._id}`} key={item._id} className='a-category mt-0'>
+                                <li className="list-group-item d-flex justify-content-between align-items-center list-item" key={item._id}>
+                                    <Link to={`/products-category/${item._id}`} className='a-category mt-0'>
                                         <img className='img-icon-product' src={require(`../../asset/Images/${item.categoryIcon}`)} alt={item.categoryName} />
                                         {item.categoryName}
                                     </Link>
                                 </li>
                             ))}
                         </ul>
-
-
                     </div>
                 </div>
                 <div className='col-9 row-cardProduct'>
@@ -187,7 +173,18 @@ const Products = () => {
                         ))}
                     </div>
                 </div>
+                <div className="pagination mt-3">
+                    <Pagination
+                        current={currentPage}
+                        pageSize='8'
+                        total={totalProducts}
+                        onChange={(page) => {
+                            setCurrentPage(page);
+                        }}
+                    />
+                </div>
             </div>
+            <Footer />
         </div>
     );
 }

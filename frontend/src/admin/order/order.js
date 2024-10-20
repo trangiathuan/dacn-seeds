@@ -13,7 +13,7 @@ const OrdersAdmin = () => {
 
     useEffect(() => {
         fetchAllOrder(); // Gọi hàm fetch khi component được mount
-    }, []);
+    }, [orders]);
 
     const fetchAllOrder = async () => {
         try {
@@ -66,16 +66,17 @@ const OrdersAdmin = () => {
         }
     };
 
-    const deleteOrder = async (orderId) => {
+    const deleteOrder = async (orderId, items) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.delete(`${API_URL}/deleteOrder/${orderId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-
+            const response = await axios.post(`${API_URL}/deleteOrder`,
+                { orderId, items },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
             // Loại bỏ đơn hàng đã xóa khỏi danh sách đơn hàng
             setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId));
 
@@ -83,7 +84,7 @@ const OrdersAdmin = () => {
 
             setTimeout(() => {
                 window.location.reload();
-            }, 1500); // Reload sau 1 giây
+            }, 10000); // Reload sau 1 giây
 
         } catch (error) {
             console.error('Error deleting order:', error);
@@ -159,14 +160,14 @@ const OrdersAdmin = () => {
                                             onChange={(e) => updateOrderStatus(order._id, Number(e.target.value))}
                                             className='form-select'
                                         >
-                                            <option value="0" >Chờ duyệt</option>
-                                            <option value="1">Đã duyệt</option>
-                                            <option value="2">Đã giao</option>
-                                            <option value="-1">Đã hủy</option>
+                                            <option value="0">Chờ xác nhận</option>
+                                            <option value="1">Đã xác nhận</option>
+                                            <option value="2">Đang giao hàng</option>
+                                            <option value="3">Đã giao hàng</option>
                                         </select>
                                     </td>
                                     <td>
-                                        <button onClick={() => deleteOrder(order._id)} className='btn btn-danger btn-product'>Xóa</button>
+                                        <button onClick={() => deleteOrder(order._id, order.items)} className='btn btn-danger btn-product'>Xóa</button>
                                     </td>
                                 </tr>
                             ))}

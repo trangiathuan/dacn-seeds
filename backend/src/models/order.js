@@ -40,6 +40,15 @@ const orderSchema = new mongoose.Schema({
                 type: Number,
                 required: true
             },
+            image: {
+                type: String,
+                required: true
+            },
+            productId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Product',
+                required: true
+            }
         }
     ],
     totalPrice: {
@@ -49,12 +58,15 @@ const orderSchema = new mongoose.Schema({
     status: {
         type: Number,
         default: 0,
-        enum: [-1, 0, 1, 2]
+        enum: [-1, 0, 1, 2, 3, 4]
     },
 
     createdAt: {
-        type: Date,
-        default: Date.now
+        type: Date, default: () => {
+            const now = new Date();
+            const offset = 7 * 60; // Giờ Việt Nam UTC+7
+            return new Date(now.getTime() + offset * 60 * 1000);
+        }
     }
 });
 

@@ -94,51 +94,58 @@ const Cart = () => {
         <div>
             <Nav />
             <ToastContainer />
-            <div className='body-cart'>
-                <div>
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th className='text-center' scope="col"></th>
-                                <th className='text-center' scope="col">Sản phẩm</th>
-                                <th className='text-center' scope="col">Giá bán</th>
-                                <th className='text-center' scope="col">Số lượng</th>
-                                <th className='text-center' scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {cartItems.map(item => (
-                                <tr key={item._id}>
-                                    <td className='img-cart-body'>
-                                        <img className='img-cart' src={require(`../../asset/images-product/${item.image}`)} alt={item.productName} />
-                                    </td>
-                                    <td className='cart-name'>
-                                        <p className='cart-name-product'>{item.productName}</p>
-                                    </td>
-                                    <td className='cart-price'>
-                                        <p>{item.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
-                                    </td>
-                                    <td className='cart-quantity'>
-                                        <input
-                                            className='form-control input-cart'
-                                            type='number'
-                                            value={item.quantity}
-                                            onChange={(e) => updateCartItem(item._id, parseInt(e.target.value))}
-                                        />
-                                    </td>
-                                    <td className='cart-delete'>
-                                        <button className='btn btn-danger' onClick={() => deleteCartItem(item._id)}>Xóa</button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    <div className="cart-total">
-                        <h5>Tổng tiền: {calculateTotalPrice().toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</h5>
-                    </div>
-                    <button className='btn btn-success' onClick={handleProceedToCheckout}>Tiến hành thanh toán</button>
+            {cartItems === null || cartItems.length === 0 ? (
+                <div className='body-cart'>
+                    <div className='cartItemNull'>Không có sản phẩm trong giỏ hàng</div>
                 </div>
-            </div>
+            ) : (
+                <div className='body-cart'>
+                    <div>
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th className='text-center' scope="col"></th>
+                                    <th className='text-center' scope="col">Sản phẩm</th>
+                                    <th className='text-center' scope="col">Giá bán</th>
+                                    <th className='text-center' scope="col">Số lượng</th>
+                                    <th className='text-center' scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {cartItems.map(item => (
+                                    <tr key={item._id}>
+                                        <td className='img-cart-body'>
+                                            <img className='img-cart' src={require(`../../asset/images-product/${item.image}`)} alt={item.productName} />
+                                        </td>
+                                        <td className='cart-name'>
+                                            <p className='cart-name-product'>{item.productName}</p>
+                                        </td>
+                                        <td className='cart-price'>
+                                            <p>{item.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                                        </td>
+                                        <td className='cart-quantity'>
+                                            <input
+                                                className='form-control input-cart'
+                                                type='number'
+                                                value={item.quantity}
+                                                onChange={(e) => updateCartItem(item._id, parseInt(e.target.value))}
+                                            />
+                                        </td>
+                                        <td className='cart-delete'>
+                                            <button className='btn btn-danger' onClick={() => deleteCartItem(item._id)}>Xóa</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        <div className="cart-total">
+                            <h5>Tổng tiền: {calculateTotalPrice().toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</h5>
+                        </div>
+                        <button className='btn btn-success' onClick={handleProceedToCheckout}>Tiến hành thanh toán</button>
+                    </div>
+                </div>
+            )}
+
             <Footer />
         </div>
     );

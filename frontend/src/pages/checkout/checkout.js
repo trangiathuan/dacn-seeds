@@ -5,7 +5,7 @@ import './checkout.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import API_URL from '../../config/config';
 
 
@@ -23,18 +23,18 @@ const Checkout = () => {
     const isLoggedIn = !!localStorage.getItem('token');
 
     useEffect(() => {
-        if (!isLoggedIn) {
-            navigate('/login');
-            return;
-        } else {
-            fetchCartItems();
-            getInfotUser();
 
-        }
-    }, [isLoggedIn, navigate]);
+        fetchCartItems();
+        getInfotUser();
+
+    }, [isLoggedIn, cartItems]);
 
     const fetchCartItems = async () => {
         try {
+            if (!isLoggedIn) {
+                navigate('/login');
+                return;
+            }
             const token = localStorage.getItem('token');
             const res = await axios.get(`${API_URL}/cart`, {
                 headers: {
@@ -85,7 +85,8 @@ const Checkout = () => {
         }, 0);
     };
 
-    const handleCheckout = async () => {
+    const handleCheckout = async (event) => {
+        event.preventDefault();
         try {
             const token = localStorage.getItem('token');
 
@@ -94,25 +95,27 @@ const Checkout = () => {
                 items: cartItems,
                 totalPrice: calculateTotalPrice()
             };
-            console.log("Sending order data:", orderData); // Log dữ liệu order để kiểm tra
 
             const res = await axios.post(`${API_URL}/checkout`, orderData, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
-            });
 
-            alert('Thanh toán thành công! Mã đơn hàng: ' + res.data.orderId);
+            });
+            await toast.success('Thanh toán thành công! Mã đơn hàng: ' + res.data.orderId);
+            navigate('/')
 
         } catch (err) {
             console.error(err);
-            alert('Đã xảy ra lỗi trong quá trình thanh toán.');
+            alert('Đã xảy ra lỗi trong quá trình thanh toán: ' + err.message);
         }
     };
+
 
     return (
         <div>
             <Nav />
+            <ToastContainer />
             <div className='row body-checkout '>
                 <div className='table-checkout'>
                     <table className="col-6 table ">
