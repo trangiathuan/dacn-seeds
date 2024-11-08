@@ -8,7 +8,6 @@ import { jwtDecode } from 'jwt-decode';
 import { toast, ToastContainer } from 'react-toastify';
 import API_URL from '../../config/config';
 
-
 const Checkout = () => {
     const [cartItems, setCartItems] = useState([]);
     const [orderInfo, setOrderInfo] = useState({
@@ -18,30 +17,28 @@ const Checkout = () => {
         addDress: '',
         paymentMethod: 'Khi nhận hàng' // Mặc định là tiền mặt
     });
-    const [user, setUser] = useState(null);
     const navigate = useNavigate();
     const isLoggedIn = !!localStorage.getItem('token');
 
     useEffect(() => {
-
         fetchCartItems();
         getInfotUser();
-
-    }, [isLoggedIn, cartItems]);
+    }, [isLoggedIn]);
 
     const fetchCartItems = async () => {
         try {
-            if (!isLoggedIn) {
-                navigate('/login');
-                return;
+            if (isLoggedIn) {
+                const token = localStorage.getItem('token');
+                const res = await axios.get(`${API_URL}/cart`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                setCartItems(res.data);
+            } else {
+                const storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || {};
+                setCartItems(Object.values(storedCartItems));
             }
-            const token = localStorage.getItem('token');
-            const res = await axios.get(`${API_URL}/cart`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            setCartItems(res.data);
         } catch (err) {
             console.error(err);
         }
@@ -53,7 +50,6 @@ const Checkout = () => {
             try {
                 const decoded = jwtDecode(token);
                 const userId = decoded.userId;
-
                 const response = await axios.get(`${API_URL}/users/${userId}`);
                 const userData = response.data;
 
@@ -69,7 +65,7 @@ const Checkout = () => {
                 console.error("Error fetching user data:", error);
             }
         }
-    }
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -88,29 +84,31 @@ const Checkout = () => {
     const handleCheckout = async (event) => {
         event.preventDefault();
         try {
-            const token = localStorage.getItem('token');
-
             const orderData = {
                 ...orderInfo,
                 items: cartItems,
                 totalPrice: calculateTotalPrice()
             };
 
-            const res = await axios.post(`${API_URL}/checkout`, orderData, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-
-            });
-            await toast.success('Thanh toán thành công! Mã đơn hàng: ' + res.data.orderId);
-            navigate('/')
-
+            // Nếu người dùng chưa đăng nhập, gửi yêu cầu đến một endpoint riêng để lưu đơn hàng
+            if (!isLoggedIn) {
+                const res = await axios.post(`${API_URL}/checkout-guest`, orderData);
+                await toast.success('Đặt hàng thành công! Mã đơn hàng: ' + res.data.orderId);
+            } else {
+                const token = localStorage.getItem('token');
+                const res = await axios.post(`${API_URL}/checkout`, orderData, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                await toast.success('Thanh toán thành công! Mã đơn hàng: ' + res.data.orderId);
+            }
+            navigate('/');
         } catch (err) {
             console.error(err);
             alert('Đã xảy ra lỗi trong quá trình thanh toán: ' + err.message);
         }
     };
-
 
     return (
         <div>
@@ -129,7 +127,7 @@ const Checkout = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {cartItems.map(item => (
+                            {Array.isArray(cartItems) && cartItems.map(item => (
                                 <tr key={item._id}>
                                     <td className='img-checkout-body'>
                                         <img className='img-checkout' src={require(`../../asset/images-product/${item.image}`)} alt={item.productName} />
@@ -145,11 +143,9 @@ const Checkout = () => {
                                 </tr>
                             ))}
                         </tbody>
-
                     </table>
                 </div>
                 <div className='col-6 customer-infor '>
-
                     <h4>Thông tin mua hàng</h4>
                     <form>
                         <div className="form-group mb-2">
@@ -209,7 +205,6 @@ const Checkout = () => {
                                 <option value="Thẻ tín dụng">Thanh toán bằng thẻ tín dụng</option>
                                 <option value="Momo">Thanh toán bằng ví điện tử Momo</option>
                                 <option value="ZaloPay">Thanh toán bằng ví điện tử ZaloPay</option>
-
                             </select>
                         </div>
                         <div className="checkout-total">
@@ -218,12 +213,9 @@ const Checkout = () => {
                         <button className='btn btn-success' onClick={handleCheckout}>Thanh toán</button>
                     </form>
                 </div>
-
-
-
             </div>
             <Footer />
-        </div >
+        </div>
     );
 };
 

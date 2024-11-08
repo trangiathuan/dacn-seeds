@@ -35,10 +35,8 @@ const Products = () => {
         setLoading(true);
         try {
             const res = await axios.get(`${API_URL}/product?sort=${sortKey}&page=${currentPage}&limit=${limit}`);
-            console.log('Products data:', res.data);
             setProducts(res.data.products);
             setTotalProducts(res.data.pagination.totalProducts);
-            console.log(res.data.pagination.totalProducts)
         } catch (error) {
             console.error('There was an error fetching the products!', error);
         } finally {
@@ -61,8 +59,25 @@ const Products = () => {
         if (isLoggedIn) {
             addToCartDatabase(product);
         } else {
-            toast.warn("Đăng nhập để thêm sản phẩm vào giỏ hàng");
+            addToLocalStorageCart(product);
         }
+    };
+
+    const addToLocalStorageCart = (product) => {
+        const cart = JSON.parse(localStorage.getItem('cartItems')) || {};
+        if (cart[product._id]) {
+            cart[product._id].quantity += 1; // Tăng số lượng
+        } else {
+            cart[product._id] = {
+                productId: product._id,
+                productName: product.productName,
+                image: product.image,
+                price: product.price,
+                quantity: 1
+            };
+        }
+        localStorage.setItem('cartItems', JSON.stringify(cart));
+        toast.success("Sản phẩm đã được thêm vào giỏ hàng");
     };
 
     const addToCartDatabase = async (product) => {

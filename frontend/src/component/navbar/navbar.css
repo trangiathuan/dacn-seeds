@@ -90,8 +90,13 @@
 }
 
 .a-cart {
-    width: 160px;
+    width: 190px;
     margin-top: 12px;
+}
+
+.cout-cart {
+    margin-left: -15px;
+    top: -10px !important;
 }
 
 .btn-search {

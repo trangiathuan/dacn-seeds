@@ -17,6 +17,7 @@ const Nav = () => {
     const [showResults, setShowResults] = useState(false); // Biến để kiểm soát hiển thị kết quả
     const resultsRef = useRef(null); // Tham chiếu đến phần tử danh sách tìm kiếm
     const isLoggedIn = !!localStorage.getItem('token');
+    const [cartItemsCount, setCartItemsCount] = useState(0);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -36,6 +37,8 @@ const Nav = () => {
                 console.error("Invalid token:", error);
             }
         }
+
+
     }, []);
 
     const handleLogout = () => {
@@ -68,15 +71,16 @@ const Nav = () => {
     ];
 
     const checkLogin = async () => {
-        try {
-            if (!isLoggedIn)
-                toast.warn("Yêu cầu đăng nhập !")
-            else
-                navigate('/cart')
-        }
-        catch (error) {
-            console.error('Lỗi check đăng nhập', error);
-        }
+        navigate('/cart')
+
+        // try {
+        //     if (!isLoggedIn)
+        //         toast.warn("Yêu cầu đăng nhập !")
+        //     else
+        // }
+        // catch (error) {
+        //     console.error('Lỗi check đăng nhập', error);
+        // }
     }
 
     // Hàm xử lý tìm kiếm
@@ -167,6 +171,7 @@ const Nav = () => {
                 <div className='col-1 mb-1 a-cart'>
                     <a className='btn btn-nav' onClick={checkLogin}>
                         <img className='cart' src={require('../../asset/Images/cart.png')} alt="Cart" />
+                        <span className="badge bg-danger cout-cart">0</span>
                         <span>  Giỏ hàng</span>
                     </a>
                 </div>

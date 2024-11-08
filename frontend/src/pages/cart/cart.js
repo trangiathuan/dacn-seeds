@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
     const navigate = useNavigate();
@@ -16,14 +15,22 @@ const Cart = () => {
 
     useEffect(() => {
         if (!isLoggedIn) {
-            alert("Yêu cầu đăng nhập ")
-            navigate('/login');
-            return;
+            loadCartFromLocalStorage();
         } else {
-            // Nếu người dùng đã đăng nhập, tải giỏ hàng từ cơ sở dữ liệu
             fetchCartItems();
         }
-    }, [isLoggedIn, navigate]);
+    }, [isLoggedIn]);
+
+    const loadCartFromLocalStorage = () => {
+        const localCart = JSON.parse(localStorage.getItem('cartItems')) || {};
+        setCartItems(Object.keys(localCart).map(key => ({
+            _id: key,
+            productName: localCart[key].productName,
+            image: localCart[key].image,
+            price: localCart[key].price,
+            quantity: localCart[key].quantity
+        })));
+    };
 
     const fetchCartItems = async () => {
         try {
@@ -42,8 +49,20 @@ const Cart = () => {
     const updateCartItem = (id, quantity) => {
         if (quantity <= 0) return;
 
-        // Nếu người dùng đã đăng nhập, cập nhật giỏ hàng trong cơ sở dữ liệu
-        updateCartItemInDatabase(id, quantity);
+        if (isLoggedIn) {
+            updateCartItemInDatabase(id, quantity);
+        } else {
+            updateLocalStorageCartItem(id, quantity);
+        }
+    };
+
+    const updateLocalStorageCartItem = (id, quantity) => {
+        const localCart = JSON.parse(localStorage.getItem('cartItems')) || {};
+        if (localCart[id]) {
+            localCart[id].quantity = quantity;
+            localStorage.setItem('cartItems', JSON.stringify(localCart));
+            loadCartFromLocalStorage(); // Cập nhật lại giỏ hàng
+        }
     };
 
     const updateCartItemInDatabase = async (id, quantity) => {
@@ -63,8 +82,22 @@ const Cart = () => {
     };
 
     const deleteCartItem = (id) => {
-        console.log("Deleting item with id:", id);
+        if (isLoggedIn) {
+            deleteCartItemFromDatabase(id);
+        } else {
+            deleteCartItemFromLocalStorage(id);
+        }
+    };
 
+    const deleteCartItemFromLocalStorage = (id) => {
+        const localCart = JSON.parse(localStorage.getItem('cartItems')) || {};
+        delete localCart[id];
+        localStorage.setItem('cartItems', JSON.stringify(localCart));
+        loadCartFromLocalStorage(); // Cập nhật lại giỏ hàng
+        toast.success("Sản phẩm đã được xóa khỏi giỏ hàng");
+    };
+
+    const deleteCartItemFromDatabase = (id) => {
         const token = localStorage.getItem('token');
         axios.delete(`${API_URL}/cart/${id}`, {
             headers: {
@@ -73,8 +106,7 @@ const Cart = () => {
         }).then(() => {
             const newCartItems = cartItems.filter(item => item._id !== id);
             setCartItems(newCartItems);
-            console.log("Cart items after delete:", newCartItems);
-            toast.success("Sảm phẩm đã được xóa khỏi giỏ hàng")
+            toast.success("Sản phẩm đã được xóa khỏi giỏ hàng");
         }).catch((err) => {
             console.error(err);
         });
@@ -94,7 +126,7 @@ const Cart = () => {
         <div>
             <Nav />
             <ToastContainer />
-            {cartItems === null || cartItems.length === 0 ? (
+            {cartItems.length === 0 ? (
                 <div className='body-cart'>
                     <div className='cartItemNull'>Không có sản phẩm trong giỏ hàng</div>
                 </div>
@@ -145,12 +177,9 @@ const Cart = () => {
                     </div>
                 </div>
             )}
-
             <Footer />
         </div>
     );
 };
 
 export default Cart;
-
-

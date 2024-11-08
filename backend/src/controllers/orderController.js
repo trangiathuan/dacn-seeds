@@ -86,10 +86,6 @@ exports.checkout = async (req, res) => {
             `,
         };
 
-
-
-
-
         await transporter.sendMail(adminMailOptions);
 
         res.status(200).json({ message: 'Thanh toán thành công', orderId: order._id });
@@ -98,6 +94,88 @@ exports.checkout = async (req, res) => {
         res.status(500).json({ message: 'Lỗi hệ thống', error: err.message });
     }
 };
+
+exports.checkoutGuest = async (req, res) => {
+    try {
+        const { fullName, email, phoneNumber, addDress, items, totalPrice, paymentMethod } = req.body;
+
+        // Kiểm tra thông tin yêu cầu
+        if (!fullName || !email || !phoneNumber || !addDress || !items || !totalPrice) {
+            return res.status(400).json({ message: 'Thiếu thông tin yêu cầu' });
+        }
+
+        const order = new Order({
+            fullName,
+            email,
+            phoneNumber,
+            addDress,
+            paymentMethod,
+            items: items.map(item => ({
+                productId: item.productId,
+                productName: item.productName,
+                price: item.price,
+                quantity: item.quantity,
+                image: item.image
+            })),
+            totalPrice
+        });
+
+        await order.save();
+
+        // Cập nhật số lượng sản phẩm
+        for (const item of items) {
+            const product = await Product.findById(item.productId);
+
+            // Kiểm tra xem sản phẩm có đủ số lượng không
+            if (product && product.quantity >= item.quantity) {
+                await Product.findByIdAndUpdate(item.productId, {
+                    $inc: { quantity: -item.quantity }
+                });
+            } else {
+                // Nếu không đủ số lượng, có thể trả về lỗi
+                return res.status(400).json({ message: `Sản phẩm ${item.productName} không đủ số lượng` });
+            }
+        }
+
+        // Gửi email thông báo cho admin
+        const adminMailOptions = {
+            from: 'trangiathuan8223@gmail.com', // Địa chỉ email đã xác minh
+            to: 'trangiathuan8223@gmail.com', // Email của bạn
+            subject: 'THÔNG BÁO ĐƠN HÀNG MỚI',
+            html: `
+                <div style="font-family: Arial, sans-serif; margin: 20px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+                    <h1 style="color: #333; text-align: center;">Chi tiết đơn hàng</h1>
+                    <p style="font-size: 16px;">Có một đơn hàng mới từ <strong>${fullName}</strong>.</p>
+                    <p><strong>Mã đơn hàng:</strong> ${order._id}</p>
+                    <p><strong>Tổng tiền:</strong> ${totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                    <p><strong>Email khách hàng:</strong> ${email}</p>
+                    <p><strong>Số điện thoại:</strong> ${phoneNumber}</p>
+                    <p><strong>Địa chỉ nhận hàng:</strong> ${addDress}</p>
+                    <h2 style="color: #333;">Chi tiết sản phẩm:</h2>
+                    <ul style="list-style-type: none; padding: 0;">
+                        ${items.map(item => `
+                            <li style="margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 10px; display: flex; align-items: center;">
+                                <img src="https://raw.githubusercontent.com/trangiathuan/dacn-seeds/main/frontend/src/asset/images-product/${item.image}" alt="${item.productName}" style="width: 100px; height: auto; margin-right: 10px;"/>
+                                <div>
+                                    <strong>${item.productName}</strong><br/>
+                                    <span> Số lượng: ${item.quantity} <br/> Giá: ${item.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
+                                </div>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `,
+        };
+
+        await transporter.sendMail(adminMailOptions);
+
+        res.status(200).json({ message: 'Thanh toán thành công', orderId: order._id });
+    } catch (err) {
+        console.error("Error during guest checkout process:", err);
+        res.status(500).json({ message: 'Lỗi hệ thống', error: err.message });
+    }
+};
+
 
 
 exports.userOrder = async (req, res) => {
