@@ -16,13 +16,14 @@ const Cart = () => {
     useEffect(() => {
         if (!isLoggedIn) {
             loadCartFromLocalStorage();
+
         } else {
             fetchCartItems();
         }
     }, [isLoggedIn]);
 
     const loadCartFromLocalStorage = () => {
-        const localCart = JSON.parse(localStorage.getItem('cartItems')) || {};
+        const localCart = JSON.parse(localStorage.getItem('cartItems')) || [];
         setCartItems(Object.keys(localCart).map(key => ({
             _id: key,
             productName: localCart[key].productName,

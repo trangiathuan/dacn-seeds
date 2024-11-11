@@ -19,6 +19,8 @@ const Nav = () => {
     const isLoggedIn = !!localStorage.getItem('token');
     const [cartItemsCount, setCartItemsCount] = useState(0);
 
+
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -37,9 +39,51 @@ const Nav = () => {
                 console.error("Invalid token:", error);
             }
         }
+        if (isLoggedIn) {
+            fetchCartQuantity();
+        }
+        else {
+            countCartItems();
+            const intervalId = setInterval(countCartItems, 500);
+            return () => clearInterval(intervalId);
+        }
 
+    }, [cartItemsCount]);
 
-    }, []);
+    const fetchCartQuantity = async () => {
+        try {
+            const token = localStorage.getItem('token'); // Lấy token từ localStorage
+
+            if (!token) {
+                console.log('Vui lòng đăng nhập để xem giỏ hàng');
+                return;
+            }
+
+            const response = await axios.get(`${API_URL}/quantityCart/`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            setCartItemsCount(response.data)
+        } catch (error) {
+            console.error('Lỗi khi gọi API:', error);
+        }
+    };
+
+    const countCartItems = () => {
+        try {
+            const cart = JSON.parse(localStorage.getItem('cartItems')) || {};
+            let count = 0;
+            for (let key in cart) {
+                if (cart.hasOwnProperty(key)) {
+                    count += 1;
+                }
+            }
+            setCartItemsCount(count);
+        } catch (error) {
+            console.error("Lỗi khi đếm sản phẩm trong giỏ hàng:", error);
+        }
+    };
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -171,7 +215,7 @@ const Nav = () => {
                 <div className='col-1 mb-1 a-cart'>
                     <a className='btn btn-nav' onClick={checkLogin}>
                         <img className='cart' src={require('../../asset/Images/cart.png')} alt="Cart" />
-                        <span className="badge bg-danger cout-cart">0</span>
+                        <span className="badge bg-danger cout-cart">{cartItemsCount?.count || cartItemsCount}</span>
                         <span>  Giỏ hàng</span>
                     </a>
                 </div>

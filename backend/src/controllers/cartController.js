@@ -75,5 +75,15 @@ exports.deleteCartItem = async (req, res) => {
     }
 };
 
+exports.countQuantityCart = async (req, res) => {
+    try {
+        const count = await CartItem.countDocuments({ userId: req.user.userId });
+        res.status(200).json({ count })
+    } catch (error) {
+        console.error('Error getting total orders:', error);
+        res.status(500).json({ message: 'Lỗi hệ thống', error: error.message });
+    }
+}
+
 
 

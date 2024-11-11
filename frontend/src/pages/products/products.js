@@ -65,6 +65,7 @@ const Products = () => {
 
     const addToLocalStorageCart = (product) => {
         const cart = JSON.parse(localStorage.getItem('cartItems')) || {};
+        console.log(product)
         if (cart[product._id]) {
             cart[product._id].quantity += 1; // Tăng số lượng
         } else {
@@ -78,6 +79,7 @@ const Products = () => {
         }
         localStorage.setItem('cartItems', JSON.stringify(cart));
         toast.success("Sản phẩm đã được thêm vào giỏ hàng");
+        console.log(cart)
     };
 
     const addToCartDatabase = async (product) => {
