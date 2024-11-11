@@ -6,7 +6,6 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import API_URL from '../../config/config';
 
-
 const UpdateProduct = () => {
     const { id } = useParams(); // Lấy ID sản phẩm từ URL
     const [productName, setProductName] = useState('');
@@ -15,8 +14,10 @@ const UpdateProduct = () => {
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
     const [image, setImage] = useState('');
-    const navigation = useNavigate('');
+    const [imageFile, setImageFile] = useState(null); // Để lưu trữ tệp hình ảnh
+    const navigate = useNavigate(); // Sử dụng navigate để điều hướng sau khi cập nhật thành công
 
+    // Lấy dữ liệu sản phẩm từ API khi component mount
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -37,7 +38,7 @@ const UpdateProduct = () => {
                 setDescription(product.description);
                 setPrice(product.price);
                 setQuantity(product.quantity);
-                setImage(product.image);
+                setImage(product.image); // Lưu đường dẫn hình ảnh
             } catch (error) {
                 alert('Không thể lấy dữ liệu sản phẩm');
                 console.error(error.message);
@@ -45,37 +46,59 @@ const UpdateProduct = () => {
         };
 
         fetchProduct();
-    }, [id]);
+    }, [id]); // Chạy lại khi `id` thay đổi
 
+    // Xử lý form submit
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const formData = new FormData(); // Tạo FormData để gửi tệp hình ảnh cùng dữ liệu khác
+
+        // Append các thông tin khác vào formData
+        formData.append('productName', productName);
+        formData.append('categoryID', categoryID);
+        formData.append('description', description);
+        formData.append('price', price);
+        formData.append('quantity', quantity);
+
+        // Nếu có hình ảnh, append vào FormData
+        if (imageFile) {
+            formData.append('image', imageFile);
+        } else {
+            formData.append('image', image); // Nếu không chọn tệp mới, gửi lại đường dẫn hình ảnh cũ
+        }
 
         try {
             const token = localStorage.getItem('token');
             if (!token) {
                 throw new Error('No token found');
             }
-            const response = await axios.put(`${API_URL}/update-product/${id}`, {
-                productName: productName,
-                categoryID: categoryID,
-                description: description,
-                price: price,
-                quantity: quantity,
-                image: image,
-            }, {
+
+            // Gửi yêu cầu PUT để cập nhật sản phẩm
+            const response = await axios.put(`${API_URL}/update-product/${id}`, formData, {
                 headers: {
-                    Authorization: `Bearer ${token}` // Thêm token vào header
+                    'Authorization': `Bearer ${token}`, // Thêm token vào header
+                    'Content-Type': 'multipart/form-data', // Thông báo rằng đang gửi form-data
                 }
             });
 
             if (response.status === 200) {
                 alert('Sản phẩm đã được cập nhật thành công!');
-                navigation('/admin/products')
+                navigate('/admin/products'); // Điều hướng về trang danh sách sản phẩm
             } else {
                 alert('Có lỗi xảy ra khi cập nhật sản phẩm!');
             }
         } catch (error) {
             alert('Có lỗi xảy ra khi gửi yêu cầu cập nhật!');
+        }
+    };
+
+    // Xử lý thay đổi tệp hình ảnh
+    const handleImageChange = (e) => {
+        const file = e.target.files[0]; // Lấy tệp đầu tiên từ mảng file
+        if (file) {
+            setImageFile(file); // Lưu tệp vào state
+            setImage(URL.createObjectURL(file)); // Hiển thị ảnh xem trước (nếu cần)
         }
     };
 
@@ -148,13 +171,11 @@ const UpdateProduct = () => {
                                 />
                             </div>
                             <div className="form-group">
-                                <label className="mb-2">Hình</label>
+                                <label className="mb-2">Hình ảnh</label>
                                 <input
-                                    type="text"
+                                    type="file"
                                     className="form-control mb-2"
-                                    placeholder="Nhập Hình"
-                                    value={image}
-                                    onChange={(e) => setImage(e.target.value)}
+                                    onChange={handleImageChange} // Xử lý thay đổi tệp
                                 />
                             </div>
                             <div>
@@ -166,6 +187,6 @@ const UpdateProduct = () => {
             </div>
         </div>
     );
-}
+};
 
 export default UpdateProduct;

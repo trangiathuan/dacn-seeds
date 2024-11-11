@@ -20,6 +20,8 @@ exports.getAllProducts = async (req, res) => {
 exports.addProduct = async (req, res) => {
     const { productName, categoryID, description, price, quantity, image } = req.body;
     try {
+        const imagePath = req.file ? `${req.file.filename}` : null;
+
         const existingProduct = await Product.findOne({ productName })
         if (existingProduct) {
             return res.status(400).json({ message: " Sản phẩm này đã tồn tại" });
@@ -30,10 +32,11 @@ exports.addProduct = async (req, res) => {
             description,
             price,
             quantity,
-            image
+            image: imagePath,
+            createdAt: Date.now()
         })
         await newProduct.save();
-        res.status(201).json({ message: "Sản phẩm đã được tạo thành công", product: newProduct });
+        res.status(200).json({ message: "Sản phẩm đã được tạo thành công", product: newProduct });
     }
     catch (err) {
         res.status(500).json({ error: err.message });
@@ -44,10 +47,12 @@ exports.updateProduct = async (req, res) => {
     const { productName, categoryID, description, price, quantity, image } = req.body;  // Lấy dữ liệu từ body request
 
     try {
+        const imagePath = req.file ? `${req.file.filename}` : null;
+
         // Tìm và cập nhật sản phẩm dựa trên ID
         const updatedProduct = await Product.findByIdAndUpdate(
             id,
-            { productName, categoryID, description, price, quantity, image },
+            { productName, categoryID, description, price, quantity, image: imagePath },
             { new: true }  // Tùy chọn này trả về document đã được cập nhật
         );
 
