@@ -7,6 +7,8 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './home.css';
 import API_URL from "../../config/config";
+import { Button, Dropdown, Space, Pagination } from 'antd';
+
 const Home = () => {
     const [products, setProducts] = useState([]);
     const [category, setCategory] = useState([]);
@@ -183,6 +185,16 @@ const Home = () => {
                         </div>
                     </div>
                 ))}
+            </div>
+            <div className="pagination mt-3">
+                <Pagination
+                    current={currentPage}
+                    pageSize='8'
+                    total={totalProducts}
+                    onChange={(page) => {
+                        setCurrentPage(page);
+                    }}
+                />
             </div>
             <Footer />
         </div >

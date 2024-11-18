@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Nav from '../../component/navbar/navbar.js';
 import './userOrders.css';
 import API_URL from '../../config/config';
-import { Tabs, List, Typography, Image, Divider, Card, Row, Col } from 'antd';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
+import { Tabs, List, Typography, Image, Divider, Card, Row, Col } from 'antd';
 
 const { Text } = Typography;
 
@@ -12,10 +12,16 @@ const UserOrder = () => {
     const [orders, setOrders] = useState([]); // Khởi tạo là mảng
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const isLoggedIn = !!localStorage.getItem('token');
     const [expandedOrders, setExpandedOrders] = useState([]); // Trạng thái mở rộng các đơn hàng
 
     useEffect(() => {
-        fetchOrders();
+        if (isLoggedIn) {
+            fetchOrders();
+        }
+        else {
+            toast.warn('Đăng nhập để theo dõi đơn hàng')
+        }
     }, []);
 
     const fetchOrders = async () => {
@@ -89,7 +95,7 @@ const UserOrder = () => {
 
     const renderOrderDetails = (status) => {
         if (loading) {
-            return <p>Đang tải dữ liệu...</p>;
+            return <p className='text-center'>Dữ liệu không tồn tại</p>;
         }
 
         const filteredOrders = orders.filter(order => Array.isArray(status) ? status.includes(order.status) : order.status === status);

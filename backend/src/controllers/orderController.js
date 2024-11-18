@@ -203,22 +203,37 @@ exports.updateOrderStatus = async (req, res) => {
     try {
         const { orderId } = req.params;
         const { status } = req.body;
+
         // Kiểm tra trạng thái có hợp lệ hay không
         const validStatuses = [-1, 0, 1, 2, 3, 4];
         if (!validStatuses.includes(status)) {
             return res.status(400).json({ message: 'Trạng thái không hợp lệ' });
         }
-        // Tìm đơn hàng theo ID và cập nhật trạng thái
-        const order = await Order.findByIdAndUpdate(
-            orderId,
-            { status: status },
-            { new: true } // Trả về đơn hàng đã cập nhật
-        );
 
+        // Tìm đơn hàng theo ID
+        const order = await Order.findById(orderId);
         if (!order) {
             return res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
         }
-        res.status(200).json({ message: 'Cập nhật trạng thái thành công', order });
+
+        // Cập nhật trạng thái đơn hàng
+        order.status = status;
+        const updatedOrder = await order.save();
+
+        // Nếu trạng thái được cập nhật thành '4' (hoàn tất)
+        if (status === 4) {
+            for (let item of updatedOrder.items) {
+                // Cập nhật trường 'isSold' của sản phẩm
+                const product = await Product.findById(item.productId);
+                if (product) {
+                    // Cộng thêm số lượng đã bán vào trường isSold
+                    product.isSold = (product.isSold || 0) + item.quantity;
+                    await product.save();
+                }
+            }
+        }
+
+        res.status(200).json({ message: 'Cập nhật trạng thái thành công', order: updatedOrder });
 
     } catch (err) {
         console.error(err);

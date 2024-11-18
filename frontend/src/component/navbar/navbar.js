@@ -18,6 +18,7 @@ const Nav = () => {
     const resultsRef = useRef(null); // Tham chiếu đến phần tử danh sách tìm kiếm
     const isLoggedIn = !!localStorage.getItem('token');
     const [cartItemsCount, setCartItemsCount] = useState(0);
+    const [cartItemsCount1, setCartItemsCount1] = useState(0);
 
 
 
@@ -79,7 +80,7 @@ const Nav = () => {
                     count += 1;
                 }
             }
-            setCartItemsCount(count);
+            setCartItemsCount1(count);
         } catch (error) {
             console.error("Lỗi khi đếm sản phẩm trong giỏ hàng:", error);
         }
@@ -88,8 +89,8 @@ const Nav = () => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         setUser(null);
-        navigate('/');
         toast.success("Đăng xuất thành công");
+        window.location.reload()
     };
 
     const handleLogin = () => {
@@ -215,7 +216,9 @@ const Nav = () => {
                 <div className='col-1 mb-1 a-cart'>
                     <a className='btn btn-nav' onClick={checkLogin}>
                         <img className='cart' src={require('../../asset/Images/cart.png')} alt="Cart" />
-                        <span className="badge bg-danger cout-cart">{cartItemsCount?.count || cartItemsCount}</span>
+                        <span className="badge bg-danger cout-cart">
+                            {isLoggedIn ? cartItemsCount.count : cartItemsCount1}
+                        </span>
                         <span>  Giỏ hàng</span>
                     </a>
                 </div>

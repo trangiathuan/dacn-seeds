@@ -14,6 +14,8 @@ import Cart from './pages/cart/cart';
 import Checkout from './pages/checkout/checkout';
 import Blog from './pages/blog/blog';
 import UserAdmin from './admin/user/user';
+import Profile from './pages/profile/profile';
+import ForgotPass from './pages/login/forgotPassword';
 
 // import admin pages
 import Dashboard from './admin/dashboard/dashboard';
@@ -24,7 +26,6 @@ import DeleteProduct from './admin/products/delete-product';
 import OrdersAdmin from './admin/order/order';
 import SoldOrdersAdmin from './admin/order/soldOrders';
 import UserOrder from './pages/order/order';
-
 // import ProductList from './pages/admin/productList';
 
 // // import ProtectedRoute component
@@ -46,6 +47,9 @@ root.render(
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order" element={<UserOrder />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/forgotPassword" element={<ForgotPass />} />
+
 
         {/* Admin Routes */}
         <Route path="/admin/dashboard" element={<Dashboard />} />

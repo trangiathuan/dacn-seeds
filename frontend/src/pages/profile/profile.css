@@ -1,0 +1,15 @@
+.tabs-body {
+    padding: 20px;
+}
+
+.tabs {
+    margin-top: 20px;
+}
+
+.custom-tabs .ant-tabs-tab {
+    font-weight: bold;
+}
+
+.ant-card {
+    margin-bottom: 20px;
+}
