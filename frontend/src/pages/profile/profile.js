@@ -238,12 +238,14 @@ const Profile = () => {
                             type="primary"
                             onClick={handleUpdateProfile}
                             style={{
-                                width: '100%',
+                                width: '30%',
                                 padding: '12px 0',
                                 fontSize: '16px',
                                 borderRadius: '8px',
                                 backgroundColor: '#4A90E2',
                                 borderColor: '#4A90E2',
+                                marginLeft: 'auto', // Căn phải
+                                display: 'flex'
                             }}
                         >
                             Cập nhật thông tin

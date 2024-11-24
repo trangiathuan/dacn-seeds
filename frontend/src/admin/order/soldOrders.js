@@ -110,7 +110,7 @@ const SoldOrdersAdmin = () => {
                     <table className="table ">
                         <thead>
                             <tr>
-                                <th className='text-center' scope="col">Đơn hàng</th>
+                                <th className='text-center' scope="col">Đơn hàng đã bán</th>
                                 <th className='text-center'>Thông tin liên hệ</th>
                                 <th className='text-center' scope="col">Thanh toán</th>
                                 <th className='text-center' scope="col">Tổng cộng</th>

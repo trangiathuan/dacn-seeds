@@ -35,7 +35,7 @@ exports.postBlog = async (req, res) => {
 
 exports.getAllBlog = async (req, res) => {
     try {
-        const getBlog = await Blog.find()
+        const getBlog = await Blog.find({ isActive: 1 })
             .populate('userId', 'fullName')
             .sort({ createdAt: -1 }); // Sắp xếp theo createdAt giảm dần
         res.status(200).json(getBlog);

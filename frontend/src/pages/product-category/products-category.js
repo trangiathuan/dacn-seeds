@@ -8,7 +8,8 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import API_URL from "../../config/config";
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Dropdown, message, Space, Tooltip } from 'antd';
+import { Button, Dropdown, message, Space, Tooltip, Pagination } from 'antd';
+
 
 const items = [
     {
@@ -45,7 +46,7 @@ const ProductsCategory = () => {
 
     const fetchProducts = async () => {
         try {
-            const res = await axios.get(`${API_URL}/product?sort=${sortKey}&page=${currentPage}&limit=${limit}`);
+            const res = await axios.get(`${API_URL}/products-category/${id}?sort=${sortKey}&page=${currentPage}&limit=${limit}`);
             console.log('Products data:', res.data);
             setProducts(res.data.products);
             setTotalProducts(res.data.pagination.totalProducts); // Cập nhật tổng số sản phẩm
@@ -65,8 +66,27 @@ const ProductsCategory = () => {
         if (isLoggedIn) {
             addToCartDatabase(product);
         } else {
-            toast.success("Đăng nhập để thêm sản phẩm vào giỏ hàng");
+            addToLocalStorageCart(product)
         }
+    };
+
+    const addToLocalStorageCart = (product) => {
+        const cart = JSON.parse(localStorage.getItem('cartItems')) || {};
+        console.log(product)
+        if (cart[product._id]) {
+            cart[product._id].quantity += 1; // Tăng số lượng
+        } else {
+            cart[product._id] = {
+                productId: product._id,
+                productName: product.productName,
+                image: product.image,
+                price: product.price,
+                quantity: 1
+            };
+        }
+        localStorage.setItem('cartItems', JSON.stringify(cart));
+        toast.success("Sản phẩm đã được thêm vào giỏ hàng");
+        console.log(cart)
     };
 
     const addToCartDatabase = async (product) => {
@@ -141,7 +161,7 @@ const ProductsCategory = () => {
                                 <Link to={`/products/`} className='a-category mt-0'>
                                     <img className='img-icon-product' src={require(`../../asset/Images/mark.png`)} />
                                     Tất cả sản phẩm
-                                    <span className="badge text-bg-success rounded-pill ms-2"> 64</span>
+                                    <span className="badge text-bg-success rounded-pill ms-2"> {totalProducts}</span>
                                 </Link>
                             </li>
                             {category.map((item) => (
@@ -183,8 +203,18 @@ const ProductsCategory = () => {
                         ))}
                     </div>
                 </div>
+                <div className="pagination1 mt-3">
+                    <Pagination
+                        current={currentPage}
+                        pageSize='8'
+                        total={totalProducts}
+                        onChange={(page) => {
+                            setCurrentPage(page);
+                        }}
+                    />
+                </div>
             </div>
-            {/* <Footer /> */}
+            <Footer />
         </div>
     );
 }

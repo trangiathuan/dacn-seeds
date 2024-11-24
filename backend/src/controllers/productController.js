@@ -68,10 +68,12 @@ const getProduct = async (req, res) => {
 
 
 const getProductCategory = async (req, res) => {
-    const id = req.params.id
+    const id = req.params.id;
     try {
-        const { sort } = req.query; // Lấy tham số sắp xếp từ query string
+        // Lấy các tham số từ query string: sort, page và limit
+        const { sort, page = 1, limit = 8 } = req.query;
 
+        // Xác định option sắp xếp
         let sortOption;
         switch (sort) {
             case '1': // Mới nhất
@@ -90,23 +92,38 @@ const getProductCategory = async (req, res) => {
                 sortOption = {}; // Mặc định không sắp xếp
         }
 
-        // Truy vấn sản phẩm và sắp xếp theo sortOption
-        const products = await Product.find({ categoryID: id }).sort(sortOption);
-        res.json(products);
+        // Chuyển đổi các tham số sang số
+        const pageNumber = parseInt(page, 10);
+        const limitNumber = parseInt(limit, 10);
+
+        // Tính toán các chỉ số phân trang
+        const skip = (pageNumber - 1) * limitNumber;
+
+        // Truy vấn sản phẩm theo categoryID, sắp xếp, và phân trang
+        const products = await Product.find({ categoryID: id })
+            .sort(sortOption)
+            .skip(skip)
+            .limit(limitNumber);
+
+        // Lấy tổng số sản phẩm trong danh mục đó
+        const totalProducts = await Product.countDocuments({ categoryID: id });
+        const totalPages = Math.ceil(totalProducts / limitNumber);
+
+        // Trả về dữ liệu với thông tin phân trang
+        res.json({
+            products,
+            pagination: {
+                totalProducts,
+                totalPages,
+                currentPage: pageNumber,
+                limit: limitNumber,
+            },
+        });
     } catch (error) {
         res.status(500).send({ message: 'Có lỗi xảy ra khi lấy sản phẩm', error });
     }
-    // try {
-    //     const products = await Product.find({ categoryID: id });
-    //     if (!products || products.length === 0) {
-    //         return res.status(404).send('Products not found');
-    //     }
-    //     res.json(products);
-    // } catch (error) {
-    //     console.error('Error fetching products by category:', error);
-    //     res.status(500).send('Server error');
-    // }
-}
+};
+
 
 const postCreateProduct = async (req, res) => {
     let productName = req.body.productName;

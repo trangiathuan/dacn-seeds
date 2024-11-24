@@ -6,7 +6,7 @@
     margin: auto;
     border: rgb(255, 255, 255) solid 1px;
     border-radius: 25px;
-    box-shadow: 0 2px 10px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0px 5px 1px rgba(0, 0, 0, 0.3);
     width: 1000px;
     height: 455px;
 }
@@ -16,7 +16,7 @@
     border: rgb(202, 196, 196) solid 1px;
     border-radius: 10px;
     margin: 50px 55px;
-    box-shadow: 0 12px 18px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
 }
 .content-detail{
     margin-top: 45px;
@@ -92,9 +92,10 @@
     border: rgb(255, 255, 255) solid 1px;
     border-radius: 5px;
     padding: 10px;
-    box-shadow: 0px 2px 10px 5px rgb(209, 206, 206);
+    box-shadow: 0px 2px 10px 0px rgb(209, 206, 206);
     width: 940px;
     margin-bottom: 15px ;
+    margin-right: 3px;
 }
 .img-avt{
     width: 50px;

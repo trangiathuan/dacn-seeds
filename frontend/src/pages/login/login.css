@@ -1,7 +1,7 @@
 .brg {
     width: 100%;
     height: 100vh; /* Chiều cao toàn màn hình */
-    background-image: url(../../asset/Images/brg-login.png);
+    background-image: url(../../asset/Images/bg-seedd.jpg);
     background-size: cover;
     background-position: center;
     display: flex;
@@ -44,8 +44,16 @@
 }
 
 .login-form a {
-    color: #007bff;
+    color: #17e439;
 }
+.login-formBtn {
+    background-color: #17e439;
+}
+
+.login-formBtn:hover {
+    background-color: #0c701d;
+}
+
 
 .login-form a:hover {
     text-decoration: none;

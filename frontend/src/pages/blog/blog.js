@@ -52,7 +52,6 @@ const Blog = () => {
         }
 
         const token = localStorage.getItem('token');
-        setLoading(true);
 
         try {
             await axios.post(`${API_URL}/blog`, formData, {
@@ -62,15 +61,13 @@ const Blog = () => {
                 },
 
             });
-            toast.success('Đăng bài viết thành công')
+            toast.success('Bài viết của bạn đã được đăng tải thành công, chờ người quản trị xét duyệt')
             setTimeout(() => {
                 setTitle('');
                 setContent('');
-                setLoading(false);
                 setImage(null);
                 getAllBlog();
-
-            }, 500);
+            }, 1000);
 
         } catch (err) {
             console.error(err);

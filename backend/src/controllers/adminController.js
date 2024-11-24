@@ -1,6 +1,7 @@
 const Product = require('../models/product'); // Đường dẫn đến model Product
 const Order = require('../models/order');
 const User = require('../models/user');
+const Blog = require('../models/blog')
 const { param } = require('../routes/adminRoutes');
 
 exports.checkAdmin = async (req, res) => {
@@ -114,13 +115,34 @@ exports.getTotalProducts = async (req, res) => {
 };
 
 
-
 //API Order//
 
 //Lấy ra DS đơn hàng 
 exports.getAllOrder = async (req, res) => {
     try {
-        const orders = await Order.find({ status: { $in: [0, 1, 2] } }) //Hiển thị đơn hàng chưa duyệt và đã duyệt
+        const orders = await Order.find({ status: { $in: [0] } }) //Hiển thị đơn hàng chưa duyệt và đã duyệt
+        res.status(200).json(orders);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ msg: 'Lỗi server' });
+    }
+};
+
+//Lấy ra DS đơn hàng đã xác nhận
+exports.getResolvedOrders = async (req, res) => {
+    try {
+        const orders = await Order.find({ status: 1 })
+        res.status(200).json(orders);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ msg: 'Lỗi server' });
+    }
+};
+
+//Lấy ra DS đơn hàng đang giao
+exports.getShipOrders = async (req, res) => {
+    try {
+        const orders = await Order.find({ status: 2 })
         res.status(200).json(orders);
     } catch (error) {
         console.error(error.message);
@@ -131,7 +153,7 @@ exports.getAllOrder = async (req, res) => {
 //Lấy ra DS đơn hàng đã bán 
 exports.getSoldOrders = async (req, res) => {
     try {
-        const orders = await Order.find({ status: 3 })
+        const orders = await Order.find({ status: 4 })
         res.status(200).json(orders);
     } catch (error) {
         console.error(error.message);
@@ -216,15 +238,70 @@ exports.getTotalOrders = async (req, res) => {
 exports.getTotalPendingOrders = async (req, res) => {
     try {
         // Sử dụng Mongoose để đếm tổng số đơn hàng với status là "Pending"
-        const totalPendingOrders = await Order.countDocuments({ status: 0 });
+        const total = await Order.countDocuments({ status: 0 });
 
         // Trả về tổng số lượng đơn hàng "Pending"
-        res.status(200).json({ totalPendingOrders });
+        res.status(200).json({ total });
     } catch (err) {
         console.error('Error getting total pending orders:', err);
         res.status(500).json({ message: 'Lỗi hệ thống', error: err.message });
     }
 };
+
+exports.getTotalResolveOrders = async (req, res) => {
+    try {
+        // Sử dụng Mongoose để đếm tổng số đơn hàng với status là "Pending"
+        const total = await Order.countDocuments({ status: 1 });
+
+        // Trả về tổng số lượng đơn hàng "Pending"
+        res.status(200).json({ total });
+    } catch (err) {
+        console.error('Error getting total pending orders:', err);
+        res.status(500).json({ message: 'Lỗi hệ thống', error: err.message });
+    }
+};
+
+exports.getTotalShippingOrders = async (req, res) => {
+    try {
+        // Sử dụng Mongoose để đếm tổng số đơn hàng với status là "Pending"
+        const total = await Order.countDocuments({ status: 2 });
+
+        // Trả về tổng số lượng đơn hàng "Pending"
+        res.status(200).json({ total });
+    } catch (err) {
+        console.error('Error getting total pending orders:', err);
+        res.status(500).json({ message: 'Lỗi hệ thống', error: err.message });
+    }
+};
+
+exports.getTotalCompletedOrders = async (req, res) => {
+    try {
+        // Sử dụng Mongoose để đếm tổng số đơn hàng với status là "Pending"
+        const total = await Order.countDocuments({ status: 4 });
+
+        // Trả về tổng số lượng đơn hàng "Pending"
+        res.status(200).json({ total });
+    } catch (err) {
+        console.error('Error getting total pending orders:', err);
+        res.status(500).json({ message: 'Lỗi hệ thống', error: err.message });
+    }
+};
+
+exports.getTotalCancelOrders = async (req, res) => {
+    try {
+        // Sử dụng Mongoose để đếm tổng số đơn hàng với status là "Pending"
+        const total = await Order.countDocuments({ status: -1 });
+
+        // Trả về tổng số lượng đơn hàng "Pending"
+        res.status(200).json({ total });
+    } catch (err) {
+        console.error('Error getting total pending orders:', err);
+        res.status(500).json({ message: 'Lỗi hệ thống', error: err.message });
+    }
+};
+
+
+
 
 
 
@@ -290,3 +367,58 @@ exports.deleteUser = async (req, res) => {
         res.status(500).json({ msg: 'Server error' });
     }
 };
+
+//Blog
+
+exports.getAllBlogAdmin = async (req, res) => {
+    try {
+        const getBlog = await Blog.find({ isActive: 0 })
+            .populate('userId', 'fullName')
+            .sort({ createdAt: -1 }); // Sắp xếp theo createdAt giảm dần
+        res.status(200).json(getBlog);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Có lỗi khi lấy dữ liệu blog' });
+    }
+};
+
+exports.deleteBlogAdmin = async (req, res) => {
+    try {
+        const { blogId } = req.body
+
+
+        const deleteBlog = await Blog.deleteOne({ _id: blogId })
+
+        if (!deleteBlog) {
+            return res.status(400).json({ message: 'Blog không tồn tại' })
+        }
+        else {
+            return res.status(200).json({ message: 'Xoá blog thành công' })
+        }
+
+
+    } catch (error) {
+        res.status(500).json({ message: 'Có lỗi xảy ra' })
+    }
+
+}
+
+exports.UpdateStatusBlogAdmin = async (req, res) => {
+    try {
+        const { blogId } = req.body;
+        // Kiểm tra trạng thái có hợp lệ hay không
+
+        const blog = await Blog.findByIdAndUpdate(
+            blogId,
+            { isActive: 1 },
+            { new: true } // Trả về đơn hàng đã cập nhật
+        );
+        if (!blog) {
+            return res.status(404).json({ message: 'Không tìm thấy blog' });
+        }
+        res.status(200).json({ message: 'Cập nhật trạng thái thành công', blog });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Lỗi hệ thống', error: err.message });
+    }
+}

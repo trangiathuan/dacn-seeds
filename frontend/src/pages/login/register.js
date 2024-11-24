@@ -34,7 +34,7 @@ const Register = () => {
                     <form className="login-form" onSubmit={handleRegister}>
                         <h2 className="text-center">ĐĂNG KÝ TÀI KHOẢN</h2>
                         <div className="form-group">
-                            <label htmlFor="userName" className="mb-2">Tên tài khoản</label>
+                            <label htmlFor="userName" className="mb-2">Tài khoản</label>
                             <input type="text" className="form-control" placeholder="Nhập tên tài khoản" value={userName} onChange={(e) => setUserName(e.target.value)} />
                         </div>
                         <div className="form-group">
@@ -61,7 +61,7 @@ const Register = () => {
                             <label htmlFor="email" className="mb-2">Email</label>
                             <input type="email" className="form-control" placeholder="Nhập email" value={email} onChange={(e) => setEmail(e.target.value)} />
                         </div>
-                        <button type="submit" className="btn btn-primary btn-block">Đăng ký</button>
+                        <button type="submit" className="btn btn-primary btn-block login-formBtn">Đăng ký</button>
                     </form>
                 </div>
             </div>

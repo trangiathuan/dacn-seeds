@@ -26,10 +26,12 @@ import DeleteProduct from './admin/products/delete-product';
 import OrdersAdmin from './admin/order/order';
 import SoldOrdersAdmin from './admin/order/soldOrders';
 import UserOrder from './pages/order/order';
-// import ProductList from './pages/admin/productList';
+import ResolvedOrdersAdmin from './admin/order/resolvedOrder';
+import CancelOrdersAdmin from './admin/order/cancelOrder';
+import ShippingOrdersAdmin from './admin/order/shippingOrder';
+import BlogAdmin from './admin/blog/blog';
 
-// // import ProtectedRoute component
-// import ProtectedRoute from './components/ProtectedRoute';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -58,10 +60,14 @@ root.render(
         <Route path="/admin/products-update/:id" element={<UpdateProduct />} />
         <Route path="/admin/products-delete/:id" element={<DeleteProduct />} />
         <Route path="/admin/users" element={<UserAdmin />} />
-
+        <Route path="/admin/blogs" element={<BlogAdmin />} />
 
         <Route path="/admin/orders" element={<OrdersAdmin />} />
         <Route path="/admin/soldOrders" element={<SoldOrdersAdmin />} />
+        <Route path="/admin/resolvedOrders" element={<ResolvedOrdersAdmin />} />
+        <Route path="/admin/cancelOrders" element={<CancelOrdersAdmin />} />
+        <Route path="/admin/shippingOrders" element={<ShippingOrdersAdmin />} />
+
 
 
 

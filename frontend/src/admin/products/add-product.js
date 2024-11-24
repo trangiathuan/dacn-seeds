@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './productsAdmin.css';
 import NavAdmin from "../component/nav-admin/nav-admin";
 import Sidebar from "../component/sidebar/sidebar";
@@ -8,10 +8,16 @@ import API_URL from '../../config/config';
 const AddProduct = () => {
     const [productName, setProductName] = useState('');
     const [categoryID, setCategoryId] = useState('');
+    const [category, setCategory] = useState([]); // Danh sách các loại sản phẩm
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
     const [image, setImage] = useState(null); // Lưu file hình ảnh
+
+    // Gọi API lấy danh mục khi component mount
+    useEffect(() => {
+        getCategory();
+    }, []); // Thêm [] để gọi getCategory chỉ một lần khi component mount
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -58,6 +64,15 @@ const AddProduct = () => {
         }
     };
 
+    const getCategory = async () => {
+        try {
+            const response = await axios.get(`${API_URL}/category`);
+            setCategory(response.data); // Cập nhật danh sách category từ API
+        } catch (error) {
+            console.error('Có lỗi khi lấy danh mục sản phẩm!', error);
+        }
+    };
+
     return (
         <div>
             <NavAdmin />
@@ -87,14 +102,12 @@ const AddProduct = () => {
                                     onChange={(e) => setCategoryId(e.target.value)}
                                 >
                                     <option value="">Chọn loại sản phẩm</option>
-                                    <option value="66acff98b05c1a4960364fb9">Hạt giống cây ăn trái</option>
-                                    <option value="66acff98b05c1a4960364fba">Hạt giống rau mầm</option>
-                                    <option value="66acff98b05c1a4960364fbb">Hạt giống thảo dược</option>
-                                    <option value="66acff98b05c1a4960364fbc">Hạt giống cây cảnh</option>
-                                    <option value="66acff98b05c1a4960364fbd">Hạt giống rau, củ, quả</option>
-                                    <option value="66acff98b05c1a4960364fbe">Hạt giống cây gia vị</option>
-                                    <option value="66acff98b05c1a4960364fbf">Hạt giống cây hoa</option>
-                                    <option value="66acff98b05c1a4960364fc0">Hạt giống cây cỏ</option>
+                                    {/* Lặp qua danh sách category để hiển thị */}
+                                    {category.map(cat => (
+                                        <option key={cat._id} value={cat._id}>
+                                            {cat.categoryName} {/* Giả sử danh mục có trường `name` */}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                             <div className="form-group">

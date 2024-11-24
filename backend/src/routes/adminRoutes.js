@@ -27,17 +27,36 @@ router.get('/totalProducts', authAdmin, adminController.getTotalProducts);
 router.post('/add-product', authAdmin, upload.single('image'), adminController.addProduct);
 router.put('/update-product/:id', authAdmin, upload.single('image'), adminController.updateProduct);
 router.delete('/products/:id', authAdmin, adminController.deleteProduct);
+
 // Route Order
 router.get('/getAllOrder', authAdmin, adminController.getAllOrder);
+
 router.get('/totalOrders', authAdmin, adminController.getTotalOrders);
 router.get('/totalPendingOrders', authAdmin, adminController.getTotalPendingOrders);
+router.get('/totalResolveOrders', authAdmin, adminController.getTotalResolveOrders);
+router.get('/totalShippingOrders', authAdmin, adminController.getTotalShippingOrders);
+router.get('/totalCompletedOrders', authAdmin, adminController.getTotalCompletedOrders);
+router.get('/totalCancelOrders', authAdmin, adminController.getTotalCancelOrders);
+
 router.get('/getSoldOrders', authAdmin, adminController.getSoldOrders);
+router.get('/getShipOrders', authAdmin, adminController.getShipOrders);
+router.get('/getResolvedOrders', authAdmin, adminController.getResolvedOrders);
+router.get('/getCancelledOrders', authAdmin, adminController.getCancelledOrders);
+
 router.put('/updateOrderStatus/:orderId', authAdmin, adminController.updateOrderStatus);
 router.post('/deleteOrder', authAdmin, adminController.deleteOrder);
+
 // Route User
 router.get('/getAllUsers', authAdmin, adminController.getAllUsers);
 router.get('/totalUsers', authAdmin, adminController.getTotalUsers);
 router.delete('/deleteUser/:id', authAdmin, adminController.deleteUser);
 router.put('/updateUserRole', authAdmin, adminController.updateUserRole);
+
+//Route Blog
+router.get('/getAllBlogAdmin', authAdmin, adminController.getAllBlogAdmin);
+router.post('/deleteBlogAdmin', authAdmin, adminController.deleteBlogAdmin);
+router.put('/updateStatusBlogAdmin', authAdmin, adminController.UpdateStatusBlogAdmin);
+
+
 
 module.exports = router;

@@ -14,9 +14,9 @@ const ForgotPass = () => {
         e.preventDefault();
         try {
             const res = await axios.post(`${API_URL}/forgot-password`, { email });
-            toast.success('Mật khẩu mới đã được gửi vể email');
+            toast.success('Khôi phục mật khẩu thành công, vui lòng kiểm tra email');
         } catch (err) {
-            toast.error('Đã có lỗi xảy ra, vui lòng thử lại!');
+            toast.error('Email không tồn tại');
         }
     };
 
@@ -26,21 +26,21 @@ const ForgotPass = () => {
             <div className="login-container">
                 <div className="login-content">
                     <form className="login-form" onSubmit={handleForgotPassword}>
-                        <h3 className="text-center">QUÊN MẬT KHẨU</h3>
+                        <h3 className="text-center">KHÔI PHỤC MẬT KHẨU</h3>
                         <div className="form-group">
-                            <label htmlFor="email" className="mb-2">Nhập email đăng ký tài khoản</label>
+                            <label htmlFor="email" className="mb-2 mt-2">Email xác thực</label>
                             <input
                                 type="email"
                                 className="form-control"
-                                placeholder="Nhập email của bạn"
+                                placeholder="Nhập email xác thực"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                             />
                         </div>
-                        <button type="submit" className="btn btn-primary btn-block mt-4">Lấy lại mật khẩu</button>
+                        <button type="submit" className="btn btn-primary btn-block mt-4 login-formBtn">Khôi phục mật khẩu</button>
                         <p className="text-center mt-3">
-                            Bạn đã nhớ mật khẩu? <a href="/login">Đăng nhập</a>
+                            Đã nhớ mật khẩu? <a href="/login">Đăng nhập</a>
                         </p>
                     </form>
                 </div>

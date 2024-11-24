@@ -128,21 +128,15 @@ const OrdersAdmin = () => {
                                         {order.items.map((item, index) => (
                                             <div key={index}>
                                                 <div>
-                                                    <span>{item.productName}</span>
+                                                    <span>{item.productName} x{item.quantity}</span>
                                                 </div>
-                                                <div>
-                                                    <span>Giá: {item.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
-                                                </div>
-                                                <div>
-                                                    <span>Số lượng: {item.quantity}</span>
-                                                </div>
+
                                             </div>
                                         ))}
                                     </td>
                                     <td className='info-user'>
-                                        <div> <span>Người đặt hàng: {order.fullName}  </span></div>
+                                        <div> <span>Khách hàng: {order.fullName}  </span></div>
                                         <div><span>Số điện thoại: {order.phoneNumber}</span></div>
-                                        <div><span>Email: {order.email}</span></div>
                                         <div><span>Địa chỉ: {order.addDress}</span></div>
                                     </td>
                                     <td className='paymentMethod'>

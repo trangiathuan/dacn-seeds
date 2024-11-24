@@ -39,14 +39,14 @@ const Login = () => {
                     <form className="login-form" onSubmit={handleLogin}>
                         <h2 className="text-center">ĐĂNG NHẬP</h2>
                         <div className="form-group">
-                            <label htmlFor="userName" className="mb-2">Tên tài khoản</label>
+                            <label htmlFor="userName" className="mb-2">Tài khoản</label>
                             <input type="text" className="form-control" placeholder="Nhập tên tài khoản" value={userName} onChange={(e) => setUserName(e.target.value)} />
                         </div>
                         <div className="form-group mb-5">
                             <label htmlFor="passWord" className="mb-2">Mật khẩu</label>
                             <input type="password" className="form-control" placeholder="Nhập mật khẩu" value={passWord} onChange={(e) => setPassWord(e.target.value)} />
                         </div>
-                        <button type="submit" className="btn btn-primary btn-block">Đăng nhập</button>
+                        <button type="submit" className="btn btn-primary btn-block login-formBtn">Đăng nhập</button>
                         <p className="text-center mt-3">Bạn chưa có tài khoản đăng nhập? <a href="/register">Đăng ký</a></p>
                         <p className='text-center'><a href='/forgotPassword'>Quên mật khẩu</a></p>
                     </form>

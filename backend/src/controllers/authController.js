@@ -219,7 +219,7 @@ const sendResetPasswordEmail = async (email, newPassword) => {
     const mailOptions = {
         from: 'trangiathuan8223@gmail.com',
         to: email,
-        subject: 'Lấy lại mật khẩu',
+        subject: 'Seed Plant - Khôi phục mật khẩu',
         html: `
         <html>
             <body style="font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 0;">
@@ -227,17 +227,19 @@ const sendResetPasswordEmail = async (email, newPassword) => {
                     <div style="text-align: center; margin-bottom: 20px;">
                         <h1 style=" font-size: 36px; margin: 0;">Mật khẩu mới</h1>
                     </div>
-                    <div style="font-size: 16px; color: #333333; line-height: 1.6;">
+                    <div style="font-size: 16px; color: #333333; line-height: 1.6; text-align: center;">
                         <p style="margin: 10px 0;">Chúng tôi đã nhận được yêu cầu lấy lại mật khẩu cho tài khoản của bạn. Mật khẩu mới của bạn là:</p>
                         <p style="margin: 10px 0; font-size: 18px; font-weight: bold; text-align: center; ">${newPassword}</p>
-                        <p style="margin: 10px 0;">Vui lòng đăng nhập vào tài khoản của bạn và thay đổi mật khẩu sau khi đăng nhập để đảm bảo bảo mật tài khoản.</p>
+                        <p style="margin: 10px 0;">Vui lòng đăng nhập vào tài khoản của bạn và thay đổi mật khẩu để đảm bảo an toàn và bảo mật cho tài khoản.</p>
                         <p style="margin: 10px 0;">Nhấn vào nút bên dưới để đăng nhập ngay:</p>
                         <!-- Nút button với màu xanh dương -->
-                        <a href="http://localhost:3000/login" style="display: inline-block; padding: 10px 20px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 20px;">Đăng nhập ngay</a>
+                        <a href="http://localhost:3000/login" style="display: inline-block; padding: 10px 20px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 20px;">
+                            Đăng nhập ngay
+                        </a>
                     </div>
                     <div style="text-align: center; font-size: 12px; color: #888888; margin-top: 20px;">
                         <p style="margin: 5px 0;">Bạn nhận được email này vì đã yêu cầu thay đổi mật khẩu. Nếu bạn không yêu cầu thay đổi mật khẩu, vui lòng bỏ qua email này.</p>
-                        <p style="margin: 5px 0;">&copy; 2024 Công ty của bạn</p>
+                        <p style="margin: 5px 0;">&copy; 2024 Công ty hạt giống Seed Plant</p>
                     </div>
                 </div>
             </body>

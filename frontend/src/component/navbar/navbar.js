@@ -305,7 +305,7 @@ const Nav = () => {
                                 <a className="nav-link nav-a" href="#">TIN TỨC</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link nav-a" href="/blog">BLOG</a>
+                                <a className="nav-link nav-a" href="/blog">DIỄN ĐÀN</a>
                             </li>
                         </ul>
                     </div>

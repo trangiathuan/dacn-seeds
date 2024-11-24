@@ -7,6 +7,8 @@ import { useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import API_URL from '../../config/config';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const ProductDetail = () => {
     const [product, setProduct] = useState(null);  // Khởi tạo product là null để dễ kiểm tra
@@ -25,10 +27,10 @@ const ProductDetail = () => {
                 setComments(resComments.data);
 
 
-                setLoading(false);  // Đặt loading thành false khi dữ liệu được tải
+                setLoading(false);
             } catch (err) {
                 console.log(err);
-                setLoading(false);  // Đặt loading thành false ngay cả khi có lỗi
+                setLoading(false);
             }
         };
         console.log(comments)
@@ -40,8 +42,26 @@ const ProductDetail = () => {
         if (isLoggedIn) {
             addToCartDatabase(product);
         } else {
-            toast.warn("Đăng nhập để thêm sản phẩm vào giỏ hàng");
+            addToLocalStorageCart(product)
         }
+    };
+    const addToLocalStorageCart = (product) => {
+        const cart = JSON.parse(localStorage.getItem('cartItems')) || {};
+        console.log(product)
+        if (cart[product._id]) {
+            cart[product._id].quantity += 1; // Tăng số lượng
+        } else {
+            cart[product._id] = {
+                productId: product._id,
+                productName: product.productName,
+                image: product.image,
+                price: product.price,
+                quantity: 1
+            };
+        }
+        localStorage.setItem('cartItems', JSON.stringify(cart));
+        toast.success("Sản phẩm đã được thêm vào giỏ hàng");
+        console.log(cart)
     };
 
     const addToCartDatabase = async (product) => {
@@ -65,8 +85,8 @@ const ProductDetail = () => {
         }
     };
 
-    const handleCommentChange = (e) => {
-        setComment(e.target.value);
+    const handleCommentChange = (value) => {
+        setComment(value);
     };
 
     const handleCommentSubmit = async () => {
@@ -126,9 +146,9 @@ const ProductDetail = () => {
                         </div>
                     </div>
                 </div>
-                <div className='comment-detail'>
+                <div className='comment-detail '>
                     <div className='content-comment'>
-                        <h3 className='mb-4'>NỘI DUNG BÌNH LUẬN</h3>
+                        <h4 className='mb-4'>ĐÁNH GIÁ SẢN PHẨM</h4>
                         {comments.length > 0 ? (
                             comments.map((comment, index) => (
                                 <div className='row' key={index}>
@@ -137,7 +157,7 @@ const ProductDetail = () => {
                                     </div>
                                     <div className='commnet-text col-8'>
                                         <p className='name-user'>{comment.userID.fullName} <span className='date-comment'>{new Date(comment.createdAt).toLocaleDateString()}</span></p>
-                                        <p>{comment.comment}</p>
+                                        <div dangerouslySetInnerHTML={{ __html: comment.comment }} />
                                     </div>
                                 </div>
                             ))
@@ -145,14 +165,17 @@ const ProductDetail = () => {
                             <p></p>
                         )}
                         <div className='box-comment'>
-                            <h3 className='mb-4'>BÌNH LUẬN</h3>
-                            <textarea
-                                className='input-comment'
-                                value={comment}
-                                onChange={handleCommentChange}
-                                type='text'
+                            {/* ReactQuill thay thế textarea */}
+                            <ReactQuill
+                                value={comment} // Gắn giá trị từ state vào ReactQuill
+                                onChange={handleCommentChange} // Sự kiện thay đổi giá trị
+                                className='' // Đảm bảo giữ được lớp CSS của bạn
                             />
-                            <button className='btn btn-primary btn-commnet' onClick={handleCommentSubmit}>Bình luận</button>
+
+                            {/* Button bình luận */}
+                            <button className='btn btn-primary btn-commnet' onClick={handleCommentSubmit}>
+                                Bình luận
+                            </button>
                         </div>
                     </div>
                 </div>
