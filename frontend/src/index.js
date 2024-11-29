@@ -30,8 +30,10 @@ import ResolvedOrdersAdmin from './admin/order/resolvedOrder';
 import CancelOrdersAdmin from './admin/order/cancelOrder';
 import ShippingOrdersAdmin from './admin/order/shippingOrder';
 import BlogAdmin from './admin/blog/blog';
-
-
+import CategoryAdmin from './admin/products/category';
+import AddCategory from './admin/products/add-category';
+import UpdateCategory from './admin/products/update-category';
+import RevenueChart from './admin/chart/RevenueChart';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -67,6 +69,15 @@ root.render(
         <Route path="/admin/resolvedOrders" element={<ResolvedOrdersAdmin />} />
         <Route path="/admin/cancelOrders" element={<CancelOrdersAdmin />} />
         <Route path="/admin/shippingOrders" element={<ShippingOrdersAdmin />} />
+
+        <Route path="/admin/categorys" element={<CategoryAdmin />} />
+        <Route path="/admin/category-add" element={<AddCategory />} />
+        <Route path="/admin/category-update/:id" element={<UpdateCategory />} />
+
+        <Route path="/admin/sales-revenue" element={<RevenueChart />} />
+
+
+
 
 
 

@@ -13,8 +13,8 @@ const UpdateProduct = () => {
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState('');
-    const [image, setImage] = useState('');
-    const [imageFile, setImageFile] = useState(null); // Để lưu trữ tệp hình ảnh
+    const [image, setImage] = useState(''); // Lưu đường dẫn ảnh cũ
+    const [imageFile, setImageFile] = useState(null); // Để lưu trữ tệp hình ảnh mới
     const navigate = useNavigate(); // Sử dụng navigate để điều hướng sau khi cập nhật thành công
 
     // Lấy dữ liệu sản phẩm từ API khi component mount
@@ -38,7 +38,7 @@ const UpdateProduct = () => {
                 setDescription(product.description);
                 setPrice(product.price);
                 setQuantity(product.quantity);
-                setImage(product.image); // Lưu đường dẫn hình ảnh
+                setImage(product.image); // Lưu đường dẫn hình ảnh cũ
             } catch (error) {
                 alert('Không thể lấy dữ liệu sản phẩm');
                 console.error(error.message);
@@ -46,7 +46,7 @@ const UpdateProduct = () => {
         };
 
         fetchProduct();
-    }, [id]); // Chạy lại khi `id` thay đổi
+    }, [id]);
 
     // Xử lý form submit
     const handleSubmit = async (e) => {
@@ -61,11 +61,11 @@ const UpdateProduct = () => {
         formData.append('price', price);
         formData.append('quantity', quantity);
 
-        // Nếu có hình ảnh, append vào FormData
+        // Nếu có hình ảnh mới, append vào FormData
         if (imageFile) {
             formData.append('image', imageFile);
         } else {
-            formData.append('image', image); // Nếu không chọn tệp mới, gửi lại đường dẫn hình ảnh cũ
+            formData.append('image', image || '');
         }
 
         try {
@@ -90,6 +90,7 @@ const UpdateProduct = () => {
             }
         } catch (error) {
             alert('Có lỗi xảy ra khi gửi yêu cầu cập nhật!');
+            console.error(error);
         }
     };
 

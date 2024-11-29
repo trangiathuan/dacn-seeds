@@ -2,6 +2,7 @@ const Product = require('../models/product'); // Đường dẫn đến model Pr
 const Order = require('../models/order');
 const User = require('../models/user');
 const Blog = require('../models/blog')
+const Category = require('../models/category')
 const { param } = require('../routes/adminRoutes');
 
 exports.checkAdmin = async (req, res) => {
@@ -48,13 +49,22 @@ exports.updateProduct = async (req, res) => {
     const { productName, categoryID, description, price, quantity, image } = req.body;  // Lấy dữ liệu từ body request
 
     try {
-        const imagePath = req.file ? `${req.file.filename}` : null;
+        // Kiểm tra nếu có file ảnh mới
+        let imagePath;
 
-        // Tìm và cập nhật sản phẩm dựa trên ID
+        if (req.file) {
+            imagePath = req.file.filename; // Lấy tên ảnh mới từ req.file nếu có
+        } else {
+            // Nếu không có file ảnh mới, giữ lại ảnh cũ nếu có
+            const product = await Product.findById(id); // Tìm sản phẩm theo ID
+            imagePath = product ? product.image : null;  // Nếu không có sản phẩm, set imagePath là null
+        }
+
+        // Cập nhật sản phẩm trong cơ sở dữ liệu
         const updatedProduct = await Product.findByIdAndUpdate(
             id,
-            { productName, categoryID, description, price, quantity, image: imagePath },
-            { new: true }  // Tùy chọn này trả về document đã được cập nhật
+            { productName, categoryID, description, price, quantity, image: imagePath }, // Gửi thông tin và ảnh (nếu có)
+            { new: true }  // Trả về document đã được cập nhật
         );
 
         if (!updatedProduct) {
@@ -67,6 +77,7 @@ exports.updateProduct = async (req, res) => {
         res.status(500).json({ msg: 'Server Error' });
     }
 };
+
 exports.getProductId = async (req, res) => {
     const { id } = req.params; // Lấy ID từ URL
 
@@ -422,3 +433,71 @@ exports.UpdateStatusBlogAdmin = async (req, res) => {
         res.status(500).json({ message: 'Lỗi hệ thống', error: err.message });
     }
 }
+
+//Category
+
+exports.getAllCategory = async (req, res) => {
+    try {
+        const category = await Category.find()
+        res.status(200).json(category)
+    } catch {
+        console.log("không thể tải dữ liệu loại sản phẩm")
+    }
+}
+
+exports.addCategory = async (req, res) => {
+    try {
+        const { categoryName } = req.body;
+        const categoryIcon = req.file ? `${req.file.filename}` : 'seed.png';
+        const newCategory = new Category({
+            categoryName,
+            categoryIcon: categoryIcon
+        });
+        await newCategory.save();
+        res.status(200).json({ msg: 'Danh mục đã được thêm thành công', category: newCategory });
+    } catch (err) {
+        console.error('lỗi nè', err);
+        res.status(500).json({ msg: 'Lỗi khi thêm danh mục' });
+    }
+};
+
+exports.updateCategory = async (req, res) => {
+    try {
+        const { categoryName } = req.body;
+        const { id } = req.params;
+        console.log('name', categoryName)
+        console.log('id nè', id)
+        let categoryIcon;
+        if (req.file) {
+            categoryIcon = `${req.file.filename}`;
+        }
+        else {
+            const category = await Category.findById(id);
+            categoryIcon = category.categoryIcon
+        }
+        const cat = await Category.findByIdAndUpdate(id,
+            {
+                categoryName,
+                categoryIcon: categoryIcon
+            },
+            { new: true }
+        );
+        res.status(200).json(cat);
+    } catch (err) {
+        console.error('lỗi nè', err);
+        res.status(500).json({ msg: 'Lỗi khi update danh mục' });
+    }
+};
+
+
+exports.deleteCategory = async (req, res) => {
+    try {
+        const { categoryId } = req.params;
+        await Category.findByIdAndDelete(categoryId);
+        res.status(200).json({ msg: 'Danh mục đã được xoá thành công.' });
+    } catch (error) {
+        console.error("Không thể xoá danh mục: ", error);
+        res.status(500).json({ msg: 'Lỗi khi xoá danh mục' });
+    }
+};
+

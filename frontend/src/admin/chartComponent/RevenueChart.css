@@ -1,0 +1,85 @@
+/* Tạo kiểu cho giao diện thống kê doanh thu */
+.page-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.btn-daily{
+    margin-left: 0;
+}
+
+.revenue-type-buttons button {
+    margin-right: 10px;
+    padding: 10px 20px;
+    font-size: 11px;
+    transition: background-color 0.3s ease;
+    background-color: rgb(189, 11, 11);
+    color: white;
+    
+}
+
+.revenue-type-buttons button:hover {
+    background-color: rgb(107, 9, 9);
+}
+
+.year-selector {
+    margin-top: 20px;
+}
+
+.year-selector label {
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.year-selector select {
+    width: 71px;
+    padding: 8px 20px;
+    font-size: 13px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-top: -20px;
+    
+}
+
+.chart-container {
+    margin-top: 10px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.no-data-message {
+    color: #666;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.error-message {
+    color: red;
+    font-size: 16px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.for-select{
+    width: 150px;
+    display: block;
+    margin-right: 12px;
+}
+
+.date-selector button{
+    width: 90px;
+}
+
+.yearsl {
+    margin-top: 0px;
+    margin-left: 78px;
+}
+
+.btn-export {
+    background-color: #09b7e2 !important;
+}
+
+

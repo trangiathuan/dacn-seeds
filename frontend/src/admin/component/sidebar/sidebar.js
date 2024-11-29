@@ -170,7 +170,7 @@ const Sidebar = () => {
                 },
                 {
                     key: '11', // Key cho "Quản lý danh mục"
-                    label: (<a href='#'>Quản lý danh mục</a>),
+                    label: (<a href='/admin/categorys'>Quản lý danh mục</a>),
                 },
                 {
                     key: '12', // Key cho "Option 12"
@@ -201,6 +201,21 @@ const Sidebar = () => {
                 {
                     key: '11', // Key cho "Quản lý tài khoản"
                     label: (<a href='/admin/blogs'>Duyệt bài viết</a>),
+                },
+                {
+                    key: '12', // Key cho "Option 12"
+                    label: 'Option 12',
+                },
+            ],
+        },
+        {
+            key: 'sub6',
+            label: (<div className='ms-2'>Thống kê</div>),
+            icon: <FormOutlined />,
+            children: [
+                {
+                    key: '11', // Key cho "Quản lý tài khoản"
+                    label: (<a href='/admin/sales-revenue'>Doanh thu bán hàng</a>),
                 },
                 {
                     key: '12', // Key cho "Option 12"

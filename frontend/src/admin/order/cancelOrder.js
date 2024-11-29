@@ -9,7 +9,7 @@ import API_URL from '../../config/config';
 const CancelOrdersAdmin = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const [searchQuery, setSearchQuery] = useState('');
     useEffect(() => {
         fetchAllOrder(); // Gọi hàm fetch khi component được mount
     }, []);
@@ -65,16 +65,17 @@ const CancelOrdersAdmin = () => {
         }
     };
 
-    const deleteOrder = async (orderId) => {
+    const deleteOrder = async (orderId, items) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.delete(`${API_URL}/deleteOrder/${orderId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-
+            const response = await axios.post(`${API_URL}/deleteOrder`,
+                { orderId, items },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
             // Loại bỏ đơn hàng đã xóa khỏi danh sách đơn hàng
             setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId));
 
@@ -82,7 +83,7 @@ const CancelOrdersAdmin = () => {
 
             setTimeout(() => {
                 window.location.reload();
-            }, 1500); // Reload sau 1 giây
+            }, 10000); // Reload sau 1 giây
 
         } catch (error) {
             console.error('Error deleting order:', error);
@@ -96,6 +97,17 @@ const CancelOrdersAdmin = () => {
         }
     };
 
+    const filteredOrders = orders.filter(order =>
+        order._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.phoneNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.addDress.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.paymentMethod.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.totalPrice.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+        new Date(order.createdAt).toLocaleDateString().includes(searchQuery.toLowerCase())
+    );
+
+
     return (
         <div>
             <NavAdmin />
@@ -105,7 +117,16 @@ const CancelOrdersAdmin = () => {
                     <Sidebar />
                 </div>
                 <div className="col-9 content-body">
-                    <div>
+                    <div className=" search-bar mt-3">
+
+                        <input
+                            type="text"
+                            placeholder="Tìm kiếm đơn hàng"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)} // Update search query
+                            className="form-control search-input"
+                        />
+
                     </div>
                     <table className="table ">
                         <thead>
@@ -120,7 +141,7 @@ const CancelOrdersAdmin = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {orders.map((order) => (
+                            {filteredOrders.map((order) => (
                                 <tr key={order._id}>
                                     <td className='items-order'>
                                         {order.items.map((item, index) => (
@@ -165,7 +186,7 @@ const CancelOrdersAdmin = () => {
                                         </select>
                                     </td>
                                     <td>
-                                        <button onClick={() => deleteOrder(order._id)} className='btn btn-danger btn-product'>Xóa</button>
+                                        <button onClick={() => deleteOrder(order._id, order.items)} className='btn btn-danger btn-product'>Xóa</button>
                                     </td>
                                 </tr>
                             ))}

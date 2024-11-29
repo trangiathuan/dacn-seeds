@@ -9,7 +9,7 @@ import API_URL from '../../config/config';
 const SoldOrdersAdmin = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const [searchQuery, setSearchQuery] = useState('');
     useEffect(() => {
         fetchAllOrder(); // Gọi hàm fetch khi component được mount
     }, []);
@@ -65,16 +65,17 @@ const SoldOrdersAdmin = () => {
         }
     };
 
-    const deleteOrder = async (orderId) => {
+    const deleteOrder = async (orderId, items) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.delete(`${API_URL}/deleteOrder/${orderId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-
+            const response = await axios.post(`${API_URL}/deleteOrder`,
+                { orderId, items },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
             // Loại bỏ đơn hàng đã xóa khỏi danh sách đơn hàng
             setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId));
 
@@ -82,7 +83,7 @@ const SoldOrdersAdmin = () => {
 
             setTimeout(() => {
                 window.location.reload();
-            }, 1500); // Reload sau 1 giây
+            }, 10000); // Reload sau 1 giây
 
         } catch (error) {
             console.error('Error deleting order:', error);
@@ -96,6 +97,17 @@ const SoldOrdersAdmin = () => {
         }
     };
 
+    const filteredOrders = orders.filter(order =>
+        order._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.phoneNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.addDress.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.paymentMethod.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.totalPrice.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+        new Date(order.createdAt).toLocaleDateString().includes(searchQuery.toLowerCase())
+    );
+
+
     return (
         <div>
             <NavAdmin />
@@ -105,7 +117,16 @@ const SoldOrdersAdmin = () => {
                     <Sidebar />
                 </div>
                 <div className="col-9 content-body">
-                    <div>
+                    <div className=" search-bar mt-3">
+
+                        <input
+                            type="text"
+                            placeholder="Tìm kiếm đơn hàng"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)} // Update search query
+                            className="form-control search-input"
+                        />
+
                     </div>
                     <table className="table ">
                         <thead>
@@ -120,19 +141,13 @@ const SoldOrdersAdmin = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {orders.map((order) => (
+                            {filteredOrders.map((order) => (
                                 <tr key={order._id}>
                                     <td className='items-order'>
                                         {order.items.map((item, index) => (
                                             <div key={index}>
                                                 <div>
-                                                    <span>{item.productName}</span>
-                                                </div>
-                                                <div>
-                                                    <span>Giá: {item.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
-                                                </div>
-                                                <div>
-                                                    <span>Số lượng: {item.quantity}</span>
+                                                    <span>{item.productName} x{item.quantity}</span>
                                                 </div>
                                             </div>
                                         ))}
@@ -140,7 +155,6 @@ const SoldOrdersAdmin = () => {
                                     <td className='info-user'>
                                         <div> <span>Người đặt hàng: {order.fullName}  </span></div>
                                         <div><span>Số điện thoại: {order.phoneNumber}</span></div>
-                                        <div><span>Email: {order.email}</span></div>
                                         <div><span>Địa chỉ: {order.addDress}</span></div>
                                     </td>
                                     <td className='paymentMethod'>
@@ -161,11 +175,11 @@ const SoldOrdersAdmin = () => {
                                             <option value="0" >Chờ duyệt</option>
                                             <option value="1">Đã duyệt</option>
                                             <option value="2">Đã giao</option>
-                                            <option value="-1">Đã hủy</option>
+                                            <option value="4">Đã bán</option>
                                         </select>
                                     </td>
                                     <td>
-                                        <button onClick={() => deleteOrder(order._id)} className='btn btn-danger btn-product'>Xóa</button>
+                                        <button onClick={() => deleteOrder(order._id, order.items)} className='btn btn-danger btn-product'>Xóa</button>
                                     </td>
                                 </tr>
                             ))}

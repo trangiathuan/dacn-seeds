@@ -58,5 +58,23 @@ router.post('/deleteBlogAdmin', authAdmin, adminController.deleteBlogAdmin);
 router.put('/updateStatusBlogAdmin', authAdmin, adminController.UpdateStatusBlogAdmin);
 
 
+//Category
+const storage1 = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadPath = path.join(__dirname, '../../../frontend/src/asset/Images'); // Đường dẫn lưu file
+        cb(null, uploadPath);
+    },
+    filename: (req, file, cb) => {
+        // Đặt tên file với timestamp và thay thế khoảng trắng
+        const uniqueSuffix = Date.now() + '-' + file.originalname.replace(/\s+/g, '_');
+        cb(null, uniqueSuffix);
+    },
+});
+
+const upload1 = multer({ storage: storage1 });
+router.post('/addCategoryAdmin', authAdmin, upload1.single('categoryIcon'), adminController.addCategory)
+router.get('/getAllCategoryAdmin', authAdmin, adminController.getAllCategory);
+router.delete('/deleteCategoryAdmin/:categoryId', authAdmin, adminController.deleteCategory);
+router.put('/updateCategoryAdmin/:id', authAdmin, upload1.single('categoryIcon'), adminController.updateCategory); // Cập nhật danh mục
 
 module.exports = router;

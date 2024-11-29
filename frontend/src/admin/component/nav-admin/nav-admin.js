@@ -4,10 +4,15 @@ import React, { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';  // Sử dụng axios để gửi yêu cầu tới backend
 import API_URL from '../../../config/config.js';
+import { Dropdown, Space } from 'antd';
+import { toast, ToastContainer } from 'react-toastify';
+import { UserOutlined } from '@ant-design/icons';
+
 
 const NavAdmin = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
+    const isLoggedIn = !!localStorage.getItem('token');
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -32,8 +37,24 @@ const NavAdmin = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
+        setUser(null);
+        toast.success("Đăng xuất thành công");
         navigate('/login');
     };
+
+    const handleLogin = () => {
+        navigate('/login');
+    };
+
+    const items = [
+
+        {
+            label: isLoggedIn ? <a onClick={handleLogout}>Đăng xuất</a> : <a onClick={handleLogin}>Đăng nhập</a>,
+            key: '3',
+        },
+    ];
+
+
     return (
         <div>
             <nav class="navbar navbar-body navbar-expand-lg bg-body-tertiary">
@@ -46,16 +67,18 @@ const NavAdmin = () => {
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                         </ul>
-                        <div class="d-flex mt-2" role="search">
-                            <img className='notification' src={require('../../../asset/Images/bell.png')} />
-                            {user ? (
-                                <>
-                                    <p className='username-nav'>{user.fullName}</p> {/* Hiển thị userName hoặc email */}
-                                    <button onClick={handleLogout} className='btn btn-login'>Đăng xuất</button>
-                                </>
-                            ) : (
-                                <div></div>
-                            )}
+                        <div class="ada" role="search">
+                            <Dropdown
+                                menu={{ items }}
+                                trigger={['click']}
+                            >
+                                <a onClick={(e) => e.preventDefault()}>
+                                    <Space style={{ cursor: 'pointer' }} >
+                                        <UserOutlined style={{ color: "black", cursor: 'pointer' }} />
+                                        <span className="dropdown-text">{user ? user.fullName : 'Tài Khoản'}</span>
+                                    </Space>
+                                </a>
+                            </Dropdown>
                         </div>
                     </div>
                 </div>

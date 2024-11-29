@@ -8,6 +8,17 @@ const getCategory = async (req, res) => {
         res.status(500).send(error);
     }
 }
+
+const getCategoryById = async (req, res) => {
+    const { id } = req.params
+    try {
+        const category = await Category.findById(id);
+        res.json(category);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}
 module.exports = {
-    getCategory
+    getCategory,
+    getCategoryById
 }

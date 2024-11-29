@@ -9,9 +9,10 @@ import API_URL from '../../config/config';
 const ResolvedOrdersAdmin = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
-        fetchAllOrder(); // Gọi hàm fetch khi component được mount
+        fetchAllOrder(); // Fetch all orders when component mounts
     }, []);
 
     const fetchAllOrder = async () => {
@@ -23,17 +24,17 @@ const ResolvedOrdersAdmin = () => {
 
             const response = await axios.get(`${API_URL}/getResolvedOrders`, {
                 headers: {
-                    Authorization: `Bearer ${token}` // Sử dụng Bearer token
+                    Authorization: `Bearer ${token}` // Use Bearer token for authentication
                 }
             });
-            setOrders(response.data); // Cập nhật state với dữ liệu sản phẩm
+            setOrders(response.data); // Set the fetched orders to state
         } catch (error) {
             if (error.response && (error.response.status === 401 || error.response.status === 403)) {
                 alert("Bạn không có quyền truy cập trang quản trị");
-                window.location.href = '/login'; // Ví dụ điều hướng tới trang đăng nhập
+                window.location.href = '/login'; // Redirect to login if unauthorized
             }
         } finally {
-            setLoading(false); // Tắt trạng thái loading
+            setLoading(false); // Turn off loading after data is fetched
         }
     };
 
@@ -51,37 +52,42 @@ const ResolvedOrdersAdmin = () => {
             );
 
             toast.success('Cập nhật trạng thái thành công');
-            window.location.reload();
+            window.location.reload(); // Reload page after status update
 
         } catch (error) {
             console.error('Error updating order status:', error);
-
             if (error.response) {
-                console.log(error.response); // In ra toàn bộ thông tin phản hồi
+                console.log(error.response); // Log error response
             } else {
                 alert('Đã xảy ra lỗi khi cập nhật trạng thái');
             }
         }
     };
 
-    const deleteOrder = async (orderId) => {
+    const deleteOrder = async (orderId, items) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.delete(`${API_URL}/deleteOrder/${orderId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
+            const response = await axios.post(`${API_URL}/deleteOrder`,
+                { orderId, items },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            // Loại bỏ đơn hàng đã xóa khỏi danh sách đơn hàng
             setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId));
+
             toast.success('Đã xóa đơn hàng thành công');
+
             setTimeout(() => {
                 window.location.reload();
-            }, 1500); // Reload sau 1 giây
+            }, 10000);
 
         } catch (error) {
             console.error('Error deleting order:', error);
 
+            // Nếu có response từ server, hiển thị thông báo cụ thể
             if (error.response) {
                 alert(`Đã xảy ra lỗi: ${error.response.data.message}`);
             } else {
@@ -110,7 +116,7 @@ const ResolvedOrdersAdmin = () => {
                         .invoice-details td { background-color: #fafafa; }
                         .invoice-details table th:nth-child(2),
                         .invoice-details table td:nth-child(2) {
-                            text-align: center; /* Căn giữa cho cột Số lượng */
+                            text-align: center; /* Center align quantity column */
                         }
                         .total { font-size: 18px; font-weight: bold; margin-top: 20px; }
                         .customer-info p { font-size: 16px; }
@@ -123,12 +129,12 @@ const ResolvedOrdersAdmin = () => {
                 <body>
                     <div class="container">
                         <div class="invoice-header">
-                            <h2>HÓA ĐƠN MUA HÀNG</h2>
+                            <h2>SEEDS PLANT</h2>
                         </div>
     
-                        <!-- Mã vạch -->
+                        <!-- Barcode -->
                         <div class="barcode">
-                            <svg id="barcode"></svg> <!-- Mã vạch sẽ được hiển thị tại đây -->
+                            <svg id="barcode"></svg> <!-- Barcode will be displayed here -->
                         </div>
     
                         <div class="invoice-details">
@@ -164,17 +170,17 @@ const ResolvedOrdersAdmin = () => {
                         </div>
     
                         <div class="footer">
-                            <p>SEED PLAN - THẾ GIỚI HẠT GIỐNG</p>
+                            <p>SEEDS PLAN - THẾ GIỚI HẠT GIỐNG</p>
                             <p>Địa chỉ: Tân Phước , Tiền Giang</p>
                             <p>Điện thoại: 0332204xxx</p>
                         </div>
                     </div>
                     <script>
                         JsBarcode("#barcode", "${order._id}", {
-                            format: "CODE128", // Chọn loại mã vạch
-                            displayValue: true, // Hiển thị giá trị mã vạch
-                            fontSize: 18, // Kích thước chữ
-                            height: 40, // Chiều cao mã vạch
+                            format: "CODE128", // Barcode type
+                            displayValue: true, // Show barcode value
+                            fontSize: 18, // Font size
+                            height: 40, // Barcode height
                         });
                     </script>
                 </body>
@@ -185,8 +191,15 @@ const ResolvedOrdersAdmin = () => {
         invoiceWindow.print();
     };
 
-
-
+    const filteredOrders = orders.filter(order =>
+        order._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.phoneNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.addDress.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.paymentMethod.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.totalPrice.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+        new Date(order.createdAt).toLocaleDateString().includes(searchQuery.toLowerCase())
+    );
 
     return (
         <div>
@@ -197,6 +210,18 @@ const ResolvedOrdersAdmin = () => {
                     <Sidebar />
                 </div>
                 <div className="col-9 content-body">
+                    <div className=" search-bar mt-3">
+
+                        <input
+                            type="text"
+                            placeholder="Tìm kiếm đơn hàng"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)} // Update search query
+                            className="form-control search-input"
+                        />
+
+                    </div>
+
                     <table className="table">
                         <thead>
                             <tr>
@@ -210,7 +235,7 @@ const ResolvedOrdersAdmin = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {orders.map((order) => (
+                            {filteredOrders.map((order) => (
                                 <tr key={order._id}>
                                     <td className='items-order'>
                                         {order.items.map((item, index) => (
@@ -248,7 +273,7 @@ const ResolvedOrdersAdmin = () => {
                                         </select>
                                     </td>
                                     <td className='btn-action'>
-                                        <button onClick={() => deleteOrder(order._id)} className='btn btn-success btn-product1'>Xóa</button>
+                                        <button onClick={() => deleteOrder(order._id, order.items)} className='btn btn-success btn-product1'>Xóa</button>
                                         <button onClick={() => printInvoice(order)} className='btn btn-success btn-product2'>In</button>
                                     </td>
                                 </tr>

@@ -10,6 +10,7 @@ const ProductsAdmin = () => {
     const [products, setProducts] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const fetchAllProducts = async () => {
@@ -40,6 +41,14 @@ const ProductsAdmin = () => {
         fetchAllProducts(); // Gọi hàm fetch khi component được mount
     }, []);
 
+    // Filter products based on search query (OR logic for product ID, name, category, and price)
+    const filteredProduct = products.filter(product =>
+        product._id.toLowerCase().includes(searchQuery.toLowerCase()) ||  // Tìm theo mã sản phẩm
+        product.productName.toLowerCase().includes(searchQuery.toLowerCase()) ||  // Tìm theo tên sản phẩm
+        (product.categoryID && product.categoryID.categoryName.toLowerCase().includes(searchQuery.toLowerCase())) ||  // Tìm theo tên danh mục (nếu có)
+        product.price.toString().toLowerCase().includes(searchQuery.toLowerCase())  // Tìm theo giá sản phẩm
+    );
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -60,15 +69,29 @@ const ProductsAdmin = () => {
                     <Sidebar />
                 </div>
                 <div className="col-9 content-body">
-                    <div>
-                        <button className='btn btn-success mt-3 mb-0'>
-                            <a className=' btn-add' href='/admin/products-add'>Thêm sản phẩm</a>
-                        </button>
+                    <div className='row'>
+                        <div className='col-6'>
+                        </div>
+                        <div className="col-2 search-bar-pro mt-3">
+                            {/* Input for search query */}
+                            <input
+                                type="text"
+                                placeholder="Tìm kiếm theo mã đơn hàng, tên sản phẩm, danh mục hoặc giá"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)} // Update search query
+                                className="form-control search-input"
+                            />
+                        </div>
+                        <div className='col-2 btn-addd'>
+                            <button className='btn btn-success mt-3 mb-0'>
+                                <a className=' btn-add' href='/admin/products-add'>Thêm sản phẩm</a>
+                            </button>
+                        </div>
                     </div>
                     <table className="table">
                         <thead>
                             <tr>
-                                <th scope="col"> </th>
+                                <th scope="col"></th>
                                 <th className='text-center' scope="col">Sản phẩm</th>
                                 <th className='text-center'>Loại sản phẩm</th>
                                 <th className='text-center' scope="col">Chi tiết</th>
@@ -78,14 +101,14 @@ const ProductsAdmin = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {products.map((product) => (
+                            {filteredProduct.map((product) => (
                                 <tr key={product._id}>
                                     <th>
                                         <img className='img-product-admin' src={require(`../../asset/images-product/${product.image}`)} alt={product.productName} />
                                     </th>
                                     <td className='name-product'>{product.productName}</td>
                                     <td className='categoryId-product'>
-                                        {product.categoryID ? product.categoryID.categoryName : 'Không có danh mục'} {/* Kiểm tra nếu categoryID là null */}
+                                        {product.categoryID ? product.categoryID.categoryName : 'Không có danh mục'}
                                     </td>
                                     <td className='description-product'>{product.description}</td>
                                     <td className='quantity-product'>{product.quantity}</td>
@@ -101,7 +124,7 @@ const ProductsAdmin = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default ProductsAdmin;

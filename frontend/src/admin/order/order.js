@@ -10,6 +10,7 @@ import API_URL from '../../config/config';
 const OrdersAdmin = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         fetchAllOrder(); // Gọi hàm fetch khi component được mount
@@ -98,6 +99,17 @@ const OrdersAdmin = () => {
         }
     };
 
+    const filteredOrders = orders.filter(order =>
+        order._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.phoneNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.addDress.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.paymentMethod.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.totalPrice.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+        new Date(order.createdAt).toLocaleDateString().includes(searchQuery.toLowerCase())
+    );
+
+
     return (
         <div>
             <NavAdmin />
@@ -107,7 +119,16 @@ const OrdersAdmin = () => {
                     <Sidebar />
                 </div>
                 <div className="col-9 content-body">
-                    <div>
+                    <div className=" search-bar mt-3">
+
+                        <input
+                            type="text"
+                            placeholder="Tìm kiếm đơn hàng"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)} // Update search query
+                            className="form-control search-input"
+                        />
+
                     </div>
                     <table className="table ">
                         <thead>
@@ -122,7 +143,7 @@ const OrdersAdmin = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {orders.map((order) => (
+                            {filteredOrders.map((order) => (
                                 <tr key={order._id}>
                                     <td className='items-order'>
                                         {order.items.map((item, index) => (
@@ -155,7 +176,7 @@ const OrdersAdmin = () => {
                                             className='form-select'
                                         >
                                             <option value="0">Chờ xác nhận</option>
-                                            <option value="1">Đã xác nhận</option>
+                                            <option value="1">Xác nhận đơn hàng</option>
                                             <option value="2">Đang giao hàng</option>
                                             <option value="3">Đã giao hàng</option>
                                         </select>

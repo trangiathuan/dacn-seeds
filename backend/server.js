@@ -10,7 +10,8 @@ const cartRoutes = require('./src/routes/cartRoutes');
 const authRoutes = require('./src/routes/authRoutes');
 const checkoutRoutes = require('./src/routes/checkoutRoutes');
 const categoryRoutes = require('./src/routes/categoryRoutes');
-const adminRoutes = require('./src/routes/adminRoutes')
+const adminRoutes = require('./src/routes/adminRoutes');
+const chartRoutes = require('./src/routes/chartRoutes')
 const commentRoutes = require('./src/routes/commentRoutes');
 const blogRoutes = require('./src/routes/blogRoutes')
 
@@ -24,6 +25,7 @@ app.use('/api', authRoutes);
 app.use('/api', cartRoutes);
 app.use('/api', checkoutRoutes);
 app.use('/api', adminRoutes);
+app.use('/api', chartRoutes);
 app.use('/api', commentRoutes);
 app.use('/api', blogRoutes);
 

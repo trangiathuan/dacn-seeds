@@ -14,8 +14,7 @@
     width: 137px;
 }
 .btn-action {
-    display: flex; 
-    gap: 0px; 
+   
 }
 
 
@@ -30,4 +29,9 @@
 }
 .btn-product2:hover {
     background-color: rgba(16, 112, 168, 0.692)
+}
+.search-bar {
+    width:240px;
+    display: flex;
+    margin-left: auto;
 }

@@ -31,6 +31,16 @@
 .categoryId-product {
     width: 200px;
 }
+.search-bar-pro{
+    width: 250px;
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+}
+.btn-addd{
+    width: 190px;
+    margin: 0;
+}
 /* Add and update product css */
 .add-product-body{
     display: block;
@@ -86,4 +96,36 @@
 .btn-delete-product {
     margin-top: 20px;
     margin-left: 15px;
+}
+
+.table-category {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 750px;
+}
+.cat-col-icon {
+    width: 150px;
+}
+.cat-col {
+    width: 400px;
+}
+.cat-col-sp {
+    width: 600px;
+   
+}
+.btn-cat {
+    margin-left: 50px;
+}
+.add-cat-body {
+
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 600px;
+        height: 250px;
+        box-shadow:  1px 1px 5px rgb(209, 207, 207);
+        margin-top: 25px;
+        border-radius: 15px;
+
 }

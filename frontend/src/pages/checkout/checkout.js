@@ -210,7 +210,7 @@ const Checkout = () => {
                         <div className="checkout-total">
                             <h4>Tổng tiền: {calculateTotalPrice().toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</h4>
                         </div>
-                        <button className='btn btn-success' onClick={handleCheckout}>Thanh toán</button>
+                        <button className='btn btn-success' onClick={handleCheckout}>Đặt hàng</button>
                     </form>
                 </div>
             </div>
