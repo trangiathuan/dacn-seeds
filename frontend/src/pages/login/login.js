@@ -20,10 +20,14 @@ const Login = () => {
             console.log(role)
             if (role === 'admin') {
                 toast.success('Đăng nhập thành công');
-                navigate('/admin/dashboard'); // Chuyển hướng đến trang admin nếu người dùng là admin
+                setTimeout(() => {
+                    navigate('/admin/dashboard'); // Chuyển hướng đến trang admin nếu người dùng là admin
+                }, 1200);
             } else {
-                navigate('/'); // Chuyển hướng đến trang chủ hoặc trang khác nếu không phải admin
                 toast.success('Đăng nhập thành công');
+                setTimeout(() => {
+                    navigate('/'); // Chuyển hướng đến trang chủ hoặc trang khác nếu không phải admin
+                }, 1500);
             }
         } catch (err) {
             toast.warn('Tên tài khoản hoặc mật khẩu không chính xác');

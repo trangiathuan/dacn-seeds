@@ -9,6 +9,7 @@ const UserAdmin = () => {
     const [users, setUsers] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const fetchAllUsers = async () => {
@@ -79,6 +80,15 @@ const UserAdmin = () => {
         }
     };
 
+    const filteredUsers = users.filter(user =>
+        user._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.phoneNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.role.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -99,6 +109,17 @@ const UserAdmin = () => {
                     <Sidebar />
                 </div>
                 <div className="col-9 content-body">
+                    <div className=" search-bar mt-3">
+
+                        <input
+                            type="text"
+                            placeholder="Tìm kiếm tài khoản"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)} // Update search query
+                            className="form-control search-input"
+                        />
+
+                    </div>
                     <table className="table">
                         <thead>
                             <tr>
@@ -112,7 +133,7 @@ const UserAdmin = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {users.map((user) => (
+                            {filteredUsers.map((user) => (
                                 <tr key={user._id}>
                                     <td className='text-center'>{user.userName}</td>
                                     <td className='text-center'>{user.fullName}</td>

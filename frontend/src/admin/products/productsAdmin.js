@@ -76,7 +76,7 @@ const ProductsAdmin = () => {
                             {/* Input for search query */}
                             <input
                                 type="text"
-                                placeholder="Tìm kiếm theo mã đơn hàng, tên sản phẩm, danh mục hoặc giá"
+                                placeholder="Tìm kiếm sản phẩm"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)} // Update search query
                                 className="form-control search-input"

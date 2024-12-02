@@ -146,7 +146,7 @@ const Sidebar = () => {
                         </span>
 
 
-                        Đã bán
+                        Hoàn thành
                     </a>
                     )
                 },

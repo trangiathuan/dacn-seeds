@@ -13,8 +13,8 @@ const categoryRoutes = require('./src/routes/categoryRoutes');
 const adminRoutes = require('./src/routes/adminRoutes');
 const chartRoutes = require('./src/routes/chartRoutes')
 const commentRoutes = require('./src/routes/commentRoutes');
-const blogRoutes = require('./src/routes/blogRoutes')
-
+const blogRoutes = require('./src/routes/blogRoutes');
+const commentBlogRoutes = require('./src/routes/commentBlogRoutes');
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
@@ -28,6 +28,7 @@ app.use('/api', adminRoutes);
 app.use('/api', chartRoutes);
 app.use('/api', commentRoutes);
 app.use('/api', blogRoutes);
+app.use('/api', commentBlogRoutes);
 
 
 const conn = async () => {

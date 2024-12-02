@@ -257,14 +257,14 @@ const ResolvedOrdersAdmin = () => {
                                     <td className='totalPrice-order'>
                                         {order.totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                                     </td>
-                                    <td className='date-order'>
+                                    <td className='date-order text-center'>
                                         {new Date(order.createdAt).toLocaleDateString()}
                                     </td>
-                                    <td className='status'>
+                                    <td className='status text-center'>
                                         <select
                                             value={order.status}
                                             onChange={(e) => updateOrderStatus(order._id, Number(e.target.value))}
-                                            className='form-select'
+                                            className='form-select frm-order'
                                         >
                                             <option value="0">Chờ duyệt</option>
                                             <option value="1">Đã xác nhận</option>
@@ -274,7 +274,7 @@ const ResolvedOrdersAdmin = () => {
                                     </td>
                                     <td className='btn-action'>
                                         <button onClick={() => deleteOrder(order._id, order.items)} className='btn btn-success btn-product1'>Xóa</button>
-                                        <button onClick={() => printInvoice(order)} className='btn btn-success btn-product2'>In</button>
+                                        <button onClick={() => printInvoice(order)} className='btn btn-success btn-product2'>In </button>
                                     </td>
                                 </tr>
                             ))}

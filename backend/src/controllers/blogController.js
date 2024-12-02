@@ -109,6 +109,50 @@ exports.deleteBlog = async (req, res) => {
 
 }
 
+// exports.commentBlog = async (req, res) => {
+//     const { blogId, content } = req.body;
+//     const userId = req.user.userId  // Lấy userId từ token
+
+//     if (!content) {
+//         return res.status(400).send('Bình luận không được để trống');
+//     }
+
+//     try {
+//         const blog = await Blog.findById(blogId);
+//         if (!blog) {
+//             return res.status(404).send('Bài viết không tồn tại');
+//         }
+
+//         const comment = {
+//             userId,
+//             content,
+//             createdAt: new Date(),
+//         };
+
+//         blog.comments.push(comment);
+//         await blog.save();
+
+//         res.status(200).json(blog);
+//     } catch (err) {
+//         res.status(500).send('Có lỗi xảy ra, vui lòng thử lại');
+//     }
+// };
+
+// exports.getCommentBlog = async (req, res) => {
+//     const { blogId } = req.params;
+
+//     try {
+//         const blog = await Blog.findById(blogId).populate('comments.userId', 'fullName avatar');
+//         if (!blog) {
+//             return res.status(404).send('Bài viết không tồn tại');
+//         }
+
+//         res.status(200).json(blog.comments);
+//     } catch (err) {
+//         res.status(500).send('Có lỗi xảy ra, vui lòng thử lại');
+//     }
+// };
+
 
 
 

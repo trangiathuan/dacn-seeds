@@ -3,7 +3,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import API_URL from '../../config/config';
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Register = () => {
     const [userName, setUserName] = useState('');
     const [passWord, setPassWord] = useState('');
@@ -20,15 +21,19 @@ const Register = () => {
             await axios.post(`${API_URL}/register`, {
                 userName, passWord, fullName, birthDay, address, phoneNumber, email
             });
-            navigate('/login'); // Chuyển hướng đến trang đăng nhập sau khi đăng ký thành công
+            toast.success('Đăng ký thành công')
+            setTimeout(() => {
+                navigate('/login'); // Chuyển hướng đến trang đăng nhập sau khi đăng ký thành công
+            }, 1500);
         } catch (err) {
 
-            alert(err.response.data.message); // Hiển thị thông báo lỗi
+            alert(err.response.data.message);
         }
     };
 
     return (
         <div className='brg'>
+            <ToastContainer />
             <div className="login-container">
                 <div className="login-content">
                     <form className="login-form" onSubmit={handleRegister}>

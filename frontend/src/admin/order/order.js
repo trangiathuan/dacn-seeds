@@ -163,17 +163,17 @@ const OrdersAdmin = () => {
                                     <td className='paymentMethod'>
                                         {order.paymentMethod}
                                     </td>
-                                    <td className='totalPrice-order'>
+                                    <td className='totalPrice-order text-center'>
                                         {order.totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                                     </td>
-                                    <td className='date-order'>
+                                    <td className='date-order text-center'>
                                         {new Date(order.createdAt).toLocaleDateString()}
                                     </td>
                                     <td className='status'>
                                         <select
                                             value={order.status}
                                             onChange={(e) => updateOrderStatus(order._id, Number(e.target.value))}
-                                            className='form-select'
+                                            className='form-select frm-order'
                                         >
                                             <option value="0">Chờ xác nhận</option>
                                             <option value="1">Xác nhận đơn hàng</option>

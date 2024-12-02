@@ -13,8 +13,17 @@
 .date-order {
     width: 137px;
 }
-.btn-action {
-   
+.frm-order {
+    width: 155px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.frm-order-ship{
+    width: 175px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;  
 }
 
 

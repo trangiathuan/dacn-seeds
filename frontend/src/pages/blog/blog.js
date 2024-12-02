@@ -16,11 +16,22 @@ const Blog = () => {
     const [image, setImage] = useState(null);
     const [blog, setBlog] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [comments, setComments] = useState({});  // Store comments per blog
+    const [newComment, setNewComment] = useState('');
     const isLoggedIn = !!localStorage.getItem('token');
 
     useEffect(() => {
         getAllBlog();
-    }, []);
+    }, [blog]);
+
+    useEffect(() => {
+        // Fetch comments when blog data is fetched
+        if (blog.length > 0) {
+            blog.forEach(blogItem => {
+                getComments(blogItem._id);
+            });
+        }
+    }, [blog]);  // Runs when blog data is fetched or updated
 
     const getAllBlog = async () => {
         try {
@@ -30,6 +41,38 @@ const Blog = () => {
         } catch (error) {
             console.error(error);
             toast.error('Không thể lấy dữ liệu blog.');
+        }
+    };
+
+    const getComments = async (blogId) => {
+        try {
+            const response = await axios.get(`${API_URL}/comments/${blogId}`);
+            setComments(prevState => ({ ...prevState, [blogId]: response.data }));
+        } catch (error) {
+            console.error(error);
+            toast.error('Lỗi khi tải bình luận.');
+        }
+    };
+
+    const handleCommentSubmit = async (blogId) => {
+        if (!newComment) {
+            toast.error('Vui lòng nhập bình luận.');
+            return;
+        }
+        const token = localStorage.getItem('token');
+        try {
+            await axios.post(`${API_URL}/comments`, { blogId, content: newComment }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+            toast.success('Bình luận của bạn đã được gửi!');
+            setNewComment('');
+            getComments(blogId);  // Reload comments
+        } catch (error) {
+            console.error(error);
+            toast.error('Có lỗi xảy ra khi gửi bình luận.');
         }
     };
 
@@ -75,26 +118,6 @@ const Blog = () => {
         }
     };
 
-    const handleLike = async (blogId) => {
-        const token = localStorage.getItem('token');
-        try {
-            const response = await axios.post(`${API_URL}/like`, { blogId }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-
-            const updatedBlogs = blog.map(b =>
-                b._id === blogId ? { ...b, totalLike: response.data.totalLike } : b
-            );
-            setBlog(updatedBlogs);
-        } catch (error) {
-            console.error('Error:', error);
-            toast.error('Có lỗi xảy ra khi thích bài viết.');
-        }
-    };
-
     const handleDelete = async (blogId) => {
         const token = localStorage.getItem('token');
         try {
@@ -112,6 +135,22 @@ const Blog = () => {
         } catch (error) {
             console.error('Error:', error);
             toast.error('Bạn không được phép xoá bài viết của người khác');
+        }
+    };
+
+    const handleLike = async (blogId) => {
+        const token = localStorage.getItem('token');
+        try {
+            await axios.post(`${API_URL}/like`, { blogId }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            toast.success("Đã thích bài viết!");
+            getAllBlog();  // Reload blog list to update like count
+        } catch (error) {
+            console.error(error);
+            toast.error("Có lỗi xảy ra khi thích bài viết.");
         }
     };
 
@@ -182,7 +221,10 @@ const Blog = () => {
                         <div key={blogItem._id} className="main-content">
                             <div className="info-user-cmt">
                                 <img className='' src={require('../../asset/Images/account.png')} />
-                                <p className='name-info-user-cmt'>{blogItem.userId.fullName} <span className='date-comment ms-2'>{new Date(blogItem.createdAt).toLocaleDateString()}</span></p>
+                                <p className='name-info-user-cmt'>
+                                    {blogItem.userId.fullName}
+                                    <span className='date-comment ms-2'>{new Date(blogItem.createdAt).toLocaleDateString()}</span>
+                                </p>
                                 <div className="option-menu">
                                     <Space wrap>
                                         <Dropdown menu={menuProps}>
@@ -208,7 +250,7 @@ const Blog = () => {
                             )}
                             <div>
                                 <span>{blogItem.totalLike} thích</span>
-                                <span className="ms-3">15 Bình luận</span>
+                                <span className="ms-3">{comments[blogItem._id]?.length} Bình luận</span>
                                 <div>
                                     <hr />
                                     <button
@@ -223,19 +265,39 @@ const Blog = () => {
                             </div>
                             <div className="comment">
                                 <hr />
-                                <div className="info-user-cmt mt-3">
-                                    <img className='' src={require('../../asset/Images/account.png')} />
-                                    <div>
-                                        <div className="content-comment-blog">
-                                            <p className='name-info-user-cmt'>Tran Gia Thuận <span className='date-comment'>24/09/2024</span></p>
-                                            <p>Nhớ không em lời hứa ngày xưa, mình bên nhau dưới ánh trăng đã nguyện thề, rằng đôi mình có nhau không bao giờ lìa xa</p>
+                                {/* Comments section */}
+                                <div className="comments-list">
+                                    {comments[blogItem._id]?.map((comment) => (
+                                        <div key={comment._id} className="comment-item">
+                                            <div className="info-user-cmt mt-3">
+                                                <img className='' src={require('../../asset/Images/account.png')} />
+                                                <div>
+                                                    <div className="content-comment-blog">
+                                                        <p className='name-info-user-cmt'>{comment.userId.fullName}
+                                                            <span className='date-comment'> {new Date(comment.createdAt).toLocaleDateString()}</span>
+                                                        </p>
+                                                        <p>{comment.content}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    ))}
                                 </div>
+                                {/* Comment input */}
                                 <div className="input-cmt">
                                     <hr />
-                                    <input className="form-control form-control-lg mt-3" type="text" placeholder="Bình luận" aria-label=".form-control-lg example" />
-                                    <button type="button" className="btn btn-primary mt-3 btn-comment">
+                                    <input
+                                        className="form-control form-control-lg mt-3"
+                                        type="text"
+                                        placeholder="Bình luận"
+                                        value={newComment}
+                                        onChange={(e) => setNewComment(e.target.value)}
+                                    />
+                                    <button
+                                        type="button"
+                                        className="btn btn-primary mt-3 btn-comment"
+                                        onClick={() => handleCommentSubmit(blogItem._id)}
+                                    >
                                         <img src={require("../../asset/Images/send.png")} />
                                     </button>
                                 </div>
