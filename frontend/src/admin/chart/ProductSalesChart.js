@@ -5,11 +5,10 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import API_URL from '../../config/config';
 import NavAdmin from "../component/nav-admin/nav-admin";
 import Sidebar from "../component/sidebar/sidebar";
-import SalesRevenueChart from '../chartComponent/SalesRevenue';
-import ProductQuantityByCategoryChart from '../chartComponent/ProductQuantityByCategoryChart';
+import ProductIsSoldByCategory from '../chartComponent/ProductIsSoldByCategory'
 
 
-const RevenueChart = () => {
+const ProductSalesChart = () => {
 
     return (
         <div>
@@ -19,11 +18,11 @@ const RevenueChart = () => {
                     <Sidebar />
                 </div>
                 <div className="col-9 content-body">
-                    <SalesRevenueChart />
+                    <ProductIsSoldByCategory />
                 </div>
             </div>
         </div>
     );
 };
 
-export default RevenueChart;
+export default ProductSalesChart;

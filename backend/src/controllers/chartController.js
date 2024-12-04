@@ -198,6 +198,81 @@ exports.exportRevenueToExcel = async (req, res) => {
     }
 };
 
+//
+const mongoose = require('mongoose'); // Đảm bảo mongoose đã được import
+const Category = require('../models/category'); // Import model Category
+const Product = require('../models/product'); // Import model Product
+
+exports.getProductQuantityByCategory = async (req, res) => {
+    const { categoryId } = req.params; // Lấy categoryId từ params
+
+    try {
+        // Kiểm tra xem Category có tồn tại không
+        const category = await Category.findById(categoryId);
+        if (!category) {
+            return res.status(404).json({ message: 'Danh mục không tồn tại.' });
+        }
+
+        // Lấy tất cả sản phẩm theo categoryId
+        const products = await Product.find({ categoryID: new mongoose.Types.ObjectId(categoryId) });
+
+        // Kiểm tra nếu không có sản phẩm trong danh mục
+        if (products.length === 0) {
+            return res.status(404).json({ message: 'Không có sản phẩm trong danh mục này.' });
+        }
+
+        // Trả về một mảng với label là tên sản phẩm và value là số lượng
+        const result = products.map(product => ({
+            label: product.productName,  // Tên sản phẩm
+            value: product.quantity      // Số lượng sản phẩm
+        }));
+
+        // Trả về dữ liệu thống kê
+        res.status(200).json({
+            categoryName: category.categoryName,  // Tên danh mục
+            products: result,  // Danh sách sản phẩm với tên và số lượng
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Có lỗi khi lấy dữ liệu thống kê.' });
+    }
+};
+
+
+exports.getProductSalesByCategory = async (req, res) => {
+    const { categoryId } = req.params; // Lấy categoryId từ params
+
+    try {
+        // Kiểm tra xem Category có tồn tại không
+        const category = await Category.findById(categoryId);
+        if (!category) {
+            return res.status(404).json({ message: 'Danh mục không tồn tại.' });
+        }
+
+        // Lấy tất cả sản phẩm theo categoryId
+        const products = await Product.find({ categoryID: new mongoose.Types.ObjectId(categoryId) });
+
+        // Kiểm tra nếu không có sản phẩm trong danh mục
+        if (products.length === 0) {
+            return res.status(404).json({ message: 'Không có sản phẩm trong danh mục này.' });
+        }
+
+        // Trả về một mảng với label là tên sản phẩm và value là số lượng đã bán (isSold)
+        const result = products.map(product => ({
+            label: product.productName,  // Tên sản phẩm
+            value: product.isSold       // Số lượng sản phẩm đã bán (isSold)
+        }));
+
+        // Trả về dữ liệu thống kê
+        res.status(200).json({
+            categoryName: category.categoryName,  // Tên danh mục
+            products: result,  // Danh sách sản phẩm với tên và số lượng đã bán
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Có lỗi khi lấy dữ liệu thống kê.' });
+    }
+};
 
 
 

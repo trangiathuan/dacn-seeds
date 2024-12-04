@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './sidebar.css';
 import axios from 'axios';
 import API_URL from '../../../config/config.js';
-import { UnorderedListOutlined, HomeOutlined, UserOutlined, ProductOutlined, FormOutlined } from '@ant-design/icons';
+import { UnorderedListOutlined, HomeOutlined, UserOutlined, ProductOutlined, FormOutlined, BarChartOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 
 const Sidebar = () => {
@@ -211,7 +211,7 @@ const Sidebar = () => {
         {
             key: 'sub6',
             label: (<div className='ms-2'>Thống kê</div>),
-            icon: <FormOutlined />,
+            icon: <BarChartOutlined />,
             children: [
                 {
                     key: '11', // Key cho "Quản lý tài khoản"
@@ -219,8 +219,12 @@ const Sidebar = () => {
                 },
                 {
                     key: '12', // Key cho "Option 12"
-                    label: 'Option 12',
+                    label: (<a href='/admin/ProductByCategoryChart'>Số lượng sản phẩm</a>),
                 },
+                {
+                    key: '12', // Key cho "Option 12"
+                    label: (<a href='/admin/ProductSalesByCategoryChart'>Số lượng đã bán</a>),
+                }
             ],
         },
     ];

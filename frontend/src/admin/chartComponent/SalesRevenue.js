@@ -118,7 +118,7 @@ const SalesRevenueChart = () => {
 
     return (
         <div>
-            <h2 className="page-title text-center mt-2">THỐNG KÊ DOANH THU</h2>
+            <h2 className=" text-center mt-3 mb-3">THỐNG KÊ DOANH THU</h2>
             {
                 revenueType === 'monthly' && (
                     <div className="revenue-type-buttons row">

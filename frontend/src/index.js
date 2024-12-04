@@ -34,6 +34,9 @@ import CategoryAdmin from './admin/products/category';
 import AddCategory from './admin/products/add-category';
 import UpdateCategory from './admin/products/update-category';
 import RevenueChart from './admin/chart/RevenueChart';
+import ProductByCategoryChart from './admin/chart/ProductByCategoryChart';
+import ProductSalesChart from './admin/chart/ProductSalesChart';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -75,6 +78,10 @@ root.render(
         <Route path="/admin/category-update/:id" element={<UpdateCategory />} />
 
         <Route path="/admin/sales-revenue" element={<RevenueChart />} />
+        <Route path="/admin/ProductByCategoryChart" element={<ProductByCategoryChart />} />
+        <Route path="/admin/ProductSalesByCategoryChart" element={<ProductSalesChart />} />
+
+
 
 
 

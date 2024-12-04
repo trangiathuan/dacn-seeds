@@ -5,6 +5,9 @@ import CategoryChart from "./CategoryChart";
 import './dashboard.css'
 import axios from "axios";
 import API_URL from '../../config/config.js';
+import SalesRevenueChart from "../chartComponent/SalesRevenue.js";
+import ProductSalesByCategoryChart from "../chartComponent/ProductIsSoldByCategory.js";
+import ProductQuantityByCategoryChart from "../chartComponent/ProductQuantityByCategoryChart.js";
 
 
 const Dashboard = () => {
@@ -123,9 +126,14 @@ const Dashboard = () => {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="chart">
-                            < CategoryChart />
-
+                        <div className="">
+                            <SalesRevenueChart />
+                        </div>
+                        <div className="">
+                            <ProductQuantityByCategoryChart />
+                        </div>
+                        <div>
+                            <ProductSalesByCategoryChart />
                         </div>
 
                     </div>

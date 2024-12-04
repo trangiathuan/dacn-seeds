@@ -14,5 +14,10 @@ router.get('/yearly-revenue', authAdmin, chartController.getRevenueByYear);
 
 router.get('/export-revenue-excel', authAdmin, chartController.exportRevenueToExcel);
 
+// Lấy thống kê số lượng sản phảm theo danh mục
+router.get('/quantity-by-category/:categoryId', authAdmin, chartController.getProductQuantityByCategory);
+
+router.get('/sales-by-category/:categoryId', authAdmin, chartController.getProductSalesByCategory);
+
 
 module.exports = router;

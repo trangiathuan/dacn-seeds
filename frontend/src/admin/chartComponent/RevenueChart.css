@@ -75,11 +75,22 @@
 
 .yearsl {
     margin-top: 0px;
-    margin-left: 78px;
+    margin-left: 0px;
 }
 
 .btn-export {
     background-color: #09b7e2 !important;
 }
+
+.slcat {
+    width: 220px;
+    display: block;
+    margin-left: auto;
+}
+
+.bar-sl {
+    width: 1100px;
+}
+
 
 
