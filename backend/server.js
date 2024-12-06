@@ -1,10 +1,9 @@
-const express = require('express'); //import express
+const express = require('express');
 const app = express()
 const connection = require('./src/config/database');
 const cors = require('cors')
 const port = 8000
 const bodyParser = require('body-parser');
-
 const productRoutes = require('./src/routes/productRoutes');
 const cartRoutes = require('./src/routes/cartRoutes');
 const authRoutes = require('./src/routes/authRoutes');
@@ -15,6 +14,7 @@ const chartRoutes = require('./src/routes/chartRoutes')
 const commentRoutes = require('./src/routes/commentRoutes');
 const blogRoutes = require('./src/routes/blogRoutes');
 const commentBlogRoutes = require('./src/routes/commentBlogRoutes');
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
@@ -29,6 +29,8 @@ app.use('/api', chartRoutes);
 app.use('/api', commentRoutes);
 app.use('/api', blogRoutes);
 app.use('/api', commentBlogRoutes);
+
+
 
 
 const conn = async () => {

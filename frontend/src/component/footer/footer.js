@@ -15,14 +15,14 @@ const Footer = () => {
                         </div>
                         <p className='footer-title'>Hệ thống siêu thị</p>
                         <p className='p-title'>Kho hàng trải dài từ Bắc vào Nam</p>
-                        <p className='footer-title'>Theo dõi chúng tôi qua</p>
+                        {/* <p className='footer-title'>Theo dõi chúng tôi qua</p>
                         <div className='row row-logo'>
                             <div className='col-3'><img className='logo-footer' src={require('../../asset/Images/footer-fb.jpg')} /></div>
                             <div className='col-3'><img className='logo-footer' src={require('../../asset/Images/footer-ins.jpg')} /></div>
                             <div className='col-3'><img className='logo-footer' src={require('../../asset/Images/footer-tiktok.jpg')} /></div>
                             <div className='col-3'><img className='logo-footer' src={require('../../asset/Images/footer-zalo.png')} /></div>
 
-                        </div>
+                        </div> */}
                     </div>
                     <div className='col-3'>
                         <p className='footer-title ms-4'>Danh mục sản phẩm</p>
@@ -77,13 +77,13 @@ const Footer = () => {
                         </div>
                     </div>
                     <div className='col-3'>
-                        <p className='footer-title'>Hình thức thanh toán</p>
+                        {/* <p className='footer-title'>Hình thức thanh toán</p>
                         <div className='row row-logo'>
                             <div className='col-3'><img className='logo-footer' src={require('../../asset/Images/footer-momo.jpg')} /></div>
                             <div className='col-3'><img className='logo-footer' src={require('../../asset/Images/footer-zalopay.png')} /></div>
                             <div className='col-3'><img className='logo-footer' src={require('../../asset/Images/footer-vcb.png')} /></div>
                             <div className='col-3'><img className='logo-footer' src={require('../../asset/Images/footer-visa.jpg')} /></div>
-                        </div>
+                        </div> */}
                         <p className='footer-title'>Hình thức vận chuyển</p>
                         <div className='row row-logo'>
                             <div className='col-3'><img className='logo-footer' src={require('../../asset/Images/footer-vnp.png')} /></div>

@@ -296,6 +296,9 @@ const Nav = () => {
                                 <a className="nav-link nav-a" href="/products">SẢN PHẨM</a>
                             </li>
                             <li className="nav-item">
+                                <a className="nav-link nav-a" href="/blog">DIỄN ĐÀN</a>
+                            </li>
+                            <li className="nav-item">
                                 <a className="nav-link nav-a" href="#">VỀ CHÚNG TÔI</a>
                             </li>
                             <li className="nav-item">
@@ -303,9 +306,6 @@ const Nav = () => {
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link nav-a" href="#">TIN TỨC</a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link nav-a" href="/blog">DIỄN ĐÀN</a>
                             </li>
                         </ul>
                     </div>
