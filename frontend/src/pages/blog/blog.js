@@ -146,7 +146,7 @@ const Blog = () => {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            toast.success("Đã thích bài viết!");
+
             getAllBlog();  // Reload blog list to update like count
         } catch (error) {
             console.error(error);

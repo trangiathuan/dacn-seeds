@@ -4,6 +4,7 @@ import NavAdmin from "../component/nav-admin/nav-admin";
 import Sidebar from "../component/sidebar/sidebar";
 import axios from 'axios';
 import API_URL from '../../config/config';
+import { toast, ToastContainer } from 'react-toastify';
 
 const AddProduct = () => {
     const [productName, setProductName] = useState('');
@@ -49,7 +50,7 @@ const AddProduct = () => {
             });
 
             if (response.status === 200) {
-                alert("Sản phẩm đã được tạo thành công!");
+                toast.success("Sản phẩm được thêm thành công!");
                 // Reset form
                 setProductName('');
                 setCategoryId('');
@@ -76,6 +77,7 @@ const AddProduct = () => {
     return (
         <div>
             <NavAdmin />
+            <ToastContainer />
             <div className="row productsAdmin-body">
                 <div className="col-3 sidebar-body">
                     <Sidebar />

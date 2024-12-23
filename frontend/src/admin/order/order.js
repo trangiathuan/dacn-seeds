@@ -177,8 +177,7 @@ const OrdersAdmin = () => {
                                         >
                                             <option value="0">Chờ xác nhận</option>
                                             <option value="1">Xác nhận đơn hàng</option>
-                                            <option value="2">Đang giao hàng</option>
-                                            <option value="3">Đã giao hàng</option>
+
                                         </select>
                                     </td>
                                     <td>

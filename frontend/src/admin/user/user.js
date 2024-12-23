@@ -4,6 +4,7 @@ import Sidebar from "../component/sidebar/sidebar";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 
 const UserAdmin = () => {
     const [users, setUsers] = useState([]);
@@ -50,7 +51,7 @@ const UserAdmin = () => {
                     }
                 });
 
-            alert('Chức vụ đã được cập nhật thành công');
+            toast.success('Cập nhật phân quyền thành công');
             // Cập nhật lại danh sách users sau khi thay đổi role
             setUsers(users.map(user =>
                 user._id === userId ? { ...user, role: newRole } : user
@@ -104,6 +105,7 @@ const UserAdmin = () => {
     return (
         <div>
             <NavAdmin />
+            <ToastContainer />
             <div className="row productsAdmin-body">
                 <div className="col-3 sidebar-body">
                     <Sidebar />

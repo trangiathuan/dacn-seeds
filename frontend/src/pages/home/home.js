@@ -186,7 +186,7 @@ const Home = () => {
                     </div>
                 ))}
             </div>
-            <div className="pagination mt-3">
+            <div className="paginationHome mt-3">
                 <Pagination
                     current={currentPage}
                     pageSize='8'

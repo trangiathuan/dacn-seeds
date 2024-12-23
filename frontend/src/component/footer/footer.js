@@ -28,28 +28,28 @@ const Footer = () => {
                         <p className='footer-title ms-4'>Danh mục sản phẩm</p>
                         <div>
                             <ul>
-                                <a href='#'><img className='category-img' src={require('../../asset/Images/wheat.png')} /> Hạt Giống Cây Ăn Trái</a>
+                                <a href='/products-category/66acff98b05c1a4960364fb9'><img className='category-img' src={require('../../asset/Images/wheat.png')} /> Hạt Giống Cây Ăn Trái</a>
                             </ul>
                             <ul>
-                                <a href='#'><img className='category-img' src={require('../../asset/Images/wheat.png')} /> Hạt Giống Rau Mầm</a>
+                                <a href='/products-category/66acff98b05c1a4960364fba'><img className='category-img' src={require('../../asset/Images/wheat.png')} /> Hạt Giống Rau Mầm</a>
                             </ul>
                             <ul>
-                                <a href='#'><img className='category-img' src={require('../../asset/Images/wheat.png')} /> Hạt Giống Dược Liệu</a>
+                                <a href='/products-category/66acff98b05c1a4960364fbb'><img className='category-img' src={require('../../asset/Images/wheat.png')} /> Hạt Giống Dược Liệu</a>
                             </ul>
                             <ul>
-                                <a href='#'><img className='category-img' src={require('../../asset/Images/wheat.png')} /> Hạt Giống Cây Cảnh</a>
+                                <a href='/products-category/66acff98b05c1a4960364fbc'><img className='category-img' src={require('../../asset/Images/wheat.png')} /> Hạt Giống Cây Cảnh</a>
                             </ul>
                             <ul>
-                                <a href='#'><img className='category-img' src={require('../../asset/Images/wheat.png')} /> Hạt Giống Rau, Củ, Quả</a>
+                                <a href='/products-category/66acff98b05c1a4960364fbd'><img className='category-img' src={require('../../asset/Images/wheat.png')} /> Hạt Giống Rau, Củ, Quả</a>
                             </ul>
                             <ul>
-                                <a href='#'><img className='category-img' src={require('../../asset/Images/wheat.png')} /> Hạt Giống Rau Gia Vị</a>
+                                <a href='/products-category/66acff98b05c1a4960364fbe'><img className='category-img' src={require('../../asset/Images/wheat.png')} /> Hạt Giống Rau Gia Vị</a>
                             </ul>
                             <ul>
-                                <a href='#'><img className='category-img' src={require('../../asset/Images/wheat.png')} /> Hạt Giống Hoa</a>
+                                <a href='/products-category/66acff98b05c1a4960364fbf'><img className='category-img' src={require('../../asset/Images/wheat.png')} /> Hạt Giống Hoa</a>
                             </ul>
                             <ul>
-                                <a href='#'><img className='category-img' src={require('../../asset/Images/wheat.png')} /> Hạt Giống Cỏ</a>
+                                <a href='/products-category/66acff98b05c1a4960364fc0'><img className='category-img' src={require('../../asset/Images/wheat.png')} /> Hạt Giống Cỏ</a>
                             </ul>
                         </div>
                     </div>

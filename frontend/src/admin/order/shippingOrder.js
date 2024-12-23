@@ -174,8 +174,7 @@ const ShippingOrdersAdmin = () => {
                                             onChange={(e) => updateOrderStatus(order._id, Number(e.target.value))}
                                             className='form-select frm-order-ship'
                                         >
-                                            <option value="0" >Chờ duyệt</option>
-                                            <option value="1">Đã xác nhận</option>
+
                                             <option value="2">Đang giao hàng</option>
                                             <option value="3">Đã giao hàng</option>
                                         </select>

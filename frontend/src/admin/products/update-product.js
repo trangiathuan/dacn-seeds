@@ -5,6 +5,7 @@ import Sidebar from "../component/sidebar/sidebar";
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import API_URL from '../../config/config';
+import { toast, ToastContainer } from 'react-toastify';
 
 const UpdateProduct = () => {
     const { id } = useParams(); // Lấy ID sản phẩm từ URL
@@ -83,8 +84,10 @@ const UpdateProduct = () => {
             });
 
             if (response.status === 200) {
-                alert('Sản phẩm đã được cập nhật thành công!');
-                navigate('/admin/products'); // Điều hướng về trang danh sách sản phẩm
+                toast.success('Sản phẩm đã được cập nhật thành công!');
+                setTimeout(() => {
+                    navigate('/admin/products'); // Điều hướng về trang danh sách sản phẩm
+                }, 1500);
             } else {
                 alert('Có lỗi xảy ra khi cập nhật sản phẩm!');
             }
@@ -106,6 +109,7 @@ const UpdateProduct = () => {
     return (
         <div>
             <NavAdmin />
+            <ToastContainer />
             <div className="row productsAdmin-body">
                 <div className="col-3 sidebar-body">
                     <Sidebar />

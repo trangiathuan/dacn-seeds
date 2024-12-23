@@ -93,7 +93,7 @@ const Checkout = () => {
             // Nếu người dùng chưa đăng nhập, gửi yêu cầu đến một endpoint riêng để lưu đơn hàng
             if (!isLoggedIn) {
                 const res = await axios.post(`${API_URL}/checkout-guest`, orderData);
-                await toast.success('Đặt hàng thành công! Mã đơn hàng: ' + res.data.orderId);
+                await toast.success('Đặt hàng thành công');
             } else {
                 const token = localStorage.getItem('token');
                 const res = await axios.post(`${API_URL}/checkout`, orderData, {
@@ -101,9 +101,12 @@ const Checkout = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                await toast.success('Thanh toán thành công! Mã đơn hàng: ' + res.data.orderId);
+
             }
-            navigate('/');
+            toast.success('Đặt hàng thành công');
+            setTimeout(() => {
+                navigate('/');
+            }, 1500);
         } catch (err) {
             console.error(err);
             alert('Đã xảy ra lỗi trong quá trình thanh toán: ' + err.message);

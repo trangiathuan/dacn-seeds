@@ -77,7 +77,7 @@ const UserOrder = () => {
                 }
             );
 
-            toast.success('Cập nhật trạng thái thành công');
+            toast.success('Đơn hàng đã được hủy');
             fetchOrders(); // Tải lại đơn hàng sau khi cập nhật
 
         } catch (error) {

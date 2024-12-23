@@ -164,7 +164,9 @@ const Nav = () => {
         <div className='nav-all'>
             <div className='row'>
                 <div className='col-2'>
-                    <img className='logo' src={require("../../asset/Images/Logo.png")} alt="Logo" />
+                    <a href='/'>
+                        <img className='logo' src={require("../../asset/Images/Logo.png")} alt="Logo" />
+                    </a>
                 </div>
                 <div className='col-4'>
                     <div className="input-group mt-3 mb-3 nav-search">

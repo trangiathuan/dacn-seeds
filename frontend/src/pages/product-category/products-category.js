@@ -161,7 +161,7 @@ const ProductsCategory = () => {
                                 <Link to={`/products/`} className='a-category mt-0'>
                                     <img className='img-icon-product' src={require(`../../asset/Images/mark.png`)} />
                                     Tất cả sản phẩm
-                                    <span className="badge text-bg-success rounded-pill ms-2"> {totalProducts}</span>
+                                    <span className="badge text-bg-success rounded-pill ms-2"> 64</span>
                                 </Link>
                             </li>
                             {category.map((item) => (

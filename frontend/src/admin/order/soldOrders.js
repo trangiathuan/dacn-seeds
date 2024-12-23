@@ -172,10 +172,10 @@ const SoldOrdersAdmin = () => {
                                             onChange={(e) => updateOrderStatus(order._id, Number(e.target.value))}
                                             className='form-select'
                                         >
-                                            <option value="0" >Chờ duyệt</option>
+                                            {/* <option value="0" >Chờ duyệt</option>
                                             <option value="1">Đã duyệt</option>
-                                            <option value="2">Đã giao</option>
-                                            <option value="4">Đã bán</option>
+                                            <option value="2">Đã giao</option> */}
+                                            <option value="4">Hoàn thành</option>
                                         </select>
                                     </td>
                                     <td>

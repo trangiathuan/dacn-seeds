@@ -171,11 +171,7 @@ const Sidebar = () => {
                 {
                     key: '11', // Key cho "Quản lý danh mục"
                     label: (<a href='/admin/categorys'>Quản lý danh mục</a>),
-                },
-                {
-                    key: '12', // Key cho "Option 12"
-                    label: 'Option 12',
-                },
+                }
             ],
         },
         {
@@ -186,11 +182,7 @@ const Sidebar = () => {
                 {
                     key: '11', // Key cho "Quản lý tài khoản"
                     label: (<a href='/admin/users'>Quản lý tài khoản</a>),
-                },
-                {
-                    key: '12', // Key cho "Option 12"
-                    label: 'Option 12',
-                },
+                }
             ],
         },
         {
@@ -201,11 +193,7 @@ const Sidebar = () => {
                 {
                     key: '11', // Key cho "Quản lý tài khoản"
                     label: (<a href='/admin/blogs'>Duyệt bài viết</a>),
-                },
-                {
-                    key: '12', // Key cho "Option 12"
-                    label: 'Option 12',
-                },
+                }
             ],
         },
         {
