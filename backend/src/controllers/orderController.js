@@ -3,6 +3,15 @@ const CartItem = require('../models/cartItem'); // Đảm bảo đường dẫn 
 const Product = require('../models/product')
 const nodemailer = require('nodemailer');
 
+const paypal = require('paypal-rest-sdk');
+
+// Cấu hình PayPal SDK với Client ID và Secret của bạn
+paypal.configure({
+    mode: 'sandbox', // 'sandbox' cho môi trường thử nghiệm, 'live' khi đưa vào sản phẩm thực
+    client_id: 'AUhV-2RTqCuwLM--d-gw1K6KeSugy-GdJ2WdRu-by3Ets77fjRbu1GJG0SRATBTBG0hZU5rwC6odxUfo', // Thay thế với Client ID của bạn
+    client_secret: 'EGAWoteAYbfYe8bumHtFLIvpZ7sCAFUZc3oBmTRLGhVBSGSFXFzCM_knHkVzwM-dxHIjIzTN8Uuc9BB2' // Thay thế với Secret của bạn
+});
+
 const transporter = nodemailer.createTransport({
     service: 'Gmail', // Hoặc dịch vụ email bạn sử dụng
     auth: {
@@ -14,13 +23,13 @@ const transporter = nodemailer.createTransport({
 exports.checkout = async (req, res) => {
     try {
         const userId = req.user.userId;
-
-        const { fullName, email, phoneNumber, addDress, items, totalPrice, paymentMethod } = req.body;
+        const { fullName, email, phoneNumber, addDress, items, totalPrice, paymentMethod, paymentDetails } = req.body;
 
         if (!userId) {
             return res.status(400).json({ message: 'User ID is missing' });
         }
 
+        // Tạo đơn hàng
         const order = new Order({
             userId,
             fullName,
@@ -35,31 +44,52 @@ exports.checkout = async (req, res) => {
                 quantity: item.quantity,
                 image: item.image
             })),
-            totalPrice
+            totalPrice,
+            paymentDetails: paymentMethod === 'PayPal' ? paymentDetails : null, // Lưu thông tin PayPal nếu thanh toán qua PayPal
         });
 
         await order.save();
 
-        // Cập nhật số lượng sản phẩm
+        // Cập nhật số lượng sản phẩm trong kho
         for (const item of items) {
             const product = await Product.findById(item.productId);
 
-            // Kiểm tra xem sản phẩm có đủ số lượng không
+            // Kiểm tra số lượng sản phẩm có đủ không
             if (product && product.quantity >= item.quantity) {
                 await Product.findByIdAndUpdate(item.productId, {
                     $inc: { quantity: -item.quantity }
                 });
             } else {
-                // Nếu không đủ số lượng, có thể trả về lỗi
+                // Nếu không đủ số lượng, trả về lỗi
                 return res.status(400).json({ message: `Sản phẩm ${item.productName} không đủ số lượng` });
             }
         }
 
+        // Xóa các sản phẩm trong giỏ hàng của người dùng
         await CartItem.deleteMany({ userId });
 
+        // Nếu phương thức thanh toán là PayPal, tạo đơn hàng PayPal
+        if (paymentMethod === 'PayPal') {
+            const payment = await createPaypalOrder(totalPrice);
+
+            if (payment) {
+                // Lấy link thanh toán từ PayPal
+                const approvalUrl = payment.links.find(link => link.rel === 'approval_url').href;
+
+                // Trả về đường dẫn để người dùng thanh toán qua PayPal
+                return res.status(200).json({
+                    message: 'Đơn hàng đã được tạo thành công, vui lòng thanh toán qua PayPal',
+                    approvalUrl: approvalUrl
+                });
+            } else {
+                return res.status(400).json({ message: 'Không thể tạo đơn hàng PayPal' });
+            }
+        }
+
+        // Gửi email thông báo đơn hàng cho admin
         const adminMailOptions = {
-            from: 'trangiathuan8223@gmail.com', // Địa chỉ email đã xác minh
-            to: 'trangiathuan8223@gmail.com', // Email của bạn
+            from: 'trangiathuan8223@gmail.com',
+            to: 'trangiathuan8223@gmail.com',
             subject: 'THÔNG BÁO ĐƠN HÀNG MỚI',
             html: `
                 <div style="font-family: Arial, sans-serif; margin: 20px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
@@ -95,9 +125,41 @@ exports.checkout = async (req, res) => {
     }
 };
 
+// Hàm tạo đơn hàng PayPal
+const createPaypalOrder = async (totalPrice) => {
+    const create_payment_json = {
+        intent: 'sale',
+        payer: {
+            payment_method: 'paypal'
+        },
+        redirect_urls: {
+            return_url: 'http://localhost:3000/success', // URL khi thanh toán thành công
+            cancel_url: 'http://localhost:3000/cancel'   // URL khi thanh toán bị hủy
+        },
+        transactions: [{
+            amount: {
+                currency: 'USD', // Chuyển đổi sang USD nếu cần
+                total: totalPrice
+            },
+            description: 'Payment for Order'
+        }]
+    };
+
+    return new Promise((resolve, reject) => {
+        paypal.payment.create(create_payment_json, (error, payment) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(payment);
+            }
+        });
+    });
+};
+
+
 exports.checkoutGuest = async (req, res) => {
     try {
-        const { fullName, email, phoneNumber, addDress, items, totalPrice, paymentMethod } = req.body;
+        const { fullName, email, phoneNumber, addDress, items, totalPrice, paymentMethod, paymentDetails } = req.body;
 
         // Kiểm tra thông tin yêu cầu
         if (!fullName || !email || !phoneNumber || !addDress || !items || !totalPrice) {
@@ -117,7 +179,8 @@ exports.checkoutGuest = async (req, res) => {
                 quantity: item.quantity,
                 image: item.image
             })),
-            totalPrice
+            totalPrice,
+            paymentDetails: paymentMethod === 'PayPal' ? paymentDetails : null // Chỉ lưu paymentDetails nếu phương thức là PayPal
         });
 
         await order.save();
@@ -164,7 +227,7 @@ exports.checkoutGuest = async (req, res) => {
                         `).join('')}
                     </ul>
                 </div>
-            `,
+            `
         };
 
         await transporter.sendMail(adminMailOptions);

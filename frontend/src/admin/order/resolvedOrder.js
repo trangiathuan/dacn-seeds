@@ -269,7 +269,6 @@ const ResolvedOrdersAdmin = () => {
 
                                             <option value="1">Đã xác nhận</option>
                                             <option value="2">Đang giao hàng</option>
-
                                         </select>
                                     </td>
                                     <td className='btn-action'>

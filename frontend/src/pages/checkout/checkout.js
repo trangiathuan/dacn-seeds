@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { toast, ToastContainer } from 'react-toastify';
 import API_URL from '../../config/config';
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 const Checkout = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -17,6 +18,7 @@ const Checkout = () => {
         addDress: '',
         paymentMethod: 'Khi nhận hàng' // Mặc định là tiền mặt
     });
+    const [showPaypalButton, setShowPaypalButton] = useState(false); // Để điều khiển hiển thị PayPal button
     const navigate = useNavigate();
     const isLoggedIn = !!localStorage.getItem('token');
 
@@ -73,6 +75,13 @@ const Checkout = () => {
             ...orderInfo,
             [name]: value
         });
+
+        // Kiểm tra nếu người dùng chọn PayPal, sẽ hiển thị PayPal button
+        if (name === 'paymentMethod' && value === 'PayPal') {
+            setShowPaypalButton(true);
+        } else {
+            setShowPaypalButton(false);
+        }
     };
 
     const calculateTotalPrice = () => {
@@ -81,35 +90,37 @@ const Checkout = () => {
         }, 0);
     };
 
-    const handleCheckout = async (event) => {
-        event.preventDefault();
+    const handleCheckout = async (paymentDetails) => {
         try {
+            // Nếu phương thức thanh toán là "Khi nhận hàng"
             const orderData = {
                 ...orderInfo,
                 items: cartItems,
-                totalPrice: calculateTotalPrice()
+                totalPrice: calculateTotalPrice(),
+                paymentMethod: orderInfo.paymentMethod, // Thanh toán qua phương thức người dùng chọn
+                paymentDetails: orderInfo.paymentMethod === 'PayPal' ? paymentDetails : null // Chỉ gửi paymentDetails khi là PayPal
             };
 
-            // Nếu người dùng chưa đăng nhập, gửi yêu cầu đến một endpoint riêng để lưu đơn hàng
+            // Nếu không đăng nhập, xử lý checkout cho khách
             if (!isLoggedIn) {
                 const res = await axios.post(`${API_URL}/checkout-guest`, orderData);
-                await toast.success('Đặt hàng thành công');
+                toast.success('Đặt hàng thành công');
             } else {
                 const token = localStorage.getItem('token');
-                const res = await axios.post(`${API_URL}/checkout`, orderData, {
+                await axios.post(`${API_URL}/checkout`, orderData, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-
+                toast.success('Đặt hàng thành công');
             }
-            toast.success('Đặt hàng thành công');
+
             setTimeout(() => {
                 navigate('/');
             }, 1500);
         } catch (err) {
+            toast.error('Đã xảy ra lỗi trong quá trình thanh toán');
             console.error(err);
-            alert('Đã xảy ra lỗi trong quá trình thanh toán: ' + err.message);
         }
     };
 
@@ -117,9 +128,9 @@ const Checkout = () => {
         <div>
             <Nav />
             <ToastContainer />
-            <div className='row body-checkout '>
+            <div className='row body-checkout'>
                 <div className='table-checkout'>
-                    <table className="col-6 table ">
+                    <table className="col-6 table">
                         <thead>
                             <tr>
                                 <th></th>
@@ -148,7 +159,7 @@ const Checkout = () => {
                         </tbody>
                     </table>
                 </div>
-                <div className='col-6 customer-infor '>
+                <div className='col-6 customer-infor'>
                     <h4>Thông tin mua hàng</h4>
                     <form>
                         <div className="form-group mb-2">
@@ -204,16 +215,55 @@ const Checkout = () => {
                                 value={orderInfo.paymentMethod}
                                 onChange={handleInputChange}
                             >
-                                <option value="Khi nhận hàng">Thanh toán tiền mặt khi nhận hàng</option>
-                                <option value="Thẻ tín dụng">Thanh toán bằng thẻ tín dụng</option>
-                                <option value="Momo">Thanh toán bằng ví điện tử Momo</option>
-                                <option value="ZaloPay">Thanh toán bằng ví điện tử ZaloPay</option>
+                                <option value="Khi nhận hàng">Thanh toán khi nhận hàng</option>
+                                <option value="PayPal">Thanh toán bằng PayPal</option>
                             </select>
                         </div>
                         <div className="checkout-total">
                             <h4>Tổng tiền: {calculateTotalPrice().toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</h4>
                         </div>
-                        <button className='btn btn-success' onClick={handleCheckout}>Đặt hàng</button>
+
+                        {/* Đặt hàng button chỉ hiển thị nếu không phải phương thức PayPal */}
+                        {!showPaypalButton && (
+                            <div className="form-group text-center">
+                                <button
+                                    type="button"
+                                    className="btn btn-success"
+                                    onClick={() => handleCheckout(null)} // Đặt hàng thông qua nút
+                                >
+                                    Đặt hàng
+                                </button>
+                            </div>
+                        )}
+
+                        {/* Hiển thị PayPal button nếu phương thức thanh toán là PayPal */}
+                        {showPaypalButton && (
+                            <PayPalScriptProvider options={{ "client-id": "sb" }}>
+                                <PayPalButtons
+                                    createOrder={(data, actions) => {
+                                        return actions.order.create({
+                                            purchase_units: [
+                                                {
+                                                    amount: {
+                                                        value: calculateTotalPrice().toString(),
+                                                    },
+                                                },
+                                            ],
+                                        });
+                                    }}
+                                    onApprove={async (data, actions) => {
+                                        const orderData = {
+                                            ...orderInfo,
+                                            items: cartItems,
+                                            totalPrice: calculateTotalPrice(),
+                                            paymentMethod: 'PayPal',
+                                            paymentDetails: data,
+                                        };
+                                        await handleCheckout(orderData);
+                                    }}
+                                />
+                            </PayPalScriptProvider>
+                        )}
                     </form>
                 </div>
             </div>

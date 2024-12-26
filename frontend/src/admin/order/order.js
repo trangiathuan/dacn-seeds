@@ -177,7 +177,7 @@ const OrdersAdmin = () => {
                                         >
                                             <option value="0">Chờ xác nhận</option>
                                             <option value="1">Xác nhận đơn hàng</option>
-
+                                            <option value="-1">Hủy đơn hàng</option>
                                         </select>
                                     </td>
                                     <td>

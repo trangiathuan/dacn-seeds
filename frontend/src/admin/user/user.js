@@ -91,7 +91,9 @@ const UserAdmin = () => {
     );
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div class="spinner-border" role="status">
+            <span class="visually-hidden text-center">Loading...</span>
+        </div> // Hiển thị loading trong khi đợi dữ liệu
     }
 
     if (error) {

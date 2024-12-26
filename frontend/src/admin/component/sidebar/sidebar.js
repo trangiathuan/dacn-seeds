@@ -21,7 +21,7 @@ const Sidebar = () => {
         fetchTotalShippingOrders();
         fetchTotalCancelOrders();
         fetchTotalCompletedOrders();
-    }, []);
+    }, [totalPendingOrders]);
     const fetchTotalOrders = async () => {
         try {
             const token = localStorage.getItem('token');

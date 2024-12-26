@@ -148,7 +148,7 @@ const ProductDetail = () => {
                 </div>
                 <div className='comment-detail '>
                     <div className='content-comment'>
-                        <h4 className='mb-4'>ĐÁNH GIÁ SẢN PHẨM</h4>
+                        <h4 className='mb-4'>BÌNH LUẬN / ĐÁNH GIÁ</h4>
                         {comments.length > 0 ? (
                             comments.map((comment, index) => (
                                 <div className='row' key={index}>
